@@ -1,6 +1,19 @@
 ---
 // src/themes/sgi-irix/FileManager.astro
 import { filesystem } from "../../data/filesystem";
+import { fmIcons } from "./fm-icons";
+
+const emojiToFmIcon: Record<string, string> = {
+  "🌐": "globe",
+  "🏢": "building",
+  "💎": "gem",
+  "🤖": "robot",
+  "🔀": "branch",
+  "📝": "pencil",
+  "📄": "document",
+  "💼": "briefcase",
+  "📂": "folder",
+};
 
 function flattenFolders(folder: typeof filesystem, path = ""): { id: string; label: string; path: string; depth: number; files: typeof filesystem.files }[] {
   const result: { id: string; label: string; path: string; depth: number; files: typeof filesystem.files }[] = [];
@@ -30,7 +43,7 @@ const allFolders = flattenFolders(filesystem);
           data-fm-folder={f.id}
           style={`padding-left:${8 + f.depth * 16}px`}
         >
-          {f.depth > 0 ? "📂" : "🏠"} {f.label}
+          <span class="sgi-fm-tree-icon" set:html={f.depth > 0 ? fmIcons.folder : fmIcons.home} />{f.label}
         </button>
       ))}
     </div>
@@ -51,7 +64,7 @@ const allFolders = flattenFolders(filesystem);
                   data-fm-url={file.url || ""}
                   title={file.description}
                 >
-                  <div class="sgi-fm-file-icon">{file.icon}</div>
+                  <div class="sgi-fm-file-icon" set:html={fmIcons[emojiToFmIcon[file.icon] ?? ""] || file.icon} />
                   <div class="sgi-fm-file-label">{file.label}</div>
                 </button>
               ))}

@@ -1,6 +1,7 @@
 ---
 // src/themes/sgi-irix/IconCatalog.astro
 import { catalog } from "../../data/catalog";
+import { catalogIcons } from "./catalog-icons";
 ---
 
 <div class="sgi-catalog">
@@ -23,7 +24,7 @@ import { catalog } from "../../data/catalog";
       <div class="sgi-catalog-grid">
         {cat.items.map((item) => (
           <button class="sgi-catalog-icon" data-catalog-item={item.label} title={item.description}>
-            <div class="sgi-catalog-icon-image">{item.icon}</div>
+            <div class="sgi-catalog-icon-image" set:html={catalogIcons[item.label] || item.icon} />
             <div class="sgi-catalog-icon-label">{item.label}</div>
           </button>
         ))}
