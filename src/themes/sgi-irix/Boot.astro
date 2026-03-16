@@ -1,0 +1,110 @@
+---
+// src/themes/sgi-irix/Boot.astro
+export interface Props {
+  skipBoot?: boolean;
+  abbreviated?: boolean;
+}
+const { skipBoot = false, abbreviated = false } = Astro.props;
+---
+
+<div id="sgi-boot" class="sgi-boot" data-skip={skipBoot ? "true" : "false"} data-abbreviated={abbreviated ? "true" : "false"}>
+  <div id="boot-prom" class="sgi-boot-text" style="display:none"></div>
+  <div id="boot-logo" style="display:none; text-align:center">
+    <div class="sgi-boot-logo">
+      <span class="r">s</span><span class="g">g</span><span class="b">i</span>
+    </div>
+    <div style="color:#888; font-size:12px; margin-top:8px">Silicon Graphics Computer Systems</div>
+    <div style="color:#555; font-size:11px; margin-top:16px">IRIX 6.5 | toddlebaron.com</div>
+  </div>
+  <div id="boot-progress" class="sgi-boot-progress" style="display:none">
+    <div id="boot-progress-bar" class="sgi-boot-progress-bar"></div>
+  </div>
+  <div id="boot-skip" class="sgi-boot-skip" style="display:none">Press any key to skip</div>
+</div>
+
+<script>
+  import { runBootSequence } from "./boot";
+  import { playSound } from "../../engine/audio";
+  import { markVisited } from "../../engine/era-switcher";
+  import "../../themes/sgi-irix/theme";
+
+  const bootEl = document.getElementById("sgi-boot")!;
+  const promEl = document.getElementById("boot-prom")!;
+  const logoEl = document.getElementById("boot-logo")!;
+  const progressEl = document.getElementById("boot-progress")!;
+  const progressBar = document.getElementById("boot-progress-bar")!;
+  const skipEl = document.getElementById("boot-skip")!;
+
+  const skipBoot = bootEl.dataset.skip === "true";
+  const abbreviated = bootEl.dataset.abbreviated === "true";
+  let skipped = false;
+
+  const skipHandler = () => {
+    if (!skipped) {
+      skipped = true;
+      bootEl.style.display = "none";
+      document.dispatchEvent(new CustomEvent("boot:complete"));
+    }
+  };
+
+  if (skipBoot) {
+    bootEl.style.display = "none";
+    document.dispatchEvent(new CustomEvent("boot:complete"));
+  } else if (abbreviated) {
+    logoEl.style.display = "block";
+    playSound("/audio/sgi-boot.mp3");
+    document.addEventListener("keydown", skipHandler, { once: true });
+    bootEl.addEventListener("click", skipHandler);
+    setTimeout(() => {
+      if (!skipped) {
+        bootEl.style.opacity = "0";
+        bootEl.style.transition = "opacity 0.5s ease";
+        setTimeout(() => {
+          bootEl.style.display = "none";
+          document.dispatchEvent(new CustomEvent("boot:complete"));
+        }, 500);
+      }
+    }, 1500);
+  } else {
+    setTimeout(() => {
+      if (!skipped) skipEl.style.display = "block";
+    }, 1000);
+    document.addEventListener("keydown", skipHandler, { once: true });
+    bootEl.addEventListener("click", skipHandler);
+  }
+
+  if (!skipBoot && !abbreviated) runBootSequence(
+    {
+      onPhaseChange(phase) {
+        if (skipped) return;
+        if (phase === "prom") {
+          promEl.style.display = "block";
+          playSound("/audio/sgi-boot.mp3");
+        } else if (phase === "logo") {
+          promEl.style.display = "none";
+          logoEl.style.display = "block";
+          progressEl.style.display = "block";
+        } else if (phase === "done") {
+          bootEl.style.opacity = "0";
+          bootEl.style.transition = "opacity 0.5s ease";
+          setTimeout(() => {
+            bootEl.style.display = "none";
+            markVisited();
+            document.dispatchEvent(new CustomEvent("boot:complete"));
+          }, 500);
+        }
+      },
+      onTextLine(text) {
+        if (skipped) return;
+        const line = document.createElement("div");
+        line.textContent = text;
+        promEl.appendChild(line);
+      },
+      onProgress(pct) {
+        if (skipped) return;
+        progressBar.style.width = `${pct}%`;
+      },
+    },
+    skipBoot
+  );
+</script>
