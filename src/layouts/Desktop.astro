@@ -254,6 +254,34 @@ const { title, description } = Astro.props;
           return;
         }
 
+        // File Manager folder click
+        const fmFolder = target.closest<HTMLElement>("[data-fm-folder]");
+        if (fmFolder) {
+          const folderId = fmFolder.dataset.fmFolder!;
+          document.querySelectorAll(".sgi-fm-tree-item").forEach((t) => t.classList.remove("active"));
+          fmFolder.classList.add("active");
+          document.querySelectorAll<HTMLElement>(".sgi-fm-file-panel").forEach((p) => {
+            p.style.display = p.dataset.fmFilePanel === folderId ? "" : "none";
+          });
+          document.querySelectorAll(".sgi-fm-file").forEach((f) => f.classList.remove("selected"));
+          const statusEl = document.getElementById("fm-status");
+          if (statusEl) statusEl.textContent = "Select a file for details";
+          playSound("/audio/sgi-menu-click.mp3");
+          return;
+        }
+
+        // File Manager file click
+        const fmFile = target.closest<HTMLElement>("[data-fm-file]");
+        if (fmFile) {
+          document.querySelectorAll(".sgi-fm-file").forEach((f) => f.classList.remove("selected"));
+          fmFile.classList.add("selected");
+          const desc = fmFile.dataset.fmDesc || "";
+          const statusEl = document.getElementById("fm-status");
+          if (statusEl) statusEl.textContent = desc;
+          playSound("/audio/sgi-icon-select.mp3");
+          return;
+        }
+
         // Click window to bring to front
         const win = target.closest<HTMLElement>(".sgi-window");
         if (win && win.dataset.windowId) {
@@ -309,6 +337,53 @@ const { title, description } = Astro.props;
 
       // Init audio
       initAudio();
+
+      // ButtonFly toggle
+      const bfTrigger = document.getElementById("buttonfly-trigger");
+      const bfEl = document.getElementById("buttonfly");
+      if (bfTrigger && bfEl) {
+        bfTrigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+          bfEl.classList.toggle("open");
+          playSound("/audio/sgi-menu-click.mp3");
+        });
+      }
+
+      // ButtonFly item click
+      document.addEventListener("click", (e) => {
+        const flyItem = (e.target as HTMLElement).closest<HTMLElement>("[data-fly-action]");
+        if (flyItem) {
+          const action = flyItem.dataset.flyAction!;
+          const external = flyItem.dataset.flyExternal === "true";
+          if (external) {
+            window.open(action, "_blank");
+          } else {
+            openWindow(action);
+          }
+          bfEl?.classList.remove("open");
+          playSound("/audio/sgi-menu-click.mp3");
+          return;
+        }
+        // Close buttonfly on outside click
+        if (bfEl?.classList.contains("open") && !(e.target as HTMLElement).closest(".sgi-buttonfly")) {
+          bfEl.classList.remove("open");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && bfEl?.classList.contains("open")) {
+          bfEl.classList.remove("open");
+        }
+      });
+
+      // File Manager double-click to open URL
+      document.addEventListener("dblclick", (e) => {
+        const fmFile = (e.target as HTMLElement).closest<HTMLElement>("[data-fm-file]");
+        if (fmFile) {
+          const url = fmFile.dataset.fmUrl;
+          if (url) window.open(url, "_blank");
+        }
+      });
     </script>
   </body>
 </html>

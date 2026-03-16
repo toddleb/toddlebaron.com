@@ -1,0 +1,42 @@
+---
+// src/themes/sgi-irix/ButtonFly.astro
+const items = [
+  { icon: "💻", label: "GitHub", action: "https://github.com/toddleb", external: true },
+  { icon: "💼", label: "LinkedIn", action: "https://linkedin.com/in/toddlebaron", external: true },
+  { icon: "✉️", label: "Email", action: "mailto:todd@toddlebaron.com", external: true },
+  { icon: "📝", label: "Blog", action: "blog", external: false },
+  { icon: "📄", label: "Resume", action: "resume", external: false },
+  { icon: "📁", label: "Projects", action: "icon-catalog", external: false },
+];
+
+// Calculate positions in a 180-degree arc (from left to up)
+const radius = 80;
+const startAngle = 180; // left
+const endAngle = 0;     // right (top half)
+---
+
+<div class="sgi-buttonfly" id="buttonfly">
+  <button class="sgi-buttonfly-trigger" id="buttonfly-trigger" aria-label="Quick navigation">
+    ✦
+  </button>
+  <div class="sgi-buttonfly-items">
+    {items.map((item, i) => {
+      const angle = startAngle + (endAngle - startAngle) * (i / (items.length - 1));
+      const rad = (angle * Math.PI) / 180;
+      const x = Math.cos(rad) * radius;
+      const y = Math.sin(rad) * radius;
+      return (
+        <button
+          class="sgi-buttonfly-item"
+          data-fly-action={item.action}
+          data-fly-external={item.external ? "true" : "false"}
+          style={`--fly-x:${x}px; --fly-y:${y}px; transition-delay:${i * 50}ms`}
+          title={item.label}
+          aria-label={item.label}
+        >
+          {item.icon}
+        </button>
+      );
+    })}
+  </div>
+</div>

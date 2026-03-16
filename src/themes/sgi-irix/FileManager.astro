@@ -1,0 +1,69 @@
+---
+// src/themes/sgi-irix/FileManager.astro
+import { filesystem } from "../../data/filesystem";
+
+function flattenFolders(folder: typeof filesystem, path = ""): { id: string; label: string; path: string; depth: number; files: typeof filesystem.files }[] {
+  const result: { id: string; label: string; path: string; depth: number; files: typeof filesystem.files }[] = [];
+  const currentPath = path ? `${path}/${folder.label}` : folder.label;
+  const depth = path ? path.split("/").length : 0;
+  result.push({ id: folder.id, label: folder.label, path: currentPath, depth, files: folder.files });
+  if (folder.children) {
+    for (const child of folder.children) {
+      result.push(...flattenFolders(child, currentPath));
+    }
+  }
+  return result;
+}
+
+const allFolders = flattenFolders(filesystem);
+---
+
+<div class="sgi-fm">
+  <div class="sgi-fm-toolbar">
+    <span class="sgi-fm-path" id="fm-path">/home/todd</span>
+  </div>
+  <div class="sgi-fm-body">
+    <div class="sgi-fm-tree">
+      {allFolders.map((f) => (
+        <button
+          class:list={["sgi-fm-tree-item", { active: f.id === "root" }]}
+          data-fm-folder={f.id}
+          style={`padding-left:${8 + f.depth * 16}px`}
+        >
+          {f.depth > 0 ? "📂" : "🏠"} {f.label}
+        </button>
+      ))}
+    </div>
+    <div class="sgi-fm-files" id="fm-files">
+      {allFolders.map((f) => (
+        <div
+          class="sgi-fm-file-panel"
+          data-fm-file-panel={f.id}
+          style={f.id === "root" ? "" : "display:none"}
+        >
+          {f.files && f.files.length > 0 ? (
+            <div class="sgi-fm-file-grid">
+              {f.files.map((file) => (
+                <button
+                  class="sgi-fm-file"
+                  data-fm-file={file.id}
+                  data-fm-desc={file.description}
+                  data-fm-url={file.url || ""}
+                  title={file.description}
+                >
+                  <div class="sgi-fm-file-icon">{file.icon}</div>
+                  <div class="sgi-fm-file-label">{file.label}</div>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div class="sgi-fm-empty">(empty)</div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+  <div class="sgi-fm-status" id="fm-status">
+    Select a file for details
+  </div>
+</div>
