@@ -1,0 +1,23 @@
+---
+// src/themes/sgi-irix/DesksPanel.astro
+export interface Props {
+  windows: { windowId: string; title: string }[];
+}
+const { windows } = Astro.props;
+---
+
+<div class="sgi-desks-panel" aria-label="Window taskbar">
+  {windows.map((w, i) => (
+    <button
+      class:list={["sgi-desk-tab", { active: i === 0 }]}
+      data-desk-window={w.windowId}
+    >
+      {w.title}
+    </button>
+  ))}
+  <div style="margin-left:auto">
+    <button id="volume-toggle" class="sgi-desk-tab" aria-label="Toggle sound" style="font-size:14px">
+      🔇
+    </button>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+---
+// src/themes/sgi-irix/Toolchest.astro
+export interface Props {
+  windows: { windowId: string; title: string }[];
+}
+const { windows } = Astro.props;
+---
+
+<nav class="sgi-toolchest" aria-label="Toolchest menu">
+  <div class="sgi-toolchest-header">Toolchest</div>
+  {windows.map((w) => (
+    <div class="sgi-toolchest-item" data-menu-open={w.windowId} role="menuitem" tabindex="0">
+      <span>{w.title}</span>
+    </div>
+  ))}
+  <div class="sgi-toolchest-divider"></div>
+  <div class="sgi-toolchest-item" data-menu-action="era-picker" role="menuitem" tabindex="0">
+    <span>Choose Era...</span>
+    <span style="color:#666">▸</span>
+  </div>
+  <div class="sgi-toolchest-item" data-menu-action="logout" role="menuitem" tabindex="0">
+    <span>Log Out</span>
+  </div>
+</nav>
