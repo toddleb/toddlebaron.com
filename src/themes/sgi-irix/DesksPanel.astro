@@ -4,18 +4,29 @@ export interface Props {
   windows: { windowId: string; title: string }[];
 }
 const { windows } = Astro.props;
+
+const desks = [
+  { id: "work", label: "Work" },
+  { id: "projects", label: "Projects" },
+  { id: "personal", label: "Personal" },
+  { id: "system", label: "System" },
+];
 ---
 
-<div class="sgi-desks-panel" aria-label="Window taskbar">
-  {windows.map((w, i) => (
-    <button
-      class:list={["sgi-desk-tab", { active: i === 0 }]}
-      data-desk-window={w.windowId}
-    >
-      {w.title}
-    </button>
-  ))}
-  <div style="margin-left:auto">
+<div class="sgi-desks-panel" aria-label="Virtual desktops">
+  <div class="sgi-desks-minimap">
+    {desks.map((desk, i) => (
+      <button
+        class:list={["sgi-desk-mini", { active: i === 0 }]}
+        data-desk-id={desk.id}
+        aria-label={`Switch to ${desk.label} desk`}
+      >
+        <div class="sgi-desk-mini-label">{desk.label}</div>
+        <div class="sgi-desk-mini-preview"></div>
+      </button>
+    ))}
+  </div>
+  <div style="margin-left:auto; display:flex; align-items:center; gap:8px">
     <button id="volume-toggle" class="sgi-desk-tab" aria-label="Toggle sound" style="font-size:14px">
       🔇
     </button>

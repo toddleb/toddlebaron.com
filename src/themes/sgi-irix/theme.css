@@ -871,6 +871,82 @@
   font-style: italic;
 }
 
+/* Desks Minimap */
+.sgi-desks-minimap {
+  display: flex;
+  gap: 6px;
+}
+
+.sgi-desk-mini {
+  width: 100px;
+  height: 50px;
+  background: var(--sgi-widget);
+  border: 2px outset var(--sgi-widget-light);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: 2px;
+  position: relative;
+}
+
+.sgi-desk-mini:hover {
+  border-color: var(--sgi-primary);
+}
+
+.sgi-desk-mini.active {
+  border: 2px solid var(--sgi-primary);
+  box-shadow: 0 0 4px var(--sgi-primary);
+}
+
+.sgi-desk-mini-label {
+  font-size: 8px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--sgi-text);
+}
+
+.sgi-desk-mini-preview {
+  flex: 1;
+  background: var(--sgi-sky-gradient);
+  border: 1px inset var(--sgi-widget-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Splash Screen */
+.sgi-splash-overlay {
+  position: absolute;
+  top: 24px; /* below titlebar */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--sgi-title-gradient);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: opacity 0.5s ease;
+}
+
+.sgi-splash-overlay.fading {
+  opacity: 0;
+}
+
+.sgi-splash-title-text {
+  color: var(--sgi-title-text);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.sgi-splash-line-decoration {
+  width: 60%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  margin-top: 12px;
+}
+
 @media (max-width: 768px) {
   .sgi-desktop { display: none; }
   .sgi-boot-logo { font-size: 48px; }

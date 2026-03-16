@@ -9,11 +9,13 @@ interface WindowState {
   minimized: boolean;
   maximized: boolean;
   contentUrl?: string;
+  desk?: string;
 }
 
 let windows: Map<string, WindowState> = new Map();
 let topZ = 100;
 let activeWindowId: string | null = null;
+const splashShown = new Set<string>();
 
 let dragState: {
   windowId: string;
@@ -58,6 +60,10 @@ export function openWindow(id: string): void {
     el.style.display = "flex";
     el.classList.add("opening");
     setTimeout(() => el.classList.remove("opening"), 200);
+  }
+  if (!splashShown.has(id)) {
+    splashShown.add(id);
+    document.dispatchEvent(new CustomEvent("wm:splash-start", { detail: { id } }));
   }
   document.dispatchEvent(new CustomEvent("wm:window-opened", { detail: { id } }));
 }
@@ -193,6 +199,31 @@ export function getWindows(): Map<string, WindowState> {
 
 export function getActiveWindowId(): string | null {
   return activeWindowId;
+}
+
+let activeDesk = "work";
+
+export function getActiveDesk(): string {
+  return activeDesk;
+}
+
+export function switchDesk(deskId: string): void {
+  activeDesk = deskId;
+  windows.forEach((win) => {
+    const el = getWindowEl(win.id);
+    if (!el) return;
+    if (win.desk === deskId || !win.desk) {
+      if (!win.minimized) el.style.display = "flex";
+    } else {
+      el.style.display = "none";
+    }
+  });
+  document.dispatchEvent(new CustomEvent("wm:desk-switched", { detail: { desk: deskId } }));
+}
+
+export function setWindowDesk(id: string, desk: string): void {
+  const win = windows.get(id);
+  if (win) win.desk = desk;
 }
 
 export function initKeyboardNav(): void {

@@ -57,7 +57,7 @@ const { title, description } = Astro.props;
     <script>
       import { initDesktopIcons } from "../engine/desktop";
       import { initAudio, playSound, toggleMute, isMuted } from "../engine/audio";
-      import { registerWindow, openWindow, closeWindow, minimizeWindow, maximizeWindow, startDrag, startResize, bringToFront, initKeyboardNav } from "../engine/wm";
+      import { registerWindow, openWindow, closeWindow, minimizeWindow, maximizeWindow, startDrag, startResize, bringToFront, initKeyboardNav, setWindowDesk, switchDesk } from "../engine/wm";
 
       // Wait for boot to complete (or skip)
       document.addEventListener("boot:complete", () => {
@@ -66,11 +66,36 @@ const { title, description } = Astro.props;
         initDesktopIcons();
         initKeyboardNav();
         openWindow("console");
+        // Assign desks
+        const deskMap: Record<string, string> = {
+          about: "work", resume: "work", console: "work",
+          projects: "projects", "icon-catalog": "projects", "file-manager": "projects",
+          blog: "personal", contact: "personal", "computing-history": "personal",
+          "scheme-selector": "system", "background-picker": "system",
+        };
+        for (const [winId, desk] of Object.entries(deskMap)) {
+          setWindowDesk(winId, desk);
+        }
+        switchDesk("work");
       });
 
       document.addEventListener("wm:window-opened", () => {
         playSound("/audio/sgi-window-open.mp3");
       });
+
+      document.addEventListener("wm:splash-start", ((e: CustomEvent) => {
+        const windowId = e.detail.id;
+        const splashEl = document.querySelector<HTMLElement>(`[data-splash-for="${windowId}"]`);
+        if (!splashEl) return;
+        splashEl.style.display = "flex";
+        setTimeout(() => {
+          splashEl.classList.add("fading");
+          setTimeout(() => {
+            splashEl.style.display = "none";
+            splashEl.classList.remove("fading");
+          }, 500);
+        }, 1500);
+      }) as EventListener);
 
       // Register all windows from DOM
       document.querySelectorAll<HTMLElement>("[data-window-id]").forEach((el) => {
@@ -157,6 +182,17 @@ const { title, description } = Astro.props;
             const picker = document.getElementById("era-picker");
             if (picker) picker.style.display = "flex";
           }
+          return;
+        }
+
+        // Desk minimap click
+        const deskMini = target.closest<HTMLElement>("[data-desk-id]");
+        if (deskMini) {
+          const deskId = deskMini.dataset.deskId!;
+          document.querySelectorAll(".sgi-desk-mini").forEach((d) => d.classList.remove("active"));
+          deskMini.classList.add("active");
+          switchDesk(deskId);
+          playSound("/audio/sgi-menu-click.mp3");
           return;
         }
 
