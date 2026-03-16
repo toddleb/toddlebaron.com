@@ -10,6 +10,8 @@ import MobileLayout from "../components/MobileLayout.astro";
 import SchemeSelector from "../themes/sgi-irix/SchemeSelector.astro";
 import Console from "../themes/sgi-irix/Console.astro";
 import BackgroundPicker from "../themes/sgi-irix/BackgroundPicker.astro";
+import IconCatalog from "../themes/sgi-irix/IconCatalog.astro";
+import GaugeCluster from "../themes/sgi-irix/GaugeCluster.astro";
 import { getCollection, render } from "astro:content";
 
 const pages = (await getCollection("pages")).sort((a, b) => a.data.order - b.data.order);
@@ -40,6 +42,7 @@ const windowList = pages.map((p) => ({
             visible={page.data.windowId === "about"}
           >
             <Content />
+            {page.data.windowId === "resume" && <GaugeCluster />}
             {isBlog && blog.length > 0 && (
               <ul>
                 {blog.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).map((post) => (
@@ -60,6 +63,12 @@ const windowList = pages.map((p) => ({
 
       <Window windowId="scheme-selector" title="Color Scheme" x={300} y={150} width={360} height={320}>
         <SchemeSelector />
+      </Window>
+
+      <Window windowId="icon-catalog" title="Icon Catalog" x={180} y={80} width={600} height={420}>
+        <div style="margin:-16px; height:calc(100% + 32px);">
+          <IconCatalog />
+        </div>
       </Window>
 
       <Window windowId="console" title="Console — /dev/console" x={20} y={400} width={500} height={220}>

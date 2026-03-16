@@ -222,6 +222,38 @@ const { title, description } = Astro.props;
           return;
         }
 
+        // Catalog tab click
+        const catalogTab = target.closest<HTMLElement>("[data-catalog-tab]");
+        if (catalogTab) {
+          const tabId = catalogTab.dataset.catalogTab!;
+          document.querySelectorAll(".sgi-catalog-tab").forEach((t) => t.classList.remove("active"));
+          catalogTab.classList.add("active");
+          document.querySelectorAll<HTMLElement>(".sgi-catalog-panel").forEach((p) => {
+            p.style.display = p.dataset.catalogPanel === tabId ? "" : "none";
+          });
+          playSound("/audio/sgi-menu-click.mp3");
+          return;
+        }
+
+        // Catalog icon click
+        const catalogIcon = target.closest<HTMLElement>("[data-catalog-item]");
+        if (catalogIcon) {
+          document.querySelectorAll(".sgi-catalog-icon").forEach((i) => i.classList.remove("selected"));
+          catalogIcon.classList.add("selected");
+          const label = catalogIcon.dataset.catalogItem!;
+          const desc = catalogIcon.getAttribute("title") || "";
+          const detailEl = document.getElementById("catalog-detail");
+          const titleEl = document.getElementById("catalog-detail-title");
+          const descEl = document.getElementById("catalog-detail-desc");
+          if (detailEl && titleEl && descEl) {
+            detailEl.style.display = "";
+            titleEl.textContent = label;
+            descEl.textContent = desc;
+          }
+          playSound("/audio/sgi-icon-select.mp3");
+          return;
+        }
+
         // Click window to bring to front
         const win = target.closest<HTMLElement>(".sgi-window");
         if (win && win.dataset.windowId) {
