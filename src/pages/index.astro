@@ -7,6 +7,7 @@ import Window from "../themes/sgi-irix/Window.astro";
 import Toolchest from "../themes/sgi-irix/Toolchest.astro";
 import DesksPanel from "../themes/sgi-irix/DesksPanel.astro";
 import MobileLayout from "../components/MobileLayout.astro";
+import SchemeSelector from "../themes/sgi-irix/SchemeSelector.astro";
 import { getCollection, render } from "astro:content";
 
 const pages = (await getCollection("pages")).sort((a, b) => a.data.order - b.data.order);
@@ -54,6 +55,10 @@ const windowList = pages.map((p) => ({
           </Window>
         );
       }))}
+
+      <Window windowId="scheme-selector" title="Color Scheme" x={300} y={150} width={360} height={320}>
+        <SchemeSelector />
+      </Window>
 
       <DesksPanel windows={windowList} />
     </SGIDesktop>

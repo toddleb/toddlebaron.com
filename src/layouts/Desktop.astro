@@ -14,6 +14,27 @@ const { title, description } = Astro.props;
 <html lang="en">
   <head>
     <SEOHead title={title} description={description} />
+    <script is:inline>
+      (function() {
+        var c = document.cookie.match(/toddlebaron-scheme=([^;]+)/);
+        if (!c) return;
+        var id = c[1];
+        var schemes = {
+          indigo: {"--sgi-primary":"#6B3FA0","--sgi-secondary":"#3A8A7A","--sgi-sky-dark":"#465080","--sgi-sky-light":"#8CA9D2","--sgi-widget":"#C0C0C0","--sgi-widget-light":"#E0E0E0","--sgi-widget-dark":"#888888","--sgi-surface":"#E8E8E8","--sgi-content-bg":"#F5F5F0","--sgi-text":"#222222","--sgi-text-muted":"#666666","--sgi-title-text":"#ffffff"},
+          desert: {"--sgi-primary":"#B8860B","--sgi-secondary":"#8B4513","--sgi-sky-dark":"#8B7355","--sgi-sky-light":"#D2B48C","--sgi-widget":"#D4C4A0","--sgi-widget-light":"#E8DCC0","--sgi-widget-dark":"#A09070","--sgi-surface":"#F0E8D8","--sgi-content-bg":"#FAF5EB","--sgi-text":"#3E2723","--sgi-text-muted":"#795548","--sgi-title-text":"#ffffff"},
+          ocean: {"--sgi-primary":"#1565C0","--sgi-secondary":"#00ACC1","--sgi-sky-dark":"#0D2137","--sgi-sky-light":"#1A4A6E","--sgi-widget":"#A0B8C8","--sgi-widget-light":"#C0D8E8","--sgi-widget-dark":"#607888","--sgi-surface":"#E0E8F0","--sgi-content-bg":"#F0F5FA","--sgi-text":"#1A237E","--sgi-text-muted":"#546E7A","--sgi-title-text":"#ffffff"},
+          midnight: {"--sgi-primary":"#311B92","--sgi-secondary":"#1A237E","--sgi-sky-dark":"#0A0A1A","--sgi-sky-light":"#1A1A3E","--sgi-widget":"#808098","--sgi-widget-light":"#9898B0","--sgi-widget-dark":"#505068","--sgi-surface":"#D0D0D8","--sgi-content-bg":"#E0E0E8","--sgi-text":"#1A1A2E","--sgi-text-muted":"#606078","--sgi-title-text":"#E0E0F0"},
+          rosewood: {"--sgi-primary":"#8B1A1A","--sgi-secondary":"#6D3A3A","--sgi-sky-dark":"#3E1A1A","--sgi-sky-light":"#5E2A2A","--sgi-widget":"#C0A0A0","--sgi-widget-light":"#D8C0C0","--sgi-widget-dark":"#907070","--sgi-surface":"#F0E0E0","--sgi-content-bg":"#FAF0F0","--sgi-text":"#3E1A1A","--sgi-text-muted":"#8B6060","--sgi-title-text":"#ffffff"},
+          slate: {"--sgi-primary":"#455A64","--sgi-secondary":"#607D8B","--sgi-sky-dark":"#37474F","--sgi-sky-light":"#546E7A","--sgi-widget":"#B0BEC5","--sgi-widget-light":"#CFD8DC","--sgi-widget-dark":"#78909C","--sgi-surface":"#ECEFF1","--sgi-content-bg":"#F5F7F8","--sgi-text":"#263238","--sgi-text-muted":"#607D8B","--sgi-title-text":"#ffffff"}
+        };
+        var s = schemes[id];
+        if (!s) return;
+        var r = document.documentElement;
+        for (var k in s) r.style.setProperty(k, s[k]);
+        r.style.setProperty("--sgi-title-gradient", "linear-gradient(90deg, " + s["--sgi-primary"] + ", " + s["--sgi-secondary"] + ")");
+        r.style.setProperty("--sgi-sky-gradient", "linear-gradient(180deg, " + s["--sgi-sky-dark"] + " 0%, " + s["--sgi-sky-light"] + " 100%)");
+      })();
+    </script>
   </head>
   <body style="margin:0; padding:0; overflow:hidden; background:#000">
     <slot />
@@ -94,6 +115,36 @@ const { title, description } = Astro.props;
         if (target.id === "volume-toggle") {
           const nowMuted = toggleMute();
           target.textContent = nowMuted ? "\u{1F507}" : "\u{1F50A}";
+          return;
+        }
+
+        // Scheme selector
+        const schemeSwatch = target.closest<HTMLElement>("[data-scheme-id]");
+        if (schemeSwatch) {
+          const schemeId = schemeSwatch.dataset.schemeId!;
+          document.querySelectorAll(".sgi-scheme-swatch").forEach((s) => s.classList.remove("active"));
+          schemeSwatch.classList.add("active");
+          // Apply scheme
+          import("../themes/sgi-irix/schemes").then(({ getSchemeById }) => {
+            const scheme = getSchemeById(schemeId);
+            if (!scheme) return;
+            const r = document.documentElement;
+            r.style.setProperty("--sgi-primary", scheme.primary);
+            r.style.setProperty("--sgi-secondary", scheme.secondary);
+            r.style.setProperty("--sgi-sky-dark", scheme.skyDark);
+            r.style.setProperty("--sgi-sky-light", scheme.skyLight);
+            r.style.setProperty("--sgi-widget", scheme.widget);
+            r.style.setProperty("--sgi-widget-light", scheme.widgetLight);
+            r.style.setProperty("--sgi-widget-dark", scheme.widgetDark);
+            r.style.setProperty("--sgi-surface", scheme.surface);
+            r.style.setProperty("--sgi-content-bg", scheme.contentBg);
+            r.style.setProperty("--sgi-text", scheme.text);
+            r.style.setProperty("--sgi-text-muted", scheme.textMuted);
+            r.style.setProperty("--sgi-title-text", scheme.titleText);
+            r.style.setProperty("--sgi-title-gradient", `linear-gradient(90deg, ${scheme.primary}, ${scheme.secondary})`);
+            r.style.setProperty("--sgi-sky-gradient", `linear-gradient(180deg, ${scheme.skyDark} 0%, ${scheme.skyLight} 100%)`);
+            document.cookie = `toddlebaron-scheme=${schemeId};path=/;max-age=${30 * 24 * 60 * 60}`;
+          });
           return;
         }
 
