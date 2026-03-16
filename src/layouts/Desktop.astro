@@ -52,6 +52,10 @@ const { title, description } = Astro.props;
         initKeyboardNav();
       });
 
+      document.addEventListener("wm:window-opened", () => {
+        playSound("/audio/sgi-window-open.mp3");
+      });
+
       // Register all windows from DOM
       document.querySelectorAll<HTMLElement>("[data-window-id]").forEach((el) => {
         if (!el.classList.contains("sgi-window")) return;
@@ -73,8 +77,8 @@ const { title, description } = Astro.props;
         const action = target.dataset.action;
         const windowTarget = target.dataset.target;
         if (action && windowTarget) {
-          if (action === "close") closeWindow(windowTarget);
-          if (action === "minimize") minimizeWindow(windowTarget);
+          if (action === "close") { closeWindow(windowTarget); playSound("/audio/sgi-window-close.mp3"); }
+          if (action === "minimize") { minimizeWindow(windowTarget); playSound("/audio/sgi-window-close.mp3"); }
           if (action === "maximize") maximizeWindow(windowTarget);
           return;
         }
@@ -83,6 +87,7 @@ const { title, description } = Astro.props;
         const menuOpen = target.closest<HTMLElement>("[data-menu-open]");
         if (menuOpen) {
           openWindow(menuOpen.dataset.menuOpen!);
+          playSound("/audio/sgi-menu-click.mp3");
           return;
         }
 

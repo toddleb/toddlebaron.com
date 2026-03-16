@@ -1,4 +1,5 @@
 import { openWindow, bringToFront } from "./wm";
+import { playSound } from "./audio";
 
 let selectedIconId: string | null = null;
 
@@ -27,7 +28,10 @@ function selectIcon(id: string): void {
   deselectAll();
   selectedIconId = id;
   const icon = document.querySelector<HTMLElement>(`.sgi-icon[data-window-id="${id}"]`);
-  if (icon) icon.classList.add("selected");
+  if (icon) {
+    icon.classList.add("selected");
+    playSound("/audio/sgi-icon-select.mp3");
+  }
 }
 
 function deselectAll(): void {
