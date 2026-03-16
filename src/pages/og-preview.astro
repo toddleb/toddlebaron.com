@@ -1,0 +1,126 @@
+---
+// src/pages/og-preview.astro
+// Standalone 1200x630 page for OG social preview screenshot
+// Manually screenshot this page and save as public/og-image.png
+---
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>OG Preview</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+    }
+    .og {
+      width: 1200px;
+      height: 630px;
+      background: linear-gradient(180deg, #465080 0%, #6474A6 40%, #8CA9D2 100%);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .sgi-logo {
+      font-size: 96px;
+      font-weight: 900;
+      letter-spacing: -4px;
+      text-shadow: 3px 3px 8px rgba(0,0,0,0.4);
+    }
+    .sgi-logo .s { color: #3BB8D0; }
+    .sgi-logo .g { color: #E8891E; }
+    .sgi-logo .i { color: #7B52AE; }
+    .site {
+      font-size: 28px;
+      color: white;
+      opacity: 0.9;
+      margin-top: 12px;
+      font-weight: 300;
+    }
+    .tagline {
+      font-size: 18px;
+      color: white;
+      opacity: 0.6;
+      margin-top: 8px;
+    }
+    /* Mini window mockups */
+    .mini-win {
+      position: absolute;
+      background: rgba(232,232,232,0.9);
+      border-radius: 3px;
+      border: 1px solid #888;
+      overflow: hidden;
+    }
+    .mini-titlebar {
+      height: 18px;
+      background: linear-gradient(90deg, #6B3FA0, #4A6FA0, #3A8A7A);
+    }
+    .mini-console {
+      background: rgba(10,10,26,0.9);
+    }
+    .mini-console .mini-text {
+      color: #50E880;
+      font-family: monospace;
+      font-size: 8px;
+      padding: 4px;
+    }
+    .mini-content {
+      padding: 6px;
+      font-size: 7px;
+      color: #666;
+    }
+    .mini-content .line {
+      height: 4px;
+      background: #ccc;
+      border-radius: 2px;
+      margin-bottom: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="og">
+    <!-- Top-left window -->
+    <div class="mini-win" style="top:40px;left:50px;width:180px;height:110px;">
+      <div class="mini-titlebar"></div>
+      <div class="mini-content">
+        <div class="line" style="width:80%"></div>
+        <div class="line" style="width:60%"></div>
+        <div class="line" style="width:90%"></div>
+        <div class="line" style="width:45%"></div>
+      </div>
+    </div>
+
+    <!-- Overlapping window -->
+    <div class="mini-win" style="top:80px;left:140px;width:160px;height:90px;">
+      <div class="mini-titlebar"></div>
+      <div class="mini-content">
+        <div class="line" style="width:70%"></div>
+        <div class="line" style="width:85%"></div>
+        <div class="line" style="width:50%"></div>
+      </div>
+    </div>
+
+    <!-- Console window bottom-right -->
+    <div class="mini-win mini-console" style="bottom:60px;right:60px;width:180px;height:100px;">
+      <div class="mini-titlebar"></div>
+      <div class="mini-text">
+        todd@indigo:~$ neofetch<br/>
+        IRIX 6.5 | Indigo2 IMPACT<br/>
+        todd@indigo:~$ _
+      </div>
+    </div>
+
+    <!-- Center content -->
+    <div class="sgi-logo">
+      <span class="s">s</span><span class="g">g</span><span class="i">i</span>
+    </div>
+    <div class="site">toddlebaron.com</div>
+    <div class="tagline">An SGI IRIX desktop experience in the browser</div>
+  </div>
+</body>
+</html>

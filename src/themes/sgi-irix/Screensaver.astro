@@ -1,0 +1,58 @@
+---
+// src/themes/sgi-irix/Screensaver.astro — Flying SGI cube + starfield
+// Hidden by default; visible when .screensaver-active class is on parent
+
+// Generate random star positions at build time
+const stars = Array.from({ length: 50 }, () => ({
+  x: Math.random() * 100,
+  y: Math.random() * 100,
+  size: Math.random() > 0.7 ? 2 : 1,
+  opacity: 0.3 + Math.random() * 0.5,
+  delay: Math.random() * 4,
+}));
+---
+
+<div class="sgi-screensaver" id="screensaver">
+  <!-- Starfield -->
+  <div class="sgi-ss-starfield">
+    {stars.map((s) => (
+      <div
+        class="sgi-ss-star"
+        style={`left:${s.x}%;top:${s.y}%;width:${s.size}px;height:${s.size}px;opacity:${s.opacity};animation-delay:${s.delay}s`}
+      />
+    ))}
+  </div>
+
+  <!-- Floating SGI Cube -->
+  <div class="sgi-ss-cube-container">
+    <svg class="sgi-ss-cube" width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ss-cube-top" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#5BC8DC"/>
+          <stop offset="100%" stop-color="#3A9AB0"/>
+        </linearGradient>
+        <linearGradient id="ss-cube-left" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#E8891E"/>
+          <stop offset="100%" stop-color="#C06E10"/>
+        </linearGradient>
+        <linearGradient id="ss-cube-right" x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#9B6CC8"/>
+          <stop offset="100%" stop-color="#7B52AE"/>
+        </linearGradient>
+      </defs>
+      <!-- Top face (cyan) -->
+      <polygon points="60,15 105,38 60,55 15,38" fill="url(#ss-cube-top)" opacity="0.9"/>
+      <!-- Left face (orange) -->
+      <polygon points="15,38 60,55 60,100 15,78" fill="url(#ss-cube-left)" opacity="0.9"/>
+      <!-- Right face (purple) -->
+      <polygon points="105,38 60,55 60,100 105,78" fill="url(#ss-cube-right)" opacity="0.9"/>
+      <!-- Edge highlights -->
+      <line x1="60" y1="15" x2="15" y2="38" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+      <line x1="60" y1="15" x2="105" y2="38" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+      <line x1="15" y1="38" x2="60" y2="55" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+      <line x1="60" y1="55" x2="60" y2="100" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/>
+    </svg>
+    <!-- Glow -->
+    <div class="sgi-ss-glow"></div>
+  </div>
+</div>

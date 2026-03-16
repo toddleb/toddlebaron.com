@@ -14,6 +14,7 @@ import IconCatalog from "../themes/sgi-irix/IconCatalog.astro";
 import GaugeCluster from "../themes/sgi-irix/GaugeCluster.astro";
 import ButtonFly from "../themes/sgi-irix/ButtonFly.astro";
 import FileManager from "../themes/sgi-irix/FileManager.astro";
+import MediaMail from "../themes/sgi-irix/MediaMail.astro";
 import { getCollection, render } from "astro:content";
 
 const pages = (await getCollection("pages")).sort((a, b) => a.data.order - b.data.order);
@@ -45,6 +46,7 @@ const windowList = pages.map((p) => ({
           >
             <Content />
             {page.data.windowId === "resume" && <GaugeCluster />}
+            {page.data.windowId === "contact" && <MediaMail />}
             {isBlog && blog.length > 0 && (
               <ul>
                 {blog.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).map((post) => (

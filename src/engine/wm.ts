@@ -226,6 +226,57 @@ export function setWindowDesk(id: string, desk: string): void {
   if (win) win.desk = desk;
 }
 
+export function getVisibleWindows(): WindowState[] {
+  const desk = getActiveDesk();
+  return Array.from(windows.values()).filter(
+    (win) => !win.minimized && (win.desk === desk || !win.desk)
+  );
+}
+
+export function cascadeAll(): void {
+  const visible = getVisibleWindows();
+  visible.forEach((win, i) => {
+    win.maximized = false;
+    win.x = 40 + i * 30;
+    win.y = 40 + i * 30;
+    win.width = 500;
+    win.height = 400;
+    win.zIndex = ++topZ;
+    applyWindowPosition(win.id);
+  });
+}
+
+export function tileAll(): void {
+  const visible = getVisibleWindows();
+  const n = visible.length;
+  if (n === 0) return;
+
+  const topMargin = 32;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight - topMargin;
+
+  let cols: number, rows: number;
+  if (n === 1) { cols = 1; rows = 1; }
+  else if (n === 2) { cols = 2; rows = 1; }
+  else if (n <= 4) { cols = 2; rows = 2; }
+  else { cols = 3; rows = 2; }
+
+  const cellW = Math.floor(vw / cols);
+  const cellH = Math.floor(vh / rows);
+
+  visible.forEach((win, i) => {
+    win.maximized = false;
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    win.x = col * cellW;
+    win.y = topMargin + row * cellH;
+    win.width = cellW;
+    win.height = cellH;
+    win.zIndex = ++topZ;
+    applyWindowPosition(win.id);
+  });
+}
+
 export function initKeyboardNav(): void {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && activeWindowId) {

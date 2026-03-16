@@ -1,0 +1,85 @@
+---
+// src/themes/sgi-irix/MediaMail.astro — SGI MediaMail compose window
+---
+
+<div class="sgi-mediamail">
+  <!-- Toolbar -->
+  <div class="sgi-mm-toolbar">
+    <button class="sgi-mm-btn sgi-mm-btn-send" id="mm-send">Send</button>
+    <button class="sgi-mm-btn" id="mm-clear">Clear</button>
+  </div>
+
+  <!-- Header fields -->
+  <div class="sgi-mm-headers">
+    <div class="sgi-mm-field">
+      <label class="sgi-mm-label">To:</label>
+      <div class="sgi-mm-value-readonly">hello@toddlebaron.com</div>
+    </div>
+    <div class="sgi-mm-field">
+      <label class="sgi-mm-label">From:</label>
+      <input type="email" id="mm-from" class="sgi-mm-input" placeholder="your@email.com" required />
+    </div>
+    <div class="sgi-mm-field">
+      <label class="sgi-mm-label">Subject:</label>
+      <input type="text" id="mm-subject" class="sgi-mm-input" placeholder="Hello from your website!" />
+    </div>
+  </div>
+
+  <!-- Body -->
+  <textarea id="mm-body" class="sgi-mm-body" placeholder="Type your message here..."></textarea>
+
+  <!-- Footer links -->
+  <div class="sgi-mm-footer-links">
+    <a href="https://github.com/toddleb" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/toddlebaron" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:hello@toddlebaron.com">hello@toddlebaron.com</a>
+  </div>
+
+  <!-- Status bar -->
+  <div class="sgi-mm-status" id="mm-status">Ready</div>
+</div>
+
+<script>
+  import { playSound } from "../../engine/audio";
+
+  const sendBtn = document.getElementById("mm-send")!;
+  const clearBtn = document.getElementById("mm-clear")!;
+  const fromInput = document.getElementById("mm-from") as HTMLInputElement;
+  const subjectInput = document.getElementById("mm-subject") as HTMLInputElement;
+  const bodyInput = document.getElementById("mm-body") as HTMLTextAreaElement;
+  const statusEl = document.getElementById("mm-status")!;
+
+  sendBtn.addEventListener("click", () => {
+    const from = fromInput.value.trim();
+    const subject = subjectInput.value.trim() || "Hello from your website!";
+    const body = bodyInput.value.trim();
+
+    if (!from) {
+      statusEl.textContent = "Please enter your email address";
+      fromInput.focus();
+      return;
+    }
+
+    // Construct mailto link
+    const params = new URLSearchParams();
+    params.set("subject", subject);
+    if (body) params.set("body", body + "\n\n— Sent from toddlebaron.com by " + from);
+    const mailto = "mailto:hello@toddlebaron.com?" + params.toString();
+
+    statusEl.textContent = "Opening your mail client...";
+    playSound("/audio/sgi-menu-click.mp3");
+
+    window.location.href = mailto;
+
+    setTimeout(() => {
+      statusEl.textContent = "Mail client opened — send from there!";
+    }, 1000);
+  });
+
+  clearBtn.addEventListener("click", () => {
+    fromInput.value = "";
+    subjectInput.value = "";
+    bodyInput.value = "";
+    statusEl.textContent = "Ready";
+  });
+</script>

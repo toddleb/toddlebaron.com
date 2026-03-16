@@ -968,3 +968,396 @@
   .sgi-desktop { display: none; }
   .sgi-boot-logo { font-size: 48px; }
 }
+
+/* ========================================
+   Interactive Console (shell)
+   ======================================== */
+
+.sgi-console-input-row {
+  display: flex;
+  align-items: center;
+  padding: 2px 8px 4px;
+  background: #0A0A1A;
+  border-top: 1px solid #1A1A3A;
+  font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Mono", monospace;
+  font-size: 12px;
+}
+
+.sgi-console-prompt {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sgi-console-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #50E880;
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: #50E880;
+  padding: 0;
+}
+
+.sgi-console-entry {
+  margin-bottom: 2px;
+}
+
+.sgi-console-response {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.sgi-console-response a {
+  color: #E8891E;
+  text-decoration: underline;
+}
+
+/* ========================================
+   Screensaver
+   ======================================== */
+
+.sgi-screensaver {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0a0a12;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  will-change: opacity;
+}
+
+.screensaver-active .sgi-screensaver {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Boot phase: screensaver visible but fades during logo phase */
+.sgi-boot .sgi-screensaver {
+  opacity: 1;
+  pointer-events: none;
+}
+
+.sgi-ss-starfield {
+  position: absolute;
+  inset: 0;
+}
+
+.sgi-ss-star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: ss-twinkle 3s ease-in-out infinite alternate;
+}
+
+@keyframes ss-twinkle {
+  from { opacity: var(--star-opacity, 0.3); }
+  to { opacity: 1; }
+}
+
+.sgi-ss-cube-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ss-float 28s linear infinite;
+}
+
+@keyframes ss-float {
+  0%   { transform: translate(-50%, -50%) translate(0vw, 0vh); }
+  15%  { transform: translate(-50%, -50%) translate(30vw, -20vh); }
+  30%  { transform: translate(-50%, -50%) translate(-15vw, 25vh); }
+  45%  { transform: translate(-50%, -50%) translate(25vw, 15vh); }
+  60%  { transform: translate(-50%, -50%) translate(-25vw, -15vh); }
+  75%  { transform: translate(-50%, -50%) translate(10vw, -25vh); }
+  100% { transform: translate(-50%, -50%) translate(0vw, 0vh); }
+}
+
+.sgi-ss-cube {
+  animation: ss-rotate 12s linear infinite;
+}
+
+@keyframes ss-rotate {
+  from { transform: rotate3d(1, 1, 0.5, 0deg); }
+  to   { transform: rotate3d(1, 1, 0.5, 360deg); }
+}
+
+.sgi-ss-glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle, rgba(91,200,220,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ========================================
+   MediaMail
+   ======================================== */
+
+.sgi-mediamail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: Helvetica, sans-serif;
+  font-size: 13px;
+  background: var(--sgi-surface, #E8E8E8);
+}
+
+.sgi-mm-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 4px 8px;
+  background: linear-gradient(180deg, var(--sgi-widget-light, #D8D8D8), var(--sgi-widget, #B8B8B8));
+  border-bottom: 1px solid var(--sgi-widget-dark, #888);
+}
+
+.sgi-mm-btn {
+  background: linear-gradient(180deg, var(--sgi-widget-light, #E8E8E8), var(--sgi-widget, #C8C8C8));
+  border: 1px outset var(--sgi-widget-light, #DDD);
+  border-radius: 2px;
+  padding: 3px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--sgi-text, #555);
+}
+
+.sgi-mm-btn:active {
+  border-style: inset;
+}
+
+.sgi-mm-btn-send {
+  font-weight: bold;
+  color: var(--sgi-text, #333);
+}
+
+.sgi-mm-headers {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--sgi-widget-dark, #C0C0C0);
+  background: var(--sgi-content-bg, #F0F0F0);
+}
+
+.sgi-mm-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.sgi-mm-field:last-child {
+  margin-bottom: 0;
+}
+
+.sgi-mm-label {
+  width: 60px;
+  color: var(--sgi-text-muted, #555);
+  font-size: 12px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.sgi-mm-value-readonly {
+  flex: 1;
+  background: var(--sgi-widget-light, #fff);
+  border: 1px inset var(--sgi-widget-dark, #999);
+  padding: 3px 6px;
+  color: var(--sgi-text, #333);
+  font-size: 12px;
+}
+
+.sgi-mm-input {
+  flex: 1;
+  background: #fff;
+  border: 1px inset var(--sgi-widget-dark, #999);
+  padding: 3px 6px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--sgi-text, #333);
+  outline: none;
+}
+
+.sgi-mm-input:focus {
+  border-color: var(--sgi-primary, #6B3FA0);
+}
+
+.sgi-mm-body {
+  flex: 1;
+  margin: 0;
+  padding: 12px;
+  background: #FFFFF8;
+  border: none;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--sgi-text, #333);
+  resize: none;
+  outline: none;
+  min-height: 80px;
+}
+
+.sgi-mm-footer-links {
+  display: flex;
+  gap: 12px;
+  padding: 4px 12px;
+  background: var(--sgi-content-bg, #F0F0F0);
+  border-top: 1px solid var(--sgi-widget-dark, #C0C0C0);
+  font-size: 11px;
+}
+
+.sgi-mm-footer-links a {
+  color: var(--sgi-primary, #6B3FA0);
+  text-decoration: none;
+}
+
+.sgi-mm-footer-links a:hover {
+  text-decoration: underline;
+}
+
+.sgi-mm-status {
+  background: var(--sgi-widget, #D0D0D0);
+  border-top: 1px solid var(--sgi-widget-dark, #888);
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--sgi-text-muted, #666);
+}
+
+/* ========================================
+   xeyes Easter Egg
+   ======================================== */
+
+.sgi-xeyes {
+  position: fixed;
+  z-index: 4000;
+  cursor: grab;
+}
+
+.sgi-xeyes-titlebar {
+  height: 20px;
+  background: var(--sgi-title-gradient, linear-gradient(90deg, #6B3FA0, #3A8A7A));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+  cursor: grab;
+  font-size: 10px;
+  color: var(--sgi-title-text, #fff);
+  font-family: Helvetica, sans-serif;
+}
+
+.sgi-xeyes-close {
+  width: 14px;
+  height: 14px;
+  background: var(--sgi-widget, #C0C0C0);
+  border: 1px outset var(--sgi-widget-light, #E0E0E0);
+  font-size: 10px;
+  line-height: 12px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sgi-xeyes-body {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--sgi-surface, #E8E8E8);
+  border: 2px outset var(--sgi-widget-light, #E0E0E0);
+  border-top: none;
+}
+
+/* ========================================
+   DOOM dialog Easter Egg
+   ======================================== */
+
+.sgi-doom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 6000;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sgi-doom-dialog {
+  background: var(--sgi-widget, #C0C0C0);
+  border: 3px outset var(--sgi-widget-light, #E0E0E0);
+  padding: 0;
+  min-width: 360px;
+  max-width: 440px;
+  font-family: Helvetica, sans-serif;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.sgi-doom-titlebar {
+  background: var(--sgi-title-gradient, linear-gradient(90deg, #6B3FA0, #3A8A7A));
+  color: var(--sgi-title-text, #fff);
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.sgi-doom-body {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  align-items: flex-start;
+}
+
+.sgi-doom-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.sgi-doom-text {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--sgi-text, #222);
+  white-space: pre-line;
+}
+
+.sgi-doom-footer {
+  display: flex;
+  justify-content: center;
+  padding: 8px 16px 16px;
+}
+
+.sgi-doom-ok {
+  background: linear-gradient(180deg, var(--sgi-widget-light, #E0E0E0), var(--sgi-widget, #B0B0B0));
+  border: 2px outset var(--sgi-widget-light, #E0E0E0);
+  padding: 4px 32px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.sgi-doom-ok:active {
+  border-style: inset;
+}
+
+/* ========================================
+   Draggable Desktop Icons
+   ======================================== */
+
+.sgi-desktop-icons {
+  position: relative;
+}
+
+.sgi-icon {
+  position: absolute;
+  transition: left 0.15s ease, top 0.15s ease;
+}
+
+.sgi-icon.dragging {
+  opacity: 0.6;
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.4));
+  transition: none;
+  z-index: 100;
+}
+
+.sgi-icon-ghost {
+  position: absolute;
+  width: 64px;
+  height: 80px;
+  border: 1px dashed rgba(255,255,255,0.4);
+  pointer-events: none;
+  z-index: 99;
+}

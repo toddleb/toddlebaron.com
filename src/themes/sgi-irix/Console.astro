@@ -1,6 +1,5 @@
 ---
-// src/themes/sgi-irix/Console.astro
-import { consoleEntries } from "../../data/console-entries";
+// src/themes/sgi-irix/Console.astro — Interactive shell terminal
 import RunningMan from "./RunningMan.astro";
 ---
 
@@ -9,12 +8,118 @@ import RunningMan from "./RunningMan.astro";
     <span>/dev/console</span>
     <RunningMan size={16} color="#33FF33" />
   </div>
-  <div class="sgi-console-output">
-    {consoleEntries.map((entry) => (
-      <div class:list={["sgi-console-line", `sgi-console-${entry.type}`]}>
-        <span class="sgi-console-timestamp">[{entry.date} {entry.time}]</span>
-        {" "}{entry.message}
-      </div>
-    ))}
+  <div class="sgi-console-output" id="console-output">
+    <div class="sgi-console-line sgi-console-system">IRIX 6.5 console — type 'help' for commands</div>
+  </div>
+  <div class="sgi-console-input-row">
+    <span class="sgi-console-prompt" id="console-prompt"></span>
+    <input
+      type="text"
+      id="console-input"
+      class="sgi-console-input"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    />
   </div>
 </div>
+
+<script>
+  import { executeCommand, getPromptHTML } from "../../engine/shell";
+
+  const output = document.getElementById("console-output")!;
+  const input = document.getElementById("console-input") as HTMLInputElement;
+  const promptEl = document.getElementById("console-prompt")!;
+
+  const history: string[] = [];
+  let historyIndex = -1;
+
+  // Safe method to set HTML content on an element
+  // This is a static site with no user-generated content — all HTML comes from
+  // our own shell.ts module which constructs safe HTML from known data sources
+  function setContent(el: Element, html: string): void {
+    const range = document.createRange();
+    const frag = range.createContextualFragment(html);
+    el.appendChild(frag);
+  }
+
+  function replaceContent(el: Element, html: string): void {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    setContent(el, html);
+  }
+
+  // Set initial prompt
+  replaceContent(promptEl, getPromptHTML());
+
+  function appendOutput(promptHtml: string, commandText: string, responseHtml: string): void {
+    const entry = document.createElement("div");
+    entry.className = "sgi-console-entry";
+
+    const cmdLine = document.createElement("div");
+    cmdLine.className = "sgi-console-line";
+    setContent(cmdLine, promptHtml);
+    const cmdSpan = document.createElement("span");
+    cmdSpan.textContent = commandText;
+    cmdLine.appendChild(cmdSpan);
+    entry.appendChild(cmdLine);
+
+    if (responseHtml) {
+      const resp = document.createElement("div");
+      resp.className = "sgi-console-line sgi-console-response";
+      setContent(resp, responseHtml);
+      entry.appendChild(resp);
+    }
+
+    output.appendChild(entry);
+    output.scrollTop = output.scrollHeight;
+  }
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const cmd = input.value;
+      const prompt = getPromptHTML();
+
+      if (cmd.trim()) {
+        history.unshift(cmd);
+        if (history.length > 50) history.pop();
+      }
+      historyIndex = -1;
+
+      const result = executeCommand(cmd);
+
+      if (result.type === "clear") {
+        while (output.firstChild) output.removeChild(output.firstChild);
+      } else if (result.type === "event") {
+        appendOutput(prompt, cmd, "");
+        document.dispatchEvent(new CustomEvent(result.name, { detail: result.detail }));
+      } else {
+        appendOutput(prompt, cmd, result.html);
+      }
+
+      // Update prompt (cwd may have changed)
+      replaceContent(promptEl, getPromptHTML());
+      input.value = "";
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (history.length > 0 && historyIndex < history.length - 1) {
+        historyIndex++;
+        input.value = history[historyIndex];
+      }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        historyIndex--;
+        input.value = history[historyIndex];
+      } else {
+        historyIndex = -1;
+        input.value = "";
+      }
+    }
+  });
+
+  // Focus input when clicking anywhere in the console
+  document.querySelector(".sgi-console")?.addEventListener("click", () => {
+    input.focus();
+  });
+</script>

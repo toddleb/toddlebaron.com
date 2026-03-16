@@ -149,43 +149,30 @@ export const sgiIcons: Record<string, string> = {
         <stop offset="40%" stop-color="#909090"/>
         <stop offset="100%" stop-color="#585858"/>
       </linearGradient>
-      <linearGradient id="envelope-contact" x1="0" y1="0" x2="0.2" y2="1">
-        <stop offset="0%" stop-color="#E8D870"/>
-        <stop offset="50%" stop-color="#C8A830"/>
-        <stop offset="100%" stop-color="#A88020"/>
+      <linearGradient id="mailbox-contact" x1="0" y1="0" x2="0.2" y2="1">
+        <stop offset="0%" stop-color="#70B8F0"/>
+        <stop offset="50%" stop-color="#4088C8"/>
+        <stop offset="100%" stop-color="#2060A0"/>
       </linearGradient>
-      <linearGradient id="flap-contact" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#F0E888"/>
-        <stop offset="100%" stop-color="#D4B840"/>
-      </linearGradient>
-      <linearGradient id="inside-contact" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#FFF8E0"/>
-        <stop offset="100%" stop-color="#EEE0A0"/>
+      <linearGradient id="envelope-contact" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#F8F4E8"/>
+        <stop offset="100%" stop-color="#E0D8C0"/>
       </linearGradient>
     </defs>
     <!-- shelf platform -->
     <rect x="3" y="39" width="42" height="7" rx="1" fill="url(#shelf-contact)" stroke="#444" stroke-width="0.5"/>
     <rect x="3" y="39" width="42" height="2" rx="1" fill="#D0D0D0" opacity="0.6"/>
     <ellipse cx="24" cy="41" rx="14" ry="2" fill="rgba(0,0,0,0.25)"/>
-    <!-- envelope body -->
-    <rect x="7" y="16" width="34" height="23" rx="2" fill="url(#envelope-contact)" stroke="#906820" stroke-width="0.8"/>
-    <!-- envelope inside (visible at top flap) -->
-    <rect x="8" y="17" width="32" height="10" rx="1" fill="url(#inside-contact)" opacity="0.6"/>
-    <!-- flap -->
-    <path d="M7 16 L24 27 L41 16 Z" fill="url(#flap-contact)" stroke="#906820" stroke-width="0.6"/>
-    <!-- flap center fold line -->
-    <path d="M7 16 L24 26" stroke="#C09028" stroke-width="0.5" opacity="0.5"/>
-    <path d="M41 16 L24 26" stroke="#C09028" stroke-width="0.5" opacity="0.5"/>
-    <!-- bottom V fold -->
-    <path d="M7 39 L24 28 L41 39" fill="none" stroke="#906820" stroke-width="0.6"/>
-    <!-- highlight on flap -->
-    <path d="M10 16 L24 25 L28 22 L16 16 Z" fill="rgba(255,255,255,0.2)"/>
-    <!-- envelope edge highlight -->
-    <line x1="7.5" y1="17" x2="7.5" y2="38" stroke="rgba(255,255,255,0.35)" stroke-width="0.8"/>
-    <line x1="8" y1="16.5" x2="40" y2="16.5" stroke="rgba(255,255,255,0.35)" stroke-width="0.8"/>
-    <!-- postage stamp hint -->
-    <rect x="32" y="20" width="6" height="5" rx="0.5" fill="#8850D0" stroke="#6040B0" stroke-width="0.5"/>
-    <rect x="33" y="21" width="4" height="3" rx="0.3" fill="#A870F0" opacity="0.7"/>
+    <!-- mailbox body -->
+    <rect x="10" y="12" width="28" height="27" rx="2" fill="url(#mailbox-contact)" stroke="#1858A0" stroke-width="0.8"/>
+    <rect x="10" y="12" width="28" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+    <!-- envelope sticking out -->
+    <rect x="14" y="8" width="20" height="14" rx="1" fill="url(#envelope-contact)" stroke="#B0A880" stroke-width="0.6" transform="rotate(-5 24 15)"/>
+    <path d="M15 9 L24 16 L33 9" fill="none" stroke="#A09060" stroke-width="0.8" transform="rotate(-5 24 15)"/>
+    <!-- @ symbol -->
+    <text x="24" y="32" text-anchor="middle" font-size="12" font-weight="bold" fill="#E0F0FF" font-family="sans-serif" opacity="0.8">@</text>
+    <!-- highlight -->
+    <line x1="10.5" y1="13" x2="10.5" y2="38" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>
   </svg>`,
 
   projects: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">

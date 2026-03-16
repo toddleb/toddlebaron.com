@@ -57,7 +57,7 @@ const { title, description } = Astro.props;
     <script>
       import { initDesktopIcons } from "../engine/desktop";
       import { initAudio, playSound, toggleMute, isMuted } from "../engine/audio";
-      import { registerWindow, openWindow, closeWindow, minimizeWindow, maximizeWindow, startDrag, startResize, bringToFront, initKeyboardNav, setWindowDesk, switchDesk } from "../engine/wm";
+      import { registerWindow, openWindow, closeWindow, minimizeWindow, maximizeWindow, startDrag, startResize, bringToFront, initKeyboardNav, setWindowDesk, switchDesk, cascadeAll, tileAll } from "../engine/wm";
 
       // Wait for boot to complete (or skip)
       document.addEventListener("boot:complete", () => {
@@ -137,7 +137,9 @@ const { title, description } = Astro.props;
         if (dropdownItem) {
           const action = dropdownItem.dataset.action;
           const windowTarget = dropdownItem.dataset.target;
-          if (action && windowTarget) {
+          if (action === "cascade-all") { cascadeAll(); playSound("/audio/sgi-menu-click.mp3"); }
+          else if (action === "tile-all") { tileAll(); playSound("/audio/sgi-menu-click.mp3"); }
+          else if (action && windowTarget) {
             if (action === "close") { closeWindow(windowTarget); playSound("/audio/sgi-window-close.mp3"); }
             if (action === "minimize") { minimizeWindow(windowTarget); playSound("/audio/sgi-window-close.mp3"); }
             if (action === "maximize") maximizeWindow(windowTarget);
@@ -351,6 +353,8 @@ const { title, description } = Astro.props;
         const items = [
           { label: "IRIX 6.5", disabled: true },
           { label: "Refresh Desktop", action: () => location.reload() },
+          { label: "Cascade All Windows", action: () => cascadeAll() },
+          { label: "Tile All Windows", action: () => tileAll() },
           { label: "About This Workstation", action: () => openWindow("about") },
           { label: "Change Background...", action: () => openWindow("background-picker") },
           { label: "Choose Era...", action: () => { const p = document.getElementById("era-picker"); if (p) p.style.display = "flex"; } },
@@ -419,6 +423,178 @@ const { title, description } = Astro.props;
           const url = fmFile.dataset.fmUrl;
           if (url) window.open(url, "_blank");
         }
+      });
+
+      // ============================
+      // Screensaver idle timer (90s)
+      // ============================
+      let idleTimer: ReturnType<typeof setTimeout> | null = null;
+      const IDLE_TIMEOUT = 90000;
+
+      function resetIdleTimer(): void {
+        if (idleTimer) clearTimeout(idleTimer);
+        // Deactivate screensaver if active
+        const desktop = document.getElementById("desktop");
+        if (desktop?.classList.contains("screensaver-active")) {
+          desktop.classList.remove("screensaver-active");
+        }
+        idleTimer = setTimeout(() => {
+          const desktop = document.getElementById("desktop");
+          if (desktop) desktop.classList.add("screensaver-active");
+        }, IDLE_TIMEOUT);
+      }
+
+      document.addEventListener("boot:complete", () => {
+        resetIdleTimer();
+        document.addEventListener("mousemove", resetIdleTimer);
+        document.addEventListener("keydown", resetIdleTimer);
+        document.addEventListener("click", resetIdleTimer);
+      });
+
+      // ============================
+      // Easter Egg: xeyes
+      // ============================
+      document.addEventListener("shell:xeyes-spawn", () => {
+        // Remove existing xeyes
+        document.getElementById("sgi-xeyes")?.remove();
+
+        const xeyes = document.createElement("div");
+        xeyes.id = "sgi-xeyes";
+        xeyes.className = "sgi-xeyes";
+        xeyes.style.left = "200px";
+        xeyes.style.top = "150px";
+
+        const titlebar = document.createElement("div");
+        titlebar.className = "sgi-xeyes-titlebar";
+        const title = document.createElement("span");
+        title.textContent = "xeyes";
+        const closeBtn = document.createElement("button");
+        closeBtn.className = "sgi-xeyes-close";
+        closeBtn.textContent = "\u00D7";
+        closeBtn.addEventListener("click", () => xeyes.remove());
+        titlebar.appendChild(title);
+        titlebar.appendChild(closeBtn);
+
+        const body = document.createElement("div");
+        body.className = "sgi-xeyes-body";
+
+        // Create two eyes as SVG
+        for (let i = 0; i < 2; i++) {
+          const ns = "http://www.w3.org/2000/svg";
+          const svg = document.createElementNS(ns, "svg");
+          svg.setAttribute("width", "40");
+          svg.setAttribute("height", "50");
+          svg.setAttribute("viewBox", "0 0 40 50");
+
+          const eyeWhite = document.createElementNS(ns, "ellipse");
+          eyeWhite.setAttribute("cx", "20");
+          eyeWhite.setAttribute("cy", "25");
+          eyeWhite.setAttribute("rx", "16");
+          eyeWhite.setAttribute("ry", "22");
+          eyeWhite.setAttribute("fill", "white");
+          eyeWhite.setAttribute("stroke", "#333");
+          eyeWhite.setAttribute("stroke-width", "2");
+
+          const pupil = document.createElementNS(ns, "circle");
+          pupil.setAttribute("cx", "20");
+          pupil.setAttribute("cy", "25");
+          pupil.setAttribute("r", "6");
+          pupil.setAttribute("fill", "#111");
+          pupil.classList.add("xeyes-pupil");
+
+          svg.appendChild(eyeWhite);
+          svg.appendChild(pupil);
+          body.appendChild(svg);
+        }
+
+        xeyes.appendChild(titlebar);
+        xeyes.appendChild(body);
+        document.body.appendChild(xeyes);
+
+        // Pupil tracking
+        const pupils = xeyes.querySelectorAll(".xeyes-pupil");
+        document.addEventListener("mousemove", (e) => {
+          if (!document.getElementById("sgi-xeyes")) return;
+          pupils.forEach((pupil) => {
+            const svg = pupil.closest("svg")!;
+            const rect = svg.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const angle = Math.atan2(e.clientY - cy, e.clientX - cx);
+            const maxR = 10;
+            const px = 20 + Math.cos(angle) * maxR;
+            const py = 25 + Math.sin(angle) * maxR;
+            pupil.setAttribute("cx", String(px));
+            pupil.setAttribute("cy", String(py));
+          });
+        });
+
+        // Make xeyes draggable
+        let xeyesDrag: { startX: number; startY: number; offX: number; offY: number } | null = null;
+        titlebar.addEventListener("mousedown", (e) => {
+          const rect = xeyes.getBoundingClientRect();
+          xeyesDrag = { startX: rect.left, startY: rect.top, offX: e.clientX - rect.left, offY: e.clientY - rect.top };
+          const onMove = (me: MouseEvent) => {
+            if (!xeyesDrag) return;
+            xeyes.style.left = (me.clientX - xeyesDrag.offX) + "px";
+            xeyes.style.top = (me.clientY - xeyesDrag.offY) + "px";
+          };
+          const onUp = () => { xeyesDrag = null; document.removeEventListener("mousemove", onMove); document.removeEventListener("mouseup", onUp); };
+          document.addEventListener("mousemove", onMove);
+          document.addEventListener("mouseup", onUp);
+        });
+      });
+
+      document.addEventListener("shell:xeyes-kill", () => {
+        document.getElementById("sgi-xeyes")?.remove();
+      });
+
+      // ============================
+      // Easter Egg: DOOM dialog
+      // ============================
+      document.addEventListener("shell:doom-dialog", () => {
+        document.getElementById("sgi-doom")?.remove();
+
+        const overlay = document.createElement("div");
+        overlay.id = "sgi-doom";
+        overlay.className = "sgi-doom-overlay";
+
+        const dialog = document.createElement("div");
+        dialog.className = "sgi-doom-dialog";
+
+        const tbar = document.createElement("div");
+        tbar.className = "sgi-doom-titlebar";
+        tbar.textContent = "Error";
+
+        const body = document.createElement("div");
+        body.className = "sgi-doom-body";
+
+        const icon = document.createElement("div");
+        icon.className = "sgi-doom-icon";
+        icon.textContent = "\u26A0\uFE0F";
+
+        const text = document.createElement("div");
+        text.className = "sgi-doom-text";
+        text.textContent = "Error: Insufficient memory to launch DOOM\nRequired: 8MB RAM\nAvailable: 512KB\n\nConsider upgrading your Indigo2.";
+
+        body.appendChild(icon);
+        body.appendChild(text);
+
+        const footer = document.createElement("div");
+        footer.className = "sgi-doom-footer";
+        const okBtn = document.createElement("button");
+        okBtn.className = "sgi-doom-ok";
+        okBtn.textContent = "OK";
+        okBtn.addEventListener("click", () => overlay.remove());
+        footer.appendChild(okBtn);
+
+        dialog.appendChild(tbar);
+        dialog.appendChild(body);
+        dialog.appendChild(footer);
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+
+        playSound("/audio/sgi-window-close.mp3");
       });
     </script>
   </body>

@@ -1,5 +1,6 @@
 ---
 // src/themes/sgi-irix/Boot.astro
+import Screensaver from "./Screensaver.astro";
 export interface Props {
   skipBoot?: boolean;
   abbreviated?: boolean;
@@ -8,6 +9,7 @@ const { skipBoot = false, abbreviated = false } = Astro.props;
 ---
 
 <div id="sgi-boot" class="sgi-boot" data-skip={skipBoot ? "true" : "false"} data-abbreviated={abbreviated ? "true" : "false"}>
+  <Screensaver />
   <div id="boot-prom" class="sgi-boot-text" style="display:none"></div>
   <div id="boot-logo" style="display:none; text-align:center">
     <div class="sgi-boot-logo">
@@ -73,6 +75,13 @@ const { skipBoot = false, abbreviated = false } = Astro.props;
     bootEl.addEventListener("click", skipHandler);
   }
 
+  // Show screensaver during boot dark phase
+  const ssEl = document.getElementById("screensaver");
+  if (!skipBoot && ssEl) {
+    ssEl.style.opacity = "1";
+    ssEl.style.pointerEvents = "none";
+  }
+
   if (!skipBoot && !abbreviated) runBootSequence(
     {
       onPhaseChange(phase) {
@@ -80,10 +89,14 @@ const { skipBoot = false, abbreviated = false } = Astro.props;
         if (phase === "prom") {
           promEl.style.display = "block";
           playSound("/audio/sgi-boot.mp3");
+          // Fade screensaver to background during text phase
+          if (ssEl) ssEl.style.opacity = "0.3";
         } else if (phase === "logo") {
           promEl.style.display = "none";
           logoEl.style.display = "block";
           progressEl.style.display = "block";
+          // Hide screensaver during logo phase
+          if (ssEl) { ssEl.style.transition = "opacity 0.5s ease"; ssEl.style.opacity = "0"; }
         } else if (phase === "done") {
           bootEl.style.opacity = "0";
           bootEl.style.transition = "opacity 0.5s ease";

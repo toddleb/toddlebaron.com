@@ -1,0 +1,30 @@
+// src/data/fortunes.ts
+// Tech/programming quotes for the fortune command
+
+export const fortunes: string[] = [
+  "Any sufficiently advanced technology is indistinguishable from magic. — Arthur C. Clarke",
+  "There are only two hard things in Computer Science: cache invalidation and naming things. — Phil Karlton",
+  "The best way to predict the future is to invent it. — Alan Kay",
+  "Simplicity is prerequisite for reliability. — Edsger Dijkstra",
+  "First, solve the problem. Then, write the code. — John Johnson",
+  "Programs must be written for people to read, and only incidentally for machines to execute. — Abelson & Sussman",
+  "UNIX is basically a simple operating system, but you have to be a genius to understand the simplicity. — Dennis Ritchie",
+  "Talk is cheap. Show me the code. — Linus Torvalds",
+  "The most disastrous thing that you can ever learn is your first programming language. — Alan Kay",
+  "Measuring programming progress by lines of code is like measuring aircraft building progress by weight. — Bill Gates",
+  "It works on my machine. — Every developer, eventually",
+  "The computer was born to solve problems that did not exist before. — Bill Gates",
+  "In theory, there is no difference between theory and practice. In practice, there is. — Yogi Berra",
+  "Real artists ship. — Steve Jobs",
+  "Premature optimization is the root of all evil. — Donald Knuth",
+  "The best error message is the one that never shows up. — Thomas Fuchs",
+  "You can't trust code that you did not totally create yourself. — Ken Thompson",
+  "Any fool can write code that a computer can understand. Good programmers write code that humans can understand. — Martin Fowler",
+  "The Indigo2 was the machine that made you believe in the future. — SGI engineer, circa 1995",
+  "Silicon Graphics: we make the machines that make the movies that make the machines. — SGI marketing, 1994",
+  "640K ought to be enough for anybody. — Misattributed to Bill Gates",
+  "There are 10 types of people in the world: those who understand binary and those who don't.",
+  "A language that doesn't affect the way you think about programming is not worth knowing. — Alan Perlis",
+  "Deleted code is debugged code. — Jeff Sickel",
+  "The best performance improvement is the transition from the nonworking state to the working state. — J. Osterhout",
+];
