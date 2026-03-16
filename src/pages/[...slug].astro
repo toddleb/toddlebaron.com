@@ -1,0 +1,119 @@
+---
+// src/pages/[...slug].astro
+import Desktop from "../layouts/Desktop.astro";
+import SGIDesktop from "../themes/sgi-irix/Desktop.astro";
+import Window from "../themes/sgi-irix/Window.astro";
+import Toolchest from "../themes/sgi-irix/Toolchest.astro";
+import DesksPanel from "../themes/sgi-irix/DesksPanel.astro";
+import MobileLayout from "../components/MobileLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("pages");
+  const blog = await getCollection("blog");
+  return [
+    ...pages.map((p) => ({ params: { slug: p.data.windowId } })),
+    ...blog.map((post) => ({ params: { slug: `blog/${post.id}` } })),
+  ];
+}
+
+const { slug } = Astro.params;
+const pages = (await getCollection("pages")).sort((a, b) => a.data.order - b.data.order);
+const blog = await getCollection("blog");
+const windowList = pages.map((p) => ({
+  windowId: p.data.windowId,
+  title: p.data.title,
+  icon: p.data.icon,
+}));
+
+// Determine which window to open based on slug
+const targetWindow = slug?.startsWith("blog") ? "blog" : slug ?? null;
+
+// If this is a specific blog post, get its content
+const blogPostSlug = slug?.startsWith("blog/") ? slug.slice(5) : null;
+const blogPost = blogPostSlug ? blog.find((p) => p.id === blogPostSlug) : null;
+const BlogPostContent = blogPost ? (await render(blogPost)).Content : null;
+
+const pageTitle = blogPost?.data.title
+  ?? pages.find((p) => p.data.windowId === targetWindow)?.data.title
+  ?? undefined;
+---
+
+<Desktop title={pageTitle}>
+  <!-- Desktop experience -->
+  <div class="desktop-only">
+    <!-- No boot on direct links -->
+    <SGIDesktop windows={windowList}>
+      <Toolchest windows={windowList} />
+
+      {await Promise.all(pages.map(async (page, i) => {
+        const { Content } = await render(page);
+        const isBlog = page.data.windowId === "blog";
+        const showBlogPost = isBlog && BlogPostContent;
+        return (
+          <Window
+            windowId={page.data.windowId}
+            title={showBlogPost ? blogPost!.data.title : page.data.title}
+            x={150 + i * 30}
+            y={60 + i * 30}
+            visible={page.data.windowId === targetWindow}
+          >
+            {showBlogPost ? (
+              <BlogPostContent />
+            ) : (
+              <>
+                <Content />
+                {isBlog && blog.length > 0 && (
+                  <ul>
+                    {blog.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).map((post) => (
+                      <li>
+                        <a href={`/blog/${post.id}`}>{post.data.title}</a>
+                        <span style="color:#888; font-size:12px; margin-left:8px">
+                          {post.data.date.toLocaleDateString()}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            )}
+          </Window>
+        );
+      }))}
+
+      <DesksPanel windows={windowList} />
+    </SGIDesktop>
+  </div>
+
+  <!-- Mobile experience -->
+  <div class="mobile-only">
+    <MobileLayout windows={windowList}>
+      {BlogPostContent ? (
+        <section>
+          <BlogPostContent />
+        </section>
+      ) : (
+        await Promise.all(pages.filter(p => p.data.windowId === targetWindow).map(async (page) => {
+          const { Content } = await render(page);
+          return <section><Content /></section>;
+        }))
+      )}
+    </MobileLayout>
+  </div>
+
+  <script>
+    // Skip boot on direct links — fire boot:complete immediately
+    document.addEventListener("DOMContentLoaded", () => {
+      document.dispatchEvent(new CustomEvent("boot:complete"));
+    });
+  </script>
+</Desktop>
+
+<style>
+  .desktop-only { display: block; }
+  .mobile-only { display: none; }
+  @media (max-width: 768px) {
+    .desktop-only { display: none !important; }
+    .mobile-only { display: block !important; }
+  }
+</style>
