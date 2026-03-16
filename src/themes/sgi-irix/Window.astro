@@ -38,5 +38,9 @@ const { windowId, title, x = 150, y = 80, width = 520, height = 420, visible = f
   <div class="sgi-window-content">
     <slot />
   </div>
+  <div class="sgi-splash-overlay" data-splash-for={windowId} style="display:none">
+    <div class="sgi-splash-title-text">{title}</div>
+    <div class="sgi-splash-line-decoration"></div>
+  </div>
   <div class="sgi-window-resize" data-resize-handle={windowId}></div>
 </div>
