@@ -51,7 +51,7 @@ const { skipBoot = false, abbreviated = false } = Astro.props;
     }
   };
 
-  if (skipBoot || returnVisitor) {
+  if (skipBoot) {
     bootEl.style.display = "none";
     document.getElementById("static-splash")?.remove();
     document.dispatchEvent(new CustomEvent("boot:complete"));
