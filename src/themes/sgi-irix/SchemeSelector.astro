@@ -1,0 +1,28 @@
+---
+// src/themes/sgi-irix/SchemeSelector.astro
+import { schemes } from "./schemes";
+---
+
+<div class="sgi-scheme-selector">
+  <div class="sgi-scheme-header">Color Scheme</div>
+  <div class="sgi-scheme-grid">
+    {schemes.map((s) => (
+      <button
+        class="sgi-scheme-swatch"
+        data-scheme-id={s.id}
+        aria-label={`Apply ${s.name} color scheme`}
+        title={s.name}
+      >
+        <div
+          class="sgi-scheme-preview"
+          style={`background: linear-gradient(135deg, ${s.primary}, ${s.secondary})`}
+        ></div>
+        <div
+          class="sgi-scheme-sky"
+          style={`background: linear-gradient(180deg, ${s.skyDark}, ${s.skyLight})`}
+        ></div>
+        <span class="sgi-scheme-label">{s.name}</span>
+      </button>
+    ))}
+  </div>
+</div>
