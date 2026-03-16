@@ -9,6 +9,12 @@ export const sgiIrixTheme: ThemeConfig = {
   sounds: {
     boot: "/audio/sgi-boot.mp3",
     shutdown: "/audio/sgi-shutdown.mp3",
+    windowOpen: "/audio/sgi-window-open.mp3",
+    windowClose: "/audio/sgi-window-close.mp3",
+    menuClick: "/audio/sgi-menu-click.mp3",
+    iconSelect: "/audio/sgi-icon-select.mp3",
+    error: "/audio/sgi-error.mp3",
+    ding: "/audio/sgi-ding.mp3",
   },
   colors: {
     primary: "#6B3FA0",

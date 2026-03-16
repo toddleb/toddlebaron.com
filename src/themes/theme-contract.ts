@@ -9,6 +9,10 @@ export interface ThemeConfig {
     windowOpen?: string;
     windowClose?: string;
     click?: string;
+    menuClick?: string;
+    iconSelect?: string;
+    error?: string;
+    ding?: string;
   };
   colors: {
     primary: string;
