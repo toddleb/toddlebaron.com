@@ -17,22 +17,37 @@ const { title, description } = Astro.props;
     <script is:inline>
       (function() {
         var c = document.cookie.match(/toddlebaron-scheme=([^;]+)/);
-        if (!c) return;
-        var id = c[1];
-        var schemes = {
-          indigo: {"--sgi-primary":"#6B3FA0","--sgi-secondary":"#3A8A7A","--sgi-sky-dark":"#465080","--sgi-sky-light":"#8CA9D2","--sgi-widget":"#C0C0C0","--sgi-widget-light":"#E0E0E0","--sgi-widget-dark":"#888888","--sgi-surface":"#E8E8E8","--sgi-content-bg":"#F5F5F0","--sgi-text":"#222222","--sgi-text-muted":"#666666","--sgi-title-text":"#ffffff"},
-          desert: {"--sgi-primary":"#B8860B","--sgi-secondary":"#8B4513","--sgi-sky-dark":"#8B7355","--sgi-sky-light":"#D2B48C","--sgi-widget":"#D4C4A0","--sgi-widget-light":"#E8DCC0","--sgi-widget-dark":"#A09070","--sgi-surface":"#F0E8D8","--sgi-content-bg":"#FAF5EB","--sgi-text":"#3E2723","--sgi-text-muted":"#795548","--sgi-title-text":"#ffffff"},
-          ocean: {"--sgi-primary":"#1565C0","--sgi-secondary":"#00ACC1","--sgi-sky-dark":"#0D2137","--sgi-sky-light":"#1A4A6E","--sgi-widget":"#A0B8C8","--sgi-widget-light":"#C0D8E8","--sgi-widget-dark":"#607888","--sgi-surface":"#E0E8F0","--sgi-content-bg":"#F0F5FA","--sgi-text":"#1A237E","--sgi-text-muted":"#546E7A","--sgi-title-text":"#ffffff"},
-          midnight: {"--sgi-primary":"#311B92","--sgi-secondary":"#1A237E","--sgi-sky-dark":"#0A0A1A","--sgi-sky-light":"#1A1A3E","--sgi-widget":"#808098","--sgi-widget-light":"#9898B0","--sgi-widget-dark":"#505068","--sgi-surface":"#D0D0D8","--sgi-content-bg":"#E0E0E8","--sgi-text":"#1A1A2E","--sgi-text-muted":"#606078","--sgi-title-text":"#E0E0F0"},
-          rosewood: {"--sgi-primary":"#8B1A1A","--sgi-secondary":"#6D3A3A","--sgi-sky-dark":"#3E1A1A","--sgi-sky-light":"#5E2A2A","--sgi-widget":"#C0A0A0","--sgi-widget-light":"#D8C0C0","--sgi-widget-dark":"#907070","--sgi-surface":"#F0E0E0","--sgi-content-bg":"#FAF0F0","--sgi-text":"#3E1A1A","--sgi-text-muted":"#8B6060","--sgi-title-text":"#ffffff"},
-          slate: {"--sgi-primary":"#455A64","--sgi-secondary":"#607D8B","--sgi-sky-dark":"#37474F","--sgi-sky-light":"#546E7A","--sgi-widget":"#B0BEC5","--sgi-widget-light":"#CFD8DC","--sgi-widget-dark":"#78909C","--sgi-surface":"#ECEFF1","--sgi-content-bg":"#F5F7F8","--sgi-text":"#263238","--sgi-text-muted":"#607D8B","--sgi-title-text":"#ffffff"}
-        };
-        var s = schemes[id];
-        if (!s) return;
-        var r = document.documentElement;
-        for (var k in s) r.style.setProperty(k, s[k]);
-        r.style.setProperty("--sgi-title-gradient", "linear-gradient(90deg, " + s["--sgi-primary"] + ", " + s["--sgi-secondary"] + ")");
-        r.style.setProperty("--sgi-sky-gradient", "linear-gradient(180deg, " + s["--sgi-sky-dark"] + " 0%, " + s["--sgi-sky-light"] + " 100%)");
+        if (c) {
+          var id = c[1];
+          var schemes = {
+            indigo: {"--sgi-primary":"#6B3FA0","--sgi-secondary":"#3A8A7A","--sgi-sky-dark":"#465080","--sgi-sky-light":"#8CA9D2","--sgi-widget":"#C0C0C0","--sgi-widget-light":"#E0E0E0","--sgi-widget-dark":"#888888","--sgi-surface":"#E8E8E8","--sgi-content-bg":"#F5F5F0","--sgi-text":"#222222","--sgi-text-muted":"#666666","--sgi-title-text":"#ffffff"},
+            desert: {"--sgi-primary":"#B8860B","--sgi-secondary":"#8B4513","--sgi-sky-dark":"#8B7355","--sgi-sky-light":"#D2B48C","--sgi-widget":"#D4C4A0","--sgi-widget-light":"#E8DCC0","--sgi-widget-dark":"#A09070","--sgi-surface":"#F0E8D8","--sgi-content-bg":"#FAF5EB","--sgi-text":"#3E2723","--sgi-text-muted":"#795548","--sgi-title-text":"#ffffff"},
+            ocean: {"--sgi-primary":"#1565C0","--sgi-secondary":"#00ACC1","--sgi-sky-dark":"#0D2137","--sgi-sky-light":"#1A4A6E","--sgi-widget":"#A0B8C8","--sgi-widget-light":"#C0D8E8","--sgi-widget-dark":"#607888","--sgi-surface":"#E0E8F0","--sgi-content-bg":"#F0F5FA","--sgi-text":"#1A237E","--sgi-text-muted":"#546E7A","--sgi-title-text":"#ffffff"},
+            midnight: {"--sgi-primary":"#311B92","--sgi-secondary":"#1A237E","--sgi-sky-dark":"#0A0A1A","--sgi-sky-light":"#1A1A3E","--sgi-widget":"#808098","--sgi-widget-light":"#9898B0","--sgi-widget-dark":"#505068","--sgi-surface":"#D0D0D8","--sgi-content-bg":"#E0E0E8","--sgi-text":"#1A1A2E","--sgi-text-muted":"#606078","--sgi-title-text":"#E0E0F0"},
+            rosewood: {"--sgi-primary":"#8B1A1A","--sgi-secondary":"#6D3A3A","--sgi-sky-dark":"#3E1A1A","--sgi-sky-light":"#5E2A2A","--sgi-widget":"#C0A0A0","--sgi-widget-light":"#D8C0C0","--sgi-widget-dark":"#907070","--sgi-surface":"#F0E0E0","--sgi-content-bg":"#FAF0F0","--sgi-text":"#3E1A1A","--sgi-text-muted":"#8B6060","--sgi-title-text":"#ffffff"},
+            slate: {"--sgi-primary":"#455A64","--sgi-secondary":"#607D8B","--sgi-sky-dark":"#37474F","--sgi-sky-light":"#546E7A","--sgi-widget":"#B0BEC5","--sgi-widget-light":"#CFD8DC","--sgi-widget-dark":"#78909C","--sgi-surface":"#ECEFF1","--sgi-content-bg":"#F5F7F8","--sgi-text":"#263238","--sgi-text-muted":"#607D8B","--sgi-title-text":"#ffffff"}
+          };
+          var s = schemes[id];
+          if (s) {
+            var r = document.documentElement;
+            for (var k in s) r.style.setProperty(k, s[k]);
+            r.style.setProperty("--sgi-title-gradient", "linear-gradient(90deg, " + s["--sgi-primary"] + ", " + s["--sgi-secondary"] + ")");
+            r.style.setProperty("--sgi-sky-gradient", "linear-gradient(180deg, " + s["--sgi-sky-dark"] + " 0%, " + s["--sgi-sky-light"] + " 100%)");
+          }
+        }
+        // Background
+        var b = document.cookie.match(/toddlebaron-bg=([^;]+)/);
+        if (b && b[1] !== "sky") {
+          var bgs = {
+            granite: "repeating-conic-gradient(#808080 0% 25%, #909090 0% 50%) 0/4px 4px",
+            "deep-space": "radial-gradient(1px 1px at 20% 30%, #fff, transparent),radial-gradient(1px 1px at 40% 70%, #fff, transparent),radial-gradient(1px 1px at 60% 20%, #fff, transparent),radial-gradient(1px 1px at 80% 50%, #fff, transparent),radial-gradient(1px 1px at 10% 80%, #ddd, transparent),radial-gradient(1px 1px at 70% 90%, #ddd, transparent),radial-gradient(1px 1px at 50% 10%, #ddd, transparent),radial-gradient(1px 1px at 90% 40%, #ddd, transparent),linear-gradient(180deg, #050510 0%, #0A0A2E 50%, #0D1020 100%)",
+            abstract: "linear-gradient(135deg, #6B3FA0 0%, #E040A0 40%, #FF8040 100%)",
+            circuit: "repeating-linear-gradient(0deg, transparent, transparent 19px, #1a3a1a 19px, #1a3a1a 20px),repeating-linear-gradient(90deg, transparent, transparent 19px, #1a3a1a 19px, #1a3a1a 20px),linear-gradient(180deg, #0a1a0a, #0d2d0d)",
+            mountain: "linear-gradient(170deg, transparent 60%, #2a1a3a 60%, #3a2a4a 70%, transparent 70%),linear-gradient(175deg, transparent 55%, #1a2a1a 55%, #2a3a2a 65%, transparent 65%),linear-gradient(168deg, transparent 50%, #3a2a1a 50%, #4a3a2a 58%, transparent 58%),linear-gradient(180deg, #1a1030 0%, #2a2050 30%, #4a3060 60%, #3a2040 100%)"
+          };
+          var bgCss = bgs[b[1]];
+          if (bgCss) document.documentElement.style.setProperty("--sgi-sky-gradient", bgCss);
+        }
       })();
     </script>
   </head>
@@ -191,6 +206,22 @@ const { title, description } = Astro.props;
           return;
         }
 
+        // Background swatch
+        const bgSwatch = target.closest<HTMLElement>("[data-bg-id]");
+        if (bgSwatch) {
+          const bgId = bgSwatch.dataset.bgId!;
+          document.querySelectorAll(".sgi-bg-swatch").forEach((s) => s.classList.remove("active"));
+          bgSwatch.classList.add("active");
+          import("../themes/sgi-irix/backgrounds").then(({ getBackgroundById }) => {
+            const bg = getBackgroundById(bgId);
+            if (!bg) return;
+            const desktop = document.getElementById("desktop");
+            if (desktop) desktop.style.background = bg.css;
+            document.cookie = `toddlebaron-bg=${bgId};path=/;max-age=${30 * 24 * 60 * 60}`;
+          });
+          return;
+        }
+
         // Click window to bring to front
         const win = target.closest<HTMLElement>(".sgi-window");
         if (win && win.dataset.windowId) {
@@ -225,6 +256,7 @@ const { title, description } = Astro.props;
           { label: "IRIX 6.5", disabled: true },
           { label: "Refresh Desktop", action: () => location.reload() },
           { label: "About This Workstation", action: () => openWindow("about") },
+          { label: "Change Background...", action: () => openWindow("background-picker") },
           { label: "Choose Era...", action: () => { const p = document.getElementById("era-picker"); if (p) p.style.display = "flex"; } },
         ];
         items.forEach((item) => {

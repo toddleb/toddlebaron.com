@@ -1,0 +1,21 @@
+---
+// src/themes/sgi-irix/BackgroundPicker.astro
+import { backgrounds } from "./backgrounds";
+---
+
+<div class="sgi-bg-picker">
+  <div class="sgi-scheme-header">Desktop Background</div>
+  <div class="sgi-bg-grid">
+    {backgrounds.map((bg) => (
+      <button
+        class="sgi-bg-swatch"
+        data-bg-id={bg.id}
+        aria-label={`Set ${bg.name} background`}
+        title={bg.name}
+      >
+        <div class="sgi-bg-preview" style={`background: ${bg.css}`}></div>
+        <span class="sgi-scheme-label">{bg.name}</span>
+      </button>
+    ))}
+  </div>
+</div>

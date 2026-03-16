@@ -9,6 +9,7 @@ import DesksPanel from "../themes/sgi-irix/DesksPanel.astro";
 import MobileLayout from "../components/MobileLayout.astro";
 import SchemeSelector from "../themes/sgi-irix/SchemeSelector.astro";
 import Console from "../themes/sgi-irix/Console.astro";
+import BackgroundPicker from "../themes/sgi-irix/BackgroundPicker.astro";
 import { getCollection, render } from "astro:content";
 
 const pages = (await getCollection("pages")).sort((a, b) => a.data.order - b.data.order);
@@ -65,6 +66,10 @@ const windowList = pages.map((p) => ({
         <div style="margin:-16px; height:calc(100% + 32px);">
           <Console />
         </div>
+      </Window>
+
+      <Window windowId="background-picker" title="Desktop Background" x={350} y={200} width={380} height={340}>
+        <BackgroundPicker />
       </Window>
 
       <DesksPanel windows={windowList} />
