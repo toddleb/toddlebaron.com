@@ -1,0 +1,20 @@
+---
+// src/themes/sgi-irix/Console.astro
+import { consoleEntries } from "../../data/console-entries";
+import RunningMan from "./RunningMan.astro";
+---
+
+<div class="sgi-console">
+  <div class="sgi-console-header">
+    <span>/dev/console</span>
+    <RunningMan size={16} color="#33FF33" />
+  </div>
+  <div class="sgi-console-output">
+    {consoleEntries.map((entry) => (
+      <div class:list={["sgi-console-line", `sgi-console-${entry.type}`]}>
+        <span class="sgi-console-timestamp">[{entry.date} {entry.time}]</span>
+        {" "}{entry.message}
+      </div>
+    ))}
+  </div>
+</div>

@@ -50,6 +50,7 @@ const { title, description } = Astro.props;
         if (desktop) desktop.style.opacity = "1";
         initDesktopIcons();
         initKeyboardNav();
+        openWindow("console");
       });
 
       document.addEventListener("wm:window-opened", () => {
