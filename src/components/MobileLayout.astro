@@ -1,0 +1,104 @@
+---
+// src/components/MobileLayout.astro
+export interface Props {
+  windows: { windowId: string; title: string; icon: string }[];
+}
+const { windows } = Astro.props;
+---
+
+<div class="mobile-layout">
+  <!-- Abbreviated boot: just logo -->
+  <div id="mobile-boot" style="background:#000; display:flex; align-items:center; justify-content:center; min-height:100vh; position:fixed; inset:0; z-index:100">
+    <div style="text-align:center">
+      <div style="font-size:48px; font-weight:900; letter-spacing:-2px">
+        <span style="color:#E44">s</span><span style="color:#4A4">g</span><span style="color:#44E">i</span>
+      </div>
+      <div style="color:#555; font-size:11px; margin-top:8px">toddlebaron.com</div>
+    </div>
+  </div>
+
+  <!-- Hamburger nav -->
+  <header class="mobile-header">
+    <div class="mobile-logo">Todd LeBaron</div>
+    <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Menu">☰</button>
+  </header>
+
+  <nav id="mobile-menu" class="mobile-nav" style="display:none">
+    {windows.map((w) => (
+      <a href={`/${w.windowId}`} class="mobile-nav-item">
+        <span>{w.icon}</span>
+        <span>{w.title}</span>
+      </a>
+    ))}
+  </nav>
+
+  <main class="mobile-content">
+    <slot />
+  </main>
+</div>
+
+<style>
+  .mobile-layout {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #222;
+  }
+  .mobile-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: linear-gradient(90deg, #6B3FA0, #3A8A7A);
+    color: #fff;
+  }
+  .mobile-logo { font-weight: bold; font-size: 16px; }
+  .mobile-menu-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-size: 20px;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .mobile-nav {
+    background: #E8E8E8;
+    border-bottom: 2px solid #C0C0C0;
+  }
+  .mobile-nav-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #CCC;
+    text-decoration: none;
+    color: #222;
+    font-size: 15px;
+  }
+  .mobile-nav-item:hover { background: #D8D8D8; }
+  .mobile-content {
+    padding: 16px;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  // Hide mobile boot after 1.5s
+  setTimeout(() => {
+    const boot = document.getElementById("mobile-boot");
+    if (boot) {
+      boot.style.transition = "opacity 0.5s";
+      boot.style.opacity = "0";
+      setTimeout(() => boot.remove(), 500);
+    }
+  }, 1500);
+
+  // Toggle menu
+  document.getElementById("mobile-menu-toggle")?.addEventListener("click", () => {
+    const menu = document.getElementById("mobile-menu");
+    if (menu) menu.style.display = menu.style.display === "none" ? "block" : "none";
+  });
+</script>
