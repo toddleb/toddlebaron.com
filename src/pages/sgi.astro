@@ -1,0 +1,126 @@
+---
+// src/pages/sgi.astro — SGI IRIX 6.5 Desktop (accessible as a "door" from BBS)
+import Desktop from "../layouts/Desktop.astro";
+import Boot from "../themes/sgi-irix/Boot.astro";
+import SGIDesktop from "../themes/sgi-irix/Desktop.astro";
+import Window from "../themes/sgi-irix/Window.astro";
+import Toolchest from "../themes/sgi-irix/Toolchest.astro";
+import DesksPanel from "../themes/sgi-irix/DesksPanel.astro";
+import MobileLayout from "../components/MobileLayout.astro";
+import SchemeSelector from "../themes/sgi-irix/SchemeSelector.astro";
+import Console from "../themes/sgi-irix/Console.astro";
+import BackgroundPicker from "../themes/sgi-irix/BackgroundPicker.astro";
+import IconCatalog from "../themes/sgi-irix/IconCatalog.astro";
+import GaugeCluster from "../themes/sgi-irix/GaugeCluster.astro";
+import ButtonFly from "../themes/sgi-irix/ButtonFly.astro";
+import FileManager from "../themes/sgi-irix/FileManager.astro";
+import MediaMail from "../themes/sgi-irix/MediaMail.astro";
+import { getCollection, render } from "astro:content";
+
+const pages = (await getCollection("pages")).sort((a, b) => a.data.order - b.data.order);
+const blog = await getCollection("blog");
+const windowList = pages.map((p) => ({
+  windowId: p.data.windowId,
+  title: p.data.title,
+  icon: p.data.icon,
+}));
+---
+
+<Desktop>
+  <!-- Desktop experience (hidden on mobile via CSS) -->
+  <div class="desktop-only">
+    <Boot />
+    <SGIDesktop windows={windowList}>
+      <Toolchest windows={windowList} />
+
+      {await Promise.all(pages.map(async (page, i) => {
+        const { Content } = await render(page);
+        const isBlog = page.data.windowId === "blog";
+        const isContact = page.data.windowId === "contact";
+        return (
+          <Window
+            windowId={page.data.windowId}
+            title={isContact ? "MediaMail — Compose" : page.data.title}
+            x={150 + i * 30}
+            y={60 + i * 30}
+            visible={page.data.windowId === "about"}
+          >
+            {isContact ? (
+              <div style="margin:-16px; height:calc(100% + 32px);">
+                <MediaMail />
+              </div>
+            ) : <Content />}
+            {page.data.windowId === "resume" && <GaugeCluster />}
+            {isBlog && blog.length > 0 && (
+              <ul>
+                {blog.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).map((post) => (
+                  <li>
+                    <a href={`/blog/${post.id}`}>
+                      {post.data.title}
+                    </a>
+                    <span style="color:#888; font-size:12px; margin-left:8px">
+                      {post.data.date.toLocaleDateString()}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Window>
+        );
+      }))}
+
+      <Window windowId="scheme-selector" title="Color Scheme" x={300} y={150} width={360} height={320}>
+        <SchemeSelector />
+      </Window>
+
+      <Window windowId="icon-catalog" title="Icon Catalog" x={180} y={80} width={600} height={420}>
+        <div style="margin:-16px; height:calc(100% + 32px);">
+          <IconCatalog />
+        </div>
+      </Window>
+
+      <Window windowId="console" title="Console — /dev/console" x={20} y={400} width={500} height={220}>
+        <div style="margin:-16px; height:calc(100% + 32px);">
+          <Console />
+        </div>
+      </Window>
+
+      <Window windowId="background-picker" title="Desktop Background" x={350} y={200} width={380} height={340}>
+        <BackgroundPicker />
+      </Window>
+
+      <DesksPanel windows={windowList} />
+
+      <Window windowId="file-manager" title="File Manager — /home/todd" x={200} y={100} width={620} height={400}>
+        <div style="margin:-16px; height:calc(100% + 32px);">
+          <FileManager />
+        </div>
+      </Window>
+
+      <ButtonFly />
+    </SGIDesktop>
+  </div>
+
+  <!-- Mobile experience (hidden on desktop via CSS) -->
+  <div class="mobile-only">
+    <MobileLayout windows={windowList}>
+      {await Promise.all(pages.map(async (page) => {
+        const { Content } = await render(page);
+        return (
+          <section id={`mobile-${page.data.windowId}`}>
+            <Content />
+          </section>
+        );
+      }))}
+    </MobileLayout>
+  </div>
+</Desktop>
+
+<style>
+  .desktop-only { display: block; }
+  .mobile-only { display: none; }
+  @media (max-width: 768px) {
+    .desktop-only { display: none !important; }
+    .mobile-only { display: block !important; }
+  }
+</style>

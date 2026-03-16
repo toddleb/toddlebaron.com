@@ -1,0 +1,28 @@
+---
+// src/layouts/BBS.astro — The Toddfather BBS
+// Screen: CRT terminal at top, physical modem hardware at bottom
+import SEOHead from "../components/SEOHead.astro";
+import Modem from "../themes/bbs/Modem.astro";
+import "../themes/bbs/theme.css";
+export interface Props {
+  title?: string;
+  description?: string;
+}
+const { title = "The Toddfather BBS", description = "I'm gonna make you an architecture you can't refuse" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead title={title} description={description} />
+  </head>
+  <body class="bbs-body">
+    <div class="bbs-crt">
+      <div class="bbs-scanlines"></div>
+      <div class="bbs-terminal" id="bbs-terminal">
+        <slot />
+      </div>
+    </div>
+    <Modem />
+  </body>
+</html>

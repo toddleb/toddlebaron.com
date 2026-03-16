@@ -7,7 +7,7 @@ order: 3
 
 # Projects
 
-- [LinkedIn](https://linkedin.com/in/toddlebaron) — Full work history
+- [LinkedIn](https://linkedin.com/in/thetoddfather) — Full work history
 - [GitHub](https://github.com/toddlebaron) — Open source
 - [AICR](https://app.aicoderally.com) — AI Code Rally platform
 

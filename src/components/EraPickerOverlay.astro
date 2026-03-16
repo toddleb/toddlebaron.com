@@ -62,7 +62,7 @@
       </div>
 
       <!-- 4. BBS / ANSI Art -->
-      <div class="era-card coming-soon" data-era="bbs">
+      <div class="era-card era-current" data-era="bbs">
         <div class="era-card-preview bbs-preview">
           <div class="bbs-border">&boxH;&boxH;&boxH;&boxH;&boxH;&boxH;&boxH;&boxH;&boxH;&boxH;&boxH;&boxH;&boxH;&boxH;</div>
           <span class="bbs-text">WELCOME</span>
@@ -71,7 +71,7 @@
         <div class="era-card-info">
           <div class="era-card-name">
             BBS / ANSI Art
-            <span class="era-badge badge-soon">COMING SOON</span>
+            <span class="era-badge badge-current">CURRENT</span>
           </div>
           <span class="era-card-years">Late 80s&ndash;90s</span>
           <span class="era-card-desc">14.4k modems and ASCII art</span>
@@ -98,7 +98,7 @@
       </div>
 
       <!-- 6. SGI IRIX 6.5 [CURRENT] -->
-      <div class="era-card era-current" data-era="sgi-irix">
+      <div class="era-card" data-era="sgi-irix" style="cursor:pointer">
         <div class="era-card-preview sgi-preview">
           <div class="sgi-titlebar">
             <span class="sgi-title-text">Indigo Magic</span>
@@ -108,7 +108,7 @@
         <div class="era-card-info">
           <div class="era-card-name">
             SGI IRIX 6.5
-            <span class="era-badge badge-current">CURRENT</span>
+            <span class="era-badge badge-current">DOOR</span>
           </div>
           <span class="era-card-years">Mid 90s</span>
           <span class="era-card-desc">The purple-teal Indigo Magic desktop</span>
@@ -591,5 +591,18 @@
       const picker = document.getElementById("era-picker");
       if (picker) picker.style.display = "none";
     }
+  });
+
+  // Navigate to built eras on card click
+  document.querySelectorAll<HTMLElement>('.era-card[data-era="sgi-irix"]').forEach((card) => {
+    card.addEventListener('click', () => {
+      window.location.href = '/sgi';
+    });
+  });
+
+  document.querySelectorAll<HTMLElement>('.era-card[data-era="bbs"]').forEach((card) => {
+    card.addEventListener('click', () => {
+      window.location.href = '/';
+    });
   });
 </script>

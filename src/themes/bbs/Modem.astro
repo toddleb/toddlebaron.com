@@ -1,0 +1,237 @@
+---
+// Physical modem hardware bar — sits at bottom of screen
+// LEDs: MR TR SD RD CD OH AA HS
+// Animate during boot, then SD/RD blink during "session"
+---
+
+<div id="bbs-modem" class="modem">
+  <div class="modem-body">
+    <div class="modem-brand">
+      <div class="modem-logo">US ROBOTICS</div>
+      <div class="modem-model">Sportster 14,400 FAX</div>
+    </div>
+    <div class="modem-leds">
+      <div class="modem-led" id="led-mr" data-label="MR"><span class="led-dot"></span><span class="led-label">MR</span></div>
+      <div class="modem-led" id="led-tr" data-label="TR"><span class="led-dot"></span><span class="led-label">TR</span></div>
+      <div class="modem-led" id="led-sd" data-label="SD"><span class="led-dot"></span><span class="led-label">SD</span></div>
+      <div class="modem-led" id="led-rd" data-label="RD"><span class="led-dot"></span><span class="led-label">RD</span></div>
+      <div class="modem-led" id="led-cd" data-label="CD"><span class="led-dot"></span><span class="led-label">CD</span></div>
+      <div class="modem-led" id="led-oh" data-label="OH"><span class="led-dot"></span><span class="led-label">OH</span></div>
+      <div class="modem-led" id="led-aa" data-label="AA"><span class="led-dot"></span><span class="led-label">AA</span></div>
+      <div class="modem-led" id="led-hs" data-label="HS"><span class="led-dot"></span><span class="led-label">HS</span></div>
+    </div>
+    <div class="modem-speed" id="modem-speed">STANDBY</div>
+  </div>
+</div>
+
+<style>
+  .modem {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    padding: 0 8px 6px;
+  }
+
+  .modem-body {
+    background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 40%, #1a1a1a 100%);
+    border: 1px solid #444;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    box-shadow:
+      0 -2px 8px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+    font-family: var(--bbs-font);
+  }
+
+  .modem-brand {
+    flex-shrink: 0;
+  }
+
+  .modem-logo {
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #888;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  .modem-model {
+    font-size: 9px;
+    color: #555;
+    letter-spacing: 1px;
+    margin-top: 1px;
+  }
+
+  .modem-leds {
+    display: flex;
+    gap: 14px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .modem-led {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .led-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    transition: background 0.1s, box-shadow 0.1s;
+  }
+
+  .led-label {
+    font-size: 8px;
+    color: #555;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+  }
+
+  /* LED states */
+  .modem-led.on .led-dot {
+    background: #33cc33;
+    box-shadow: 0 0 6px rgba(51, 204, 51, 0.6), 0 0 12px rgba(51, 204, 51, 0.3);
+    border-color: #2a9a2a;
+  }
+
+  .modem-led.on-orange .led-dot {
+    background: var(--tf-orange);
+    box-shadow: 0 0 6px var(--tf-orange-glow), 0 0 12px var(--tf-orange-glow);
+    border-color: #cc5500;
+  }
+
+  .modem-led.blink .led-dot {
+    animation: led-blink 0.15s ease-in-out infinite alternate;
+  }
+
+  .modem-led.blink-slow .led-dot {
+    animation: led-blink 0.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes led-blink {
+    0% { background: #33cc33; box-shadow: 0 0 6px rgba(51, 204, 51, 0.6); }
+    100% { background: #1a3a1a; box-shadow: none; }
+  }
+
+  .modem-speed {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: #444;
+    letter-spacing: 1px;
+    font-weight: bold;
+    min-width: 80px;
+    text-align: right;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .modem-body { padding: 6px 12px; gap: 12px; }
+    .modem-leds { gap: 8px; }
+    .modem-logo { font-size: 10px; }
+    .modem-model { display: none; }
+    .modem-speed { font-size: 9px; min-width: 60px; }
+    .led-label { font-size: 7px; }
+  }
+</style>
+
+<script>
+  // ─── Modem LED controller ───
+  const leds = {
+    mr: document.getElementById("led-mr")!,
+    tr: document.getElementById("led-tr")!,
+    sd: document.getElementById("led-sd")!,
+    rd: document.getElementById("led-rd")!,
+    cd: document.getElementById("led-cd")!,
+    oh: document.getElementById("led-oh")!,
+    aa: document.getElementById("led-aa")!,
+    hs: document.getElementById("led-hs")!,
+  };
+  const speedEl = document.getElementById("modem-speed")!;
+
+  function setLed(id: keyof typeof leds, state: string): void {
+    const el = leds[id];
+    el.classList.remove("on", "on-orange", "blink", "blink-slow");
+    if (state) el.classList.add(...state.split(" "));
+  }
+
+  // Phase 0: Power on — MR lights
+  setTimeout(() => {
+    setLed("mr", "on");
+    speedEl.textContent = "READY";
+  }, 100);
+
+  // Boot sequence LED choreography (synced with Boot.astro timings)
+  const visited = document.cookie.includes("toddlebaron-visited=1");
+
+  if (!visited) {
+    // Phase 1: Initializing (ATZ)
+    setTimeout(() => {
+      setLed("tr", "on");
+      speedEl.textContent = "INIT";
+    }, 350);
+
+    // Phase 2: Dialing (ATDT)
+    setTimeout(() => {
+      setLed("oh", "on-orange");
+      speedEl.textContent = "DIALING";
+    }, 1100);
+
+    // Phase 3: Ringing
+    setTimeout(() => {
+      setLed("oh", "on-orange blink-slow");
+    }, 2100);
+
+    // Phase 4: Connect!
+    setTimeout(() => {
+      setLed("cd", "on");
+      setLed("oh", "on");
+      setLed("hs", "on");
+      speedEl.textContent = "14400";
+      speedEl.style.color = "#33cc33";
+    }, 3500);
+
+    // Phase 5: Data transfer (ANSI detection etc)
+    setTimeout(() => {
+      setLed("sd", "on blink");
+      setLed("rd", "on blink");
+    }, 4000);
+
+    // Phase 6: Settled — slow blink for ongoing data
+    setTimeout(() => {
+      setLed("sd", "on blink-slow");
+      setLed("rd", "on blink-slow");
+    }, 6500);
+  } else {
+    // Already connected — show active session
+    setLed("tr", "on");
+    setLed("cd", "on");
+    setLed("oh", "on");
+    setLed("hs", "on");
+    setLed("sd", "on blink-slow");
+    setLed("rd", "on blink-slow");
+    speedEl.textContent = "14400";
+    speedEl.style.color = "#33cc33";
+  }
+
+  // Listen for navigation to pulse data LEDs faster
+  document.addEventListener("click", () => {
+    setLed("sd", "on blink");
+    setLed("rd", "on blink");
+    setTimeout(() => {
+      setLed("sd", "on blink-slow");
+      setLed("rd", "on blink-slow");
+    }, 500);
+  });
+</script>

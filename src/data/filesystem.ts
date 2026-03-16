@@ -74,7 +74,7 @@ export const filesystem: FMFolder = {
       icon: "📂",
       files: [
         { id: "resume", label: "Resume.pdf", icon: "📄", description: "Current resume and work history", date: "2026-03" },
-        { id: "linkedin", label: "LinkedIn", icon: "💼", description: "Professional profile", url: "https://linkedin.com/in/toddlebaron" },
+        { id: "linkedin", label: "LinkedIn", icon: "💼", description: "Professional profile", url: "https://linkedin.com/in/thetoddfather" },
       ],
     },
   ],

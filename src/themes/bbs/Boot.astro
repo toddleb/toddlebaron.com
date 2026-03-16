@@ -1,0 +1,224 @@
+---
+// THE TODDFATHER BBS — Boot Sequence
+// Phase 1: Modem dial-up text + AUDIO
+// Phase 1.5: WarGames "matrix" login (WOPR)
+// Phase 2: Splash logo reveal
+// Phase 3: Fade to main menu
+---
+
+<!-- Phase 1: Modem text -->
+<div id="bbs-boot" class="bbs-boot" style="cursor:pointer">
+  <div style="position:absolute;top:20px;right:24px;font-size:13px;" class="ansi-bright-black">
+    click anywhere to skip
+  </div>
+  <div id="bbs-boot-lines" style="overflow-y:auto;flex:1;display:flex;flex-direction:column;justify-content:flex-end;"></div>
+</div>
+
+<!-- Phase 1.5: WarGames matrix -->
+<div id="bbs-wargames-matrix" class="bbs-matrix" style="cursor:pointer">
+  <div id="bbs-matrix-text" style="max-width:600px;margin:0 auto;padding:40px 24px;"></div>
+</div>
+
+<!-- Phase 2: Splash -->
+<div id="bbs-splash" class="bbs-splash">
+  <div class="bbs-splash-logo">
+    <span class="bbs-splash-the">T H E</span>
+    <div class="bbs-splash-title">TODDFATHER</div>
+    <div class="bbs-splash-sub">B  B  S</div>
+    <div class="bbs-splash-line"></div>
+    <div class="bbs-splash-tagline">I'M GONNA MAKE YOU AN ARCHITECTURE YOU CAN'T REFUSE</div>
+  </div>
+</div>
+
+<script>
+  import { playModemHandshake, playDisconnect } from "../../engine/modem-audio";
+
+  // Expose disconnect for logoff
+  (window as any).__modemDisconnect = playDisconnect;
+
+  const modemLines = [
+    { text: "HAYES SMARTMODEM 14400 — FIRMWARE v4.20", color: "ansi-bright-black", delay: 150 },
+    { text: "", delay: 100 },
+    { text: "ATZ", color: "tf-orange", delay: 200 },
+    { text: "OK", color: "ansi-bright-white", delay: 250 },
+    { text: "ATS0=0 E1 V1 Q0 &C1 &D2", color: "tf-orange", delay: 200 },
+    { text: "OK", color: "ansi-bright-white", delay: 200 },
+    { text: "", delay: 150 },
+    { text: "ATDT 1-512-555-TODD", color: "tf-orange", delay: 400 },
+    { text: "", delay: 200 },
+    { text: "DIALING...", color: "ansi-bright-black", delay: 600 },
+    { text: "", delay: 200 },
+    { text: "RING...", color: "tf-orange-bright", delay: 800 },
+    { text: "RING...", color: "tf-orange-bright", delay: 800 },
+    { text: "", delay: 200 },
+    { text: "CONNECT 14400/ARQ/V.32bis/LAPM/V.42bis", color: "tf-purple-bright", delay: 400 },
+    { text: "", delay: 300 },
+    { text: "═══════════════════════════════════════════", color: "tf-purple", delay: 100 },
+    { text: "", delay: 100 },
+    { text: "Detecting terminal... ANSI color ✓", color: "ansi-green", delay: 200 },
+    { text: "Checking for ANSI graphics... ████████████████ YES", color: "tf-orange", delay: 300 },
+    { text: "Negotiating encryption... ████████████████ OK", color: "ansi-green", delay: 250 },
+    { text: "", delay: 100 },
+    { text: "═══════════════════════════════════════════", color: "tf-purple", delay: 100 },
+    { text: "", delay: 150 },
+    { text: "  Connected to THE TODDFATHER BBS", color: "tf-orange-bright", delay: 300 },
+    { text: "  Est. 1984 · Scottsdale, AZ · Node 1 of 4", color: "ansi-bright-black", delay: 200 },
+    { text: "", delay: 150 },
+    { text: "  Handle: VISITOR", color: "tf-purple-bright", delay: 200 },
+    { text: "  Access Level: Associate", color: "ansi-green", delay: 200 },
+    { text: "  Messages: 3 NEW", color: "ansi-green", delay: 150 },
+    { text: "  You are caller #48,291", color: "tf-gold", delay: 250 },
+    { text: "", delay: 100 },
+    { text: "  \"Leave the gun. Take the codebase.\"", color: "ansi-bright-black", delay: 400 },
+    { text: "", delay: 300 },
+    { text: "Entering The Toddfather BBS...", color: "tf-purple-bright", delay: 500 },
+  ];
+
+  const bootEl = document.getElementById("bbs-boot")!;
+  const linesEl = document.getElementById("bbs-boot-lines")!;
+  const matrixEl = document.getElementById("bbs-wargames-matrix")!;
+  const matrixText = document.getElementById("bbs-matrix-text")!;
+  const splashEl = document.getElementById("bbs-splash")!;
+  let aborted = false;
+
+  const visited = document.cookie.includes("toddlebaron-visited=1");
+  if (visited) {
+    bootEl.remove();
+    matrixEl.remove();
+    splashEl.remove();
+    document.getElementById("bbs-main")!.style.display = "";
+    requestAnimationFrame(() => document.dispatchEvent(new CustomEvent("boot:complete")));
+  } else {
+    // Start modem audio on first user interaction
+    let audioStarted = false;
+    function startAudio() {
+      if (audioStarted) return;
+      audioStarted = true;
+      playModemHandshake().catch(() => {});
+    }
+    document.addEventListener("click", startAudio, { once: true });
+    document.addEventListener("keydown", startAudio, { once: true });
+    setTimeout(startAudio, 100);
+
+    let totalDelay = 0;
+
+    modemLines.forEach((line) => {
+      totalDelay += line.delay;
+      setTimeout(() => {
+        if (aborted) return;
+        const el = document.createElement("div");
+        el.className = "bbs-boot-line visible";
+        if (line.color) {
+          el.innerHTML = `<span class="${line.color}">${escapeHtml(line.text)}</span>`;
+        } else {
+          el.textContent = " ";
+        }
+        linesEl.appendChild(el);
+        linesEl.scrollTop = linesEl.scrollHeight;
+      }, totalDelay);
+    });
+
+    // Phase 1.5: WarGames matrix login
+    const matrixStart = totalDelay + 400;
+    setTimeout(() => {
+      if (aborted) return;
+      bootEl.style.transition = "opacity 0.3s";
+      bootEl.style.opacity = "0";
+      setTimeout(() => bootEl.remove(), 300);
+      matrixEl.classList.add("visible");
+      runMatrixSequence();
+    }, matrixStart);
+
+    // Skip on click
+    bootEl.addEventListener("click", skipAll);
+    matrixEl.addEventListener("click", skipAll);
+    splashEl.addEventListener("click", skipAll);
+  }
+
+  async function runMatrixSequence(): Promise<void> {
+    if (aborted) return;
+
+    const lines = [
+      { text: "WOPR STRATEGIC DEFENSE COMPUTER", color: "ansi-bright-green", delay: 400 },
+      { text: "NORAD / USSTRATCOM", color: "ansi-green", delay: 300 },
+      { text: "", delay: 200 },
+      { text: "LOGON: JOSHUA", color: "ansi-green", delay: 600 },
+      { text: "", delay: 400 },
+      { text: "GREETINGS, PROFESSOR FALKEN.", color: "ansi-bright-green", delay: 800 },
+      { text: "", delay: 300 },
+      { text: "SHALL WE PLAY A GAME?", color: "ansi-bright-white", delay: 800 },
+      { text: "", delay: 400 },
+      { text: "> THE TODDFATHER BBS", color: "ansi-bright-green", delay: 600 },
+      { text: "", delay: 300 },
+      { text: "EXCELLENT CHOICE.", color: "ansi-green", delay: 500 },
+      { text: "CONNECTING TO NODE 1...", color: "ansi-green", delay: 600 },
+    ];
+
+    let d = 0;
+    for (const line of lines) {
+      d += line.delay;
+      setTimeout(() => {
+        if (aborted) return;
+        const div = document.createElement("div");
+        div.style.whiteSpace = "pre-wrap";
+        div.style.marginBottom = "4px";
+        div.style.fontFamily = "var(--bbs-font)";
+        div.style.fontSize = "var(--bbs-font-size)";
+        if (line.text) {
+          div.innerHTML = `<span class="${line.color}">${escapeHtml(line.text)}</span>`;
+        } else {
+          div.textContent = " ";
+        }
+        matrixText.appendChild(div);
+      }, d);
+    }
+
+    // After matrix → splash
+    setTimeout(() => {
+      if (aborted) return;
+      matrixEl.style.transition = "opacity 0.4s";
+      matrixEl.style.opacity = "0";
+      setTimeout(() => matrixEl.remove(), 400);
+      splashEl.classList.add("visible");
+    }, d + 600);
+
+    // Splash → main
+    setTimeout(() => {
+      if (aborted) return;
+      finishBoot();
+    }, d + 600 + 2800);
+  }
+
+  function skipAll() {
+    aborted = true;
+    bootEl.style.transition = "opacity 0.15s";
+    bootEl.style.opacity = "0";
+    matrixEl.style.transition = "opacity 0.15s";
+    matrixEl.style.opacity = "0";
+    splashEl.style.transition = "opacity 0.15s";
+    splashEl.style.opacity = "0";
+    document.getElementById("bbs-main")!.style.display = "";
+    setTimeout(() => {
+      bootEl.remove();
+      matrixEl.remove();
+      splashEl.remove();
+      document.dispatchEvent(new CustomEvent("boot:complete"));
+    }, 150);
+    document.cookie = "toddlebaron-visited=1;path=/;max-age=" + (365 * 86400);
+  }
+
+  function finishBoot() {
+    splashEl.style.transition = "opacity 0.6s ease-out";
+    splashEl.style.opacity = "0";
+    document.getElementById("bbs-main")!.style.display = "";
+    setTimeout(() => {
+      splashEl.remove();
+      document.dispatchEvent(new CustomEvent("boot:complete"));
+    }, 600);
+    document.cookie = "toddlebaron-visited=1;path=/;max-age=" + (365 * 86400);
+  }
+
+  function escapeHtml(s: string): string {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+</script>

@@ -39,8 +39,10 @@ const { skipBoot = false, abbreviated = false } = Astro.props;
 
   const skipBoot = bootEl.dataset.skip === "true";
   const abbreviated = bootEl.dataset.abbreviated === "true";
-  const returnVisitor = document.cookie.includes("toddlebaron-visited=1");
   let skipped = false;
+
+  // Remove the static first-paint splash — boot screen takes over now
+  document.getElementById("static-splash")?.remove();
 
   const skipHandler = () => {
     if (!skipped) {
@@ -80,12 +82,12 @@ const { skipBoot = false, abbreviated = false } = Astro.props;
 
   // Show screensaver during boot dark phase
   const ssEl = document.getElementById("screensaver");
-  if (!skipBoot && !returnVisitor && ssEl) {
+  if (!skipBoot && ssEl) {
     ssEl.style.opacity = "1";
     ssEl.style.pointerEvents = "none";
   }
 
-  if (!skipBoot && !returnVisitor && !abbreviated) runBootSequence(
+  if (!skipBoot && !abbreviated) runBootSequence(
     {
       onPhaseChange(phase) {
         if (skipped) return;
