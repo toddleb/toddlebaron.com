@@ -945,19 +945,41 @@
   margin-top: 12px;
 }
 
-/* Desktop SGI Logo Watermark */
-.sgi-desktop-logo {
+/* Desktop SGI Branding Watermark */
+.sgi-desktop-branding {
   position: absolute;
-  top: 12px;
-  right: 16px;
-  font-size: 48px;
-  font-weight: 900;
-  letter-spacing: -2px;
-  opacity: 0.35;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
   pointer-events: none;
   z-index: 0;
   user-select: none;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.sgi-desktop-logo {
+  font-size: 72px;
+  font-weight: 900;
+  letter-spacing: -3px;
+  opacity: 0.3;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.sgi-desktop-site {
+  font-size: 20px;
+  font-weight: 300;
+  color: white;
+  opacity: 0.25;
+  margin-top: 4px;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.sgi-desktop-tagline {
+  font-size: 13px;
+  color: white;
+  opacity: 0.18;
+  margin-top: 2px;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 
 .sgi-logo-s { color: #3BB8D0; }

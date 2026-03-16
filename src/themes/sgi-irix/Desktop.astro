@@ -8,8 +8,12 @@ const { windows } = Astro.props;
 ---
 
 <div class="sgi-desktop" id="desktop">
-  <div class="sgi-desktop-logo" aria-hidden="true">
-    <span class="sgi-logo-s">s</span><span class="sgi-logo-g">g</span><span class="sgi-logo-i">i</span>
+  <div class="sgi-desktop-branding" aria-hidden="true">
+    <div class="sgi-desktop-logo">
+      <span class="sgi-logo-s">s</span><span class="sgi-logo-g">g</span><span class="sgi-logo-i">i</span>
+    </div>
+    <div class="sgi-desktop-site">toddlebaron.com</div>
+    <div class="sgi-desktop-tagline">An SGI IRIX desktop experience in the browser</div>
   </div>
   <div class="sgi-desktop-icons">
     {windows.map((w) => (

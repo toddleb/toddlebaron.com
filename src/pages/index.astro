@@ -36,17 +36,21 @@ const windowList = pages.map((p) => ({
       {await Promise.all(pages.map(async (page, i) => {
         const { Content } = await render(page);
         const isBlog = page.data.windowId === "blog";
+        const isContact = page.data.windowId === "contact";
         return (
           <Window
             windowId={page.data.windowId}
-            title={page.data.title}
+            title={isContact ? "MediaMail — Compose" : page.data.title}
             x={150 + i * 30}
             y={60 + i * 30}
             visible={page.data.windowId === "about"}
           >
-            <Content />
+            {isContact ? (
+              <div style="margin:-16px; height:calc(100% + 32px);">
+                <MediaMail />
+              </div>
+            ) : <Content />}
             {page.data.windowId === "resume" && <GaugeCluster />}
-            {page.data.windowId === "contact" && <MediaMail />}
             {isBlog && blog.length > 0 && (
               <ul>
                 {blog.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).map((post) => (
