@@ -1,5 +1,6 @@
 ---
 // src/themes/sgi-irix/Desktop.astro
+import { sgiIcons } from "./icons";
 export interface Props {
   windows: { windowId: string; title: string; icon: string }[];
 }
@@ -13,7 +14,7 @@ const { windows } = Astro.props;
   <div class="sgi-desktop-icons">
     {windows.map((w) => (
       <div class="sgi-icon" data-window-id={w.windowId} tabindex="0" role="button" aria-label={`Open ${w.title}`}>
-        <div class="sgi-icon-image">{w.icon}</div>
+        <div class="sgi-icon-image" set:html={sgiIcons[w.windowId] || `<span style="font-size:24px">${w.icon}</span>`}></div>
         <div class="sgi-icon-label">{w.title}</div>
       </div>
     ))}

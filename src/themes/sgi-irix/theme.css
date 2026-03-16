@@ -178,8 +178,7 @@
 .sgi-icon-image {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #8060C0, #6090B0);
-  border: 1px solid #555;
+  background: transparent;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -196,8 +195,7 @@
 }
 
 .sgi-icon.selected .sgi-icon-image {
-  background: linear-gradient(135deg, #C0A000, #D0C020);
-  border-color: #AA0;
+  filter: brightness(1.3) drop-shadow(0 0 4px rgba(200, 180, 0, 0.8));
 }
 
 .sgi-boot {
