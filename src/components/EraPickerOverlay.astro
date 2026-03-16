@@ -1,0 +1,68 @@
+---
+// src/components/EraPickerOverlay.astro
+---
+
+<div id="era-picker" class="era-picker-overlay" style="display:none" role="dialog" aria-label="Choose Era">
+  <div class="era-picker-content">
+    <h2 style="margin-bottom:16px; color:#fff">Choose Your Era</h2>
+    <div class="era-option active" data-era="sgi-irix">
+      <div class="era-preview" style="background:linear-gradient(135deg, #6B3FA0, #3A8A7A)"></div>
+      <div class="era-info">
+        <strong>SGI IRIX 6.5</strong>
+        <span style="color:#888">Indigo Magic Desktop (Mid 90s)</span>
+      </div>
+    </div>
+    <p style="color:#666; font-size:13px; margin-top:16px">More eras coming soon...</p>
+    <button id="era-picker-close" style="margin-top:16px; padding:8px 24px; cursor:pointer">Close</button>
+  </div>
+</div>
+
+<style>
+  .era-picker-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .era-picker-content {
+    background: #333;
+    border: 2px outset #555;
+    padding: 24px;
+    min-width: 400px;
+    border-radius: 4px;
+  }
+  .era-option {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border: 2px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .era-option.active {
+    border-color: #6B3FA0;
+    background: rgba(107,63,160,0.2);
+  }
+  .era-preview {
+    width: 64px;
+    height: 48px;
+    border-radius: 4px;
+  }
+  .era-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: #fff;
+  }
+</style>
+
+<script>
+  document.getElementById("era-picker-close")?.addEventListener("click", () => {
+    const picker = document.getElementById("era-picker");
+    if (picker) picker.style.display = "none";
+  });
+</script>
