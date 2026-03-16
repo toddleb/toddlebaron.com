@@ -39,18 +39,21 @@ const { skipBoot = false, abbreviated = false } = Astro.props;
 
   const skipBoot = bootEl.dataset.skip === "true";
   const abbreviated = bootEl.dataset.abbreviated === "true";
+  const returnVisitor = document.cookie.includes("toddlebaron-visited=1");
   let skipped = false;
 
   const skipHandler = () => {
     if (!skipped) {
       skipped = true;
       bootEl.style.display = "none";
+      document.getElementById("static-splash")?.remove();
       document.dispatchEvent(new CustomEvent("boot:complete"));
     }
   };
 
-  if (skipBoot) {
+  if (skipBoot || returnVisitor) {
     bootEl.style.display = "none";
+    document.getElementById("static-splash")?.remove();
     document.dispatchEvent(new CustomEvent("boot:complete"));
   } else if (abbreviated) {
     logoEl.style.display = "block";
@@ -77,12 +80,12 @@ const { skipBoot = false, abbreviated = false } = Astro.props;
 
   // Show screensaver during boot dark phase
   const ssEl = document.getElementById("screensaver");
-  if (!skipBoot && ssEl) {
+  if (!skipBoot && !returnVisitor && ssEl) {
     ssEl.style.opacity = "1";
     ssEl.style.pointerEvents = "none";
   }
 
-  if (!skipBoot && !abbreviated) runBootSequence(
+  if (!skipBoot && !returnVisitor && !abbreviated) runBootSequence(
     {
       onPhaseChange(phase) {
         if (skipped) return;
@@ -100,6 +103,7 @@ const { skipBoot = false, abbreviated = false } = Astro.props;
         } else if (phase === "done") {
           bootEl.style.opacity = "0";
           bootEl.style.transition = "opacity 0.5s ease";
+          document.getElementById("static-splash")?.remove();
           setTimeout(() => {
             bootEl.style.display = "none";
             markVisited();

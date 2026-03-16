@@ -9,23 +9,23 @@ const { windows } = Astro.props;
 <nav class="sgi-toolchest" aria-label="Toolchest menu">
   <div class="sgi-toolchest-header">Toolchest</div>
   {windows.map((w) => (
-    <div class="sgi-toolchest-item" data-menu-open={w.windowId} role="menuitem" tabindex="0">
+    <div class="sgi-toolchest-item" data-menu-open={w.windowId} role="menuitem" tabindex="0" aria-haspopup="true">
       <span>{w.title}</span>
     </div>
   ))}
-  <div class="sgi-toolchest-item" data-menu-open="file-manager" role="menuitem" tabindex="0">
+  <div class="sgi-toolchest-item" data-menu-open="file-manager" role="menuitem" tabindex="0" aria-haspopup="true">
     <span>File Manager</span>
   </div>
-  <div class="sgi-toolchest-item" data-menu-open="icon-catalog" role="menuitem" tabindex="0">
+  <div class="sgi-toolchest-item" data-menu-open="icon-catalog" role="menuitem" tabindex="0" aria-haspopup="true">
     <span>Icon Catalog</span>
   </div>
-  <div class="sgi-toolchest-item" data-menu-open="console" role="menuitem" tabindex="0">
+  <div class="sgi-toolchest-item" data-menu-open="console" role="menuitem" tabindex="0" aria-haspopup="true">
     <span>Console</span>
   </div>
-  <div class="sgi-toolchest-item" data-menu-open="scheme-selector" role="menuitem" tabindex="0">
+  <div class="sgi-toolchest-item" data-menu-open="scheme-selector" role="menuitem" tabindex="0" aria-haspopup="true">
     <span>Color Scheme...</span>
   </div>
-  <div class="sgi-toolchest-item" data-menu-open="background-picker" role="menuitem" tabindex="0">
+  <div class="sgi-toolchest-item" data-menu-open="background-picker" role="menuitem" tabindex="0" aria-haspopup="true">
     <span>Backgrounds...</span>
   </div>
   <div class="sgi-toolchest-divider"></div>

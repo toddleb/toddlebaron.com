@@ -52,6 +52,14 @@ const { title, description } = Astro.props;
     </script>
   </head>
   <body style="margin:0; padding:0; overflow:hidden; background:#000">
+    <div id="static-splash" style="position:fixed;inset:0;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center">
+      <div style="text-align:center">
+        <div style="font-size:72px;font-weight:900;letter-spacing:-3px">
+          <span style="color:#3BB8D0">s</span><span style="color:#E8891E">g</span><span style="color:#7B52AE">i</span>
+        </div>
+        <div style="color:#555;font-size:12px;margin-top:8px">toddlebaron.com</div>
+      </div>
+    </div>
     <slot />
     <EraPickerOverlay />
     <script>
@@ -61,6 +69,7 @@ const { title, description } = Astro.props;
 
       // Wait for boot to complete (or skip)
       document.addEventListener("boot:complete", () => {
+        document.getElementById("static-splash")?.remove();
         const desktop = document.getElementById("desktop");
         if (desktop) desktop.style.opacity = "1";
         initDesktopIcons();
@@ -77,6 +86,17 @@ const { title, description } = Astro.props;
           setWindowDesk(winId, desk);
         }
         switchDesk("work");
+
+        // Sound affordance toast (first visit only)
+        if (!document.cookie.includes("toddlebaron-visited=1")) {
+          const toast = document.createElement("div");
+          toast.id = "sound-toast";
+          toast.textContent = "\u{1F50A} Click the speaker icon to enable sounds";
+          toast.style.cssText = "position:fixed;bottom:40px;right:16px;background:var(--sgi-widget,#C0C0C0);border:2px outset #E0E0E0;padding:6px 12px;font-size:11px;font-family:Helvetica,sans-serif;z-index:2000;opacity:0;transition:opacity 0.3s ease;box-shadow:2px 2px 4px rgba(0,0,0,0.3)";
+          document.body.appendChild(toast);
+          requestAnimationFrame(() => toast.style.opacity = "1");
+          setTimeout(() => { toast.style.opacity = "0"; setTimeout(() => toast.remove(), 300); }, 4000);
+        }
       });
 
       document.addEventListener("wm:window-opened", () => {
@@ -124,8 +144,10 @@ const { title, description } = Astro.props;
             const isOpen = dropdown.style.display !== "none";
             // Close all dropdowns first
             document.querySelectorAll<HTMLElement>(".sgi-window-dropdown").forEach((d) => d.style.display = "none");
+            document.querySelectorAll<HTMLElement>("[data-window-menu]").forEach((b) => b.setAttribute("aria-expanded", "false"));
             if (!isOpen) {
               dropdown.style.display = "block";
+              menuBtn.setAttribute("aria-expanded", "true");
               playSound("/audio/sgi-menu-click.mp3");
             }
           }
@@ -147,11 +169,13 @@ const { title, description } = Astro.props;
           }
           // Close all dropdowns
           document.querySelectorAll<HTMLElement>(".sgi-window-dropdown").forEach((d) => d.style.display = "none");
+          document.querySelectorAll<HTMLElement>("[data-window-menu]").forEach((b) => b.setAttribute("aria-expanded", "false"));
           return;
         }
 
         // Close dropdowns on any other click
         document.querySelectorAll<HTMLElement>(".sgi-window-dropdown").forEach((d) => d.style.display = "none");
+        document.querySelectorAll<HTMLElement>("[data-window-menu]").forEach((b) => b.setAttribute("aria-expanded", "false"));
 
         // Window buttons
         const action = target.dataset.action;
@@ -449,6 +473,47 @@ const { title, description } = Astro.props;
         document.addEventListener("mousemove", resetIdleTimer);
         document.addEventListener("keydown", resetIdleTimer);
         document.addEventListener("click", resetIdleTimer);
+      });
+
+      // ============================
+      // Status bar hover text (Item 7)
+      // ============================
+      const statusEl = document.getElementById("status-text");
+      if (statusEl) {
+        const defaultText = "IRIX 6.5 \u2014 toddlebaron.com";
+        document.addEventListener("mouseover", (e) => {
+          const target = e.target as HTMLElement;
+          const icon = target.closest<HTMLElement>(".sgi-icon");
+          if (icon) { statusEl.textContent = `Double-click to open ${icon.querySelector(".sgi-icon-label")?.textContent || ""}`; return; }
+          const toolItem = target.closest<HTMLElement>(".sgi-toolchest-item");
+          if (toolItem) { statusEl.textContent = `Open ${toolItem.textContent?.trim() || ""}`; return; }
+          const deskMini = target.closest<HTMLElement>(".sgi-desk-mini");
+          if (deskMini) { statusEl.textContent = `Switch to ${deskMini.querySelector(".sgi-desk-mini-label")?.textContent || ""} desk`; return; }
+          const winBtn = target.closest<HTMLElement>(".sgi-window-btn");
+          if (winBtn) {
+            const action = winBtn.dataset.action;
+            statusEl.textContent = action ? action.charAt(0).toUpperCase() + action.slice(1) + " window" : defaultText;
+            return;
+          }
+          statusEl.textContent = defaultText;
+        });
+      }
+
+      // ============================
+      // Keyboard context menu (Item 11)
+      // ============================
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ContextMenu" || (e.shiftKey && e.key === "F10")) {
+          e.preventDefault();
+          const desktop = document.getElementById("desktop");
+          if (desktop) {
+            desktop.dispatchEvent(new MouseEvent("contextmenu", {
+              clientX: window.innerWidth / 2,
+              clientY: window.innerHeight / 2,
+              bubbles: true,
+            }));
+          }
+        }
       });
 
       // ============================

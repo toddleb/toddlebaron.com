@@ -96,6 +96,7 @@ const commands: Record<string, (args: string) => CommandResult> = {
   clear         Clear the console
   echo &lt;text&gt;   Print text
   neofetch      System information
+  motd          Show welcome message
   fortune       Random tech quote
   cowsay &lt;msg&gt;  ASCII cow says your message
   xeyes         Launch xeyes (easter egg)
@@ -188,6 +189,16 @@ const commands: Record<string, (args: string) => CommandResult> = {
   <span style="color:#E8891E">CPU:</span> MIPS R10000 @ 195MHz
   <span style="color:#E8891E">GPU:</span> IMPACT (Max IMPACT)
   <span style="color:#E8891E">Memory:</span> 512KB / 256MB`,
+    };
+  },
+
+  motd() {
+    return {
+      type: "output",
+      html: `<span style="color:#70D8F0">Welcome to toddlebaron.com — IRIX 6.5 on Indigo2 IMPACT</span>
+
+Type 'help' for commands, or double-click a desktop icon to explore.
+Try: neofetch, fortune, ls, cat resume.pdf`,
     };
   },
 

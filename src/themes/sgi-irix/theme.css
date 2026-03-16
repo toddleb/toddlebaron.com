@@ -142,6 +142,16 @@
   user-select: none;
 }
 
+.sgi-status-text {
+  font-size: 11px;
+  color: var(--sgi-text-muted);
+  flex: 1;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .sgi-desk-tab {
   padding: 3px 12px;
   background: #B0B0B0;
@@ -166,7 +176,7 @@
   flex-direction: column;
   gap: 16px;
   align-items: center;
-  z-index: 10;
+  z-index: 50;
 }
 
 .sgi-icon {
@@ -299,12 +309,18 @@
 }
 
 .sgi-scheme-preview {
-  height: 20px;
+  height: 16px;
   border: 1px solid #333;
 }
 
 .sgi-scheme-sky {
-  height: 16px;
+  height: 24px;
+  border: 1px solid #333;
+  border-top: none;
+}
+
+.sgi-scheme-widget-strip {
+  height: 8px;
   border: 1px solid #333;
   border-top: none;
 }
@@ -1382,4 +1398,99 @@
   border: 1px dashed rgba(255,255,255,0.4);
   pointer-events: none;
   z-index: 99;
+}
+
+/* ========================================
+   Window Content Typography (Item 5)
+   ======================================== */
+
+.sgi-window-content h1 { font-size: 20px; font-weight: bold; margin: 0 0 12px; color: var(--sgi-text); border-bottom: 2px solid var(--sgi-widget-dark); padding-bottom: 8px; }
+.sgi-window-content h2 { font-size: 16px; font-weight: bold; margin: 16px 0 8px; color: var(--sgi-primary); }
+.sgi-window-content h3 { font-size: 14px; font-weight: bold; margin: 12px 0 6px; color: var(--sgi-text); }
+.sgi-window-content p { margin: 0 0 10px; max-width: 60ch; }
+.sgi-window-content ul, .sgi-window-content ol { margin: 0 0 10px; padding-left: 24px; }
+.sgi-window-content li { margin-bottom: 4px; }
+.sgi-window-content a { color: var(--sgi-primary); text-decoration: underline; }
+.sgi-window-content a:hover { color: var(--sgi-secondary); }
+.sgi-window-content code { background: var(--sgi-widget); padding: 1px 4px; font-size: 12px; border: 1px solid var(--sgi-widget-dark); font-family: "SF Mono", "Monaco", monospace; }
+.sgi-window-content pre { background: #1a1a2e; color: #33FF33; padding: 12px; overflow-x: auto; font-size: 12px; border: 2px inset var(--sgi-widget-dark); margin: 0 0 10px; }
+.sgi-window-content blockquote { border-left: 3px solid var(--sgi-primary); padding-left: 12px; margin: 0 0 10px; color: var(--sgi-text-muted); font-style: italic; }
+.sgi-window-content hr { border: none; border-top: 2px groove var(--sgi-widget-dark); margin: 16px 0; }
+.sgi-window-content strong { font-weight: bold; }
+.sgi-window-content em { font-style: italic; }
+
+/* ========================================
+   Accessibility (Item 11)
+   ======================================== */
+
+/* Focus-visible indicators */
+.sgi-window-btn:focus-visible,
+.sgi-toolchest-item:focus-visible,
+.sgi-desk-tab:focus-visible,
+.sgi-desk-mini:focus-visible,
+.sgi-icon:focus-visible,
+.sgi-buttonfly-trigger:focus-visible,
+.sgi-buttonfly-item:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .sgi-running-man .rm-arm-l,
+  .sgi-running-man .rm-arm-r,
+  .sgi-running-man .rm-leg-l,
+  .sgi-running-man .rm-leg-r,
+  .sgi-ss-cube,
+  .sgi-ss-cube-container,
+  .sgi-ss-star {
+    animation: none !important;
+  }
+  .sgi-screensaver { transition: none !important; }
+}
+
+/* ========================================
+   Print Stylesheet (Item 12)
+   ======================================== */
+
+@media print {
+  .sgi-desktop,
+  .sgi-boot,
+  .sgi-toolchest,
+  .sgi-desks-panel,
+  .sgi-buttonfly,
+  .sgi-screensaver,
+  .sgi-desktop-branding,
+  .sgi-desktop-icons,
+  .sgi-window-titlebar,
+  .sgi-window-resize,
+  .sgi-splash-overlay,
+  .era-picker-overlay,
+  #static-splash {
+    display: none !important;
+  }
+  body {
+    overflow: visible !important;
+    background: white !important;
+  }
+  .sgi-window {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: white !important;
+    page-break-inside: avoid;
+  }
+  .sgi-window-content {
+    background: white !important;
+    color: #000 !important;
+    font-size: 12pt !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  .sgi-window-content a { color: #000 !important; }
+  .sgi-window-content a::after { content: " (" attr(href) ")"; font-size: 10pt; color: #666; }
+  .sgi-gauge-cluster { display: none !important; }
 }

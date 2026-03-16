@@ -4,101 +4,697 @@ export interface Props {
   windows: { windowId: string; title: string; icon: string }[];
 }
 const { windows } = Astro.props;
+
+const descriptions: Record<string, string> = {
+  about: "Software engineer. Mainframes to modern web.",
+  "computing-history": "A journey from green screens to IRIX.",
+  projects: "Open source, AICR, and everything in between.",
+  resume: "Career highlights and experience.",
+  contact: "LinkedIn, GitHub, and how to reach me.",
+  blog: "Posts on tech, retro computing, and more.",
+};
+
+const desks = [
+  { id: "work", label: "Work", windowIds: ["resume", "projects"] },
+  { id: "projects", label: "Projects", windowIds: ["projects", "computing-history", "blog"] },
+  { id: "personal", label: "Personal", windowIds: ["about", "contact", "blog"] },
+];
 ---
 
-<div class="mobile-layout">
-  <!-- Abbreviated boot: just logo -->
-  <div id="mobile-boot" style="background:#000; display:flex; align-items:center; justify-content:center; min-height:100vh; position:fixed; inset:0; z-index:100">
-    <div style="text-align:center">
-      <div style="font-size:48px; font-weight:900; letter-spacing:-2px">
-        <span style="color:#E44">s</span><span style="color:#4A4">g</span><span style="color:#44E">i</span>
+<div class="m-layout">
+  <!-- Boot splash -->
+  <div id="m-boot" class="m-boot">
+    <div class="m-boot-inner">
+      <div class="m-boot-logo">
+        <span class="m-logo-s">s</span><span class="m-logo-g">g</span><span class="m-logo-i">i</span>
       </div>
-      <div style="color:#555; font-size:11px; margin-top:8px">toddlebaron.com</div>
+      <div class="m-boot-sub">toddlebaron.com</div>
+      <div class="m-boot-bar">
+        <div class="m-boot-bar-fill" id="m-boot-fill"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Hamburger nav -->
-  <header class="mobile-header">
-    <div class="mobile-logo">Todd LeBaron</div>
-    <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Menu">☰</button>
+  <!-- Header bar -->
+  <header class="m-header" id="m-header">
+    <div class="m-header-left">
+      <span id="m-back-btn" class="m-back-btn" style="display:none" aria-label="Back to cards">&larr;</span>
+      <span class="m-header-title" id="m-header-title">toddlebaron.com</span>
+    </div>
+    <button class="m-cube-toggle" id="m-cube-toggle" aria-label="Toggle menu">
+      <div class="m-cube">
+        <div class="m-cube-face m-cube-front"></div>
+        <div class="m-cube-face m-cube-right"></div>
+        <div class="m-cube-face m-cube-top"></div>
+      </div>
+    </button>
   </header>
 
-  <nav id="mobile-menu" class="mobile-nav" style="display:none">
-    {windows.map((w) => (
-      <a href={`/${w.windowId}`} class="mobile-nav-item">
-        <span>{w.icon}</span>
-        <span>{w.title}</span>
-      </a>
+  <!-- Desk tabs toolbar -->
+  <div class="m-desks" id="m-desks">
+    {desks.map((desk, i) => (
+      <button
+        class:list={["m-desk-tab", { active: i === 0 }]}
+        data-desk={desk.id}
+        data-windows={desk.windowIds.join(",")}
+      >
+        {desk.label}
+      </button>
     ))}
-  </nav>
+  </div>
 
-  <main class="mobile-content">
+  <!-- Quick links -->
+  <div class="m-quick-links" id="m-quick-links">
+    <a href="https://github.com/toddlebaron" target="_blank" rel="noopener" class="m-quick-btn">
+      <span class="m-quick-icon">&#9783;</span> GitHub
+    </a>
+    <a href="https://linkedin.com/in/toddlebaron" target="_blank" rel="noopener" class="m-quick-btn">
+      <span class="m-quick-icon">&#9830;</span> LinkedIn
+    </a>
+    <a href="mailto:todd@toddlebaron.com" class="m-quick-btn">
+      <span class="m-quick-icon">&#9993;</span> Email
+    </a>
+  </div>
+
+  <!-- Card grid -->
+  <div class="m-card-grid" id="m-card-grid">
+    {windows.map((w) => (
+      <button class="m-card" data-card-id={w.windowId} aria-label={`Open ${w.title}`}>
+        <div class="m-card-titlebar">
+          <span class="m-card-icon">{w.icon}</span>
+          <span class="m-card-title">{w.title}</span>
+        </div>
+        <div class="m-card-body">
+          <p class="m-card-desc">{descriptions[w.windowId] || w.title}</p>
+        </div>
+      </button>
+    ))}
+  </div>
+
+  <!-- Expanded card view (hidden by default) -->
+  <div class="m-expanded" id="m-expanded" style="display:none">
+    <div class="m-expanded-window">
+      <div class="m-expanded-titlebar">
+        <span class="m-expanded-icon" id="m-expanded-icon"></span>
+        <span class="m-expanded-title" id="m-expanded-title"></span>
+        <button class="m-expanded-close" id="m-expanded-close" aria-label="Close">x</button>
+      </div>
+      <div class="m-expanded-content" id="m-expanded-content">
+        <!-- Content injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot: hidden sections for content -->
+  <div id="m-slot-content" style="display:none">
     <slot />
-  </main>
+  </div>
+
+  <!-- Footer / DesksPanel bar -->
+  <footer class="m-footer" id="m-footer">
+    <div class="m-footer-links">
+      <a href="https://github.com/toddlebaron" target="_blank" rel="noopener" class="m-footer-btn" aria-label="GitHub">
+        <span class="m-footer-icon">&#9783;</span>
+      </a>
+      <a href="https://linkedin.com/in/toddlebaron" target="_blank" rel="noopener" class="m-footer-btn" aria-label="LinkedIn">
+        <span class="m-footer-icon">&#9830;</span>
+      </a>
+      <a href="mailto:todd@toddlebaron.com" class="m-footer-btn" aria-label="Email">
+        <span class="m-footer-icon">&#9993;</span>
+      </a>
+    </div>
+    <button id="m-volume-toggle" class="m-footer-vol" aria-label="Toggle sound">
+      &#128263;
+    </button>
+  </footer>
 </div>
 
 <style>
-  .mobile-layout {
+  /* ======================================
+     SGI Mobile Theme
+     ====================================== */
+
+  .m-layout {
+    --sgi-primary: #6B3FA0;
+    --sgi-secondary: #3A8A7A;
+    --sgi-widget: #C0C0C0;
+    --sgi-widget-light: #E0E0E0;
+    --sgi-widget-dark: #888888;
+    --sgi-surface: #E8E8E8;
+    --sgi-content-bg: #F5F5F0;
+    --sgi-text: #222222;
+    --sgi-text-muted: #666666;
+    --sgi-title-gradient: linear-gradient(90deg, #6B3FA0, #4A6FA0, #3A8A7A);
+
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #222;
+    color: var(--sgi-text);
+    background: var(--sgi-surface);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-text-size-adjust: 100%;
   }
-  .mobile-header {
+
+  /* ---- Boot Splash ---- */
+  .m-boot {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease;
+  }
+  .m-boot.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .m-boot-inner { text-align: center; }
+  .m-boot-logo {
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: -2px;
+  }
+  .m-logo-s { color: #3BB8D0; }
+  .m-logo-g { color: #E8891E; }
+  .m-logo-i { color: #7B52AE; }
+  .m-boot-sub {
+    color: #555;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  .m-boot-bar {
+    margin-top: 16px;
+    width: 180px;
+    height: 3px;
+    background: #222;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .m-boot-bar-fill {
+    height: 100%;
+    background: #33FF33;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  /* ---- Header ---- */
+  .m-header {
     position: sticky;
     top: 0;
-    z-index: 50;
+    z-index: 100;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 16px;
-    background: linear-gradient(90deg, #6B3FA0, #3A8A7A);
-    color: #fff;
+    padding: 10px 14px;
+    background: var(--sgi-title-gradient);
+    border-bottom: 2px outset var(--sgi-widget-light);
+    min-height: 44px;
   }
-  .mobile-logo { font-weight: bold; font-size: 16px; }
-  .mobile-menu-btn {
-    background: none;
-    border: 1px solid rgba(255,255,255,0.3);
+  .m-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .m-header-title {
     color: #fff;
-    font-size: 20px;
-    padding: 4px 8px;
+    font-weight: bold;
+    font-size: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .m-back-btn {
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
     cursor: pointer;
-    border-radius: 4px;
+    padding: 0 4px;
+    line-height: 1;
+    flex-shrink: 0;
   }
-  .mobile-nav {
-    background: #E8E8E8;
-    border-bottom: 2px solid #C0C0C0;
+
+  /* CSS-only SGI cube icon */
+  .m-cube-toggle {
+    background: none;
+    border: 1px outset rgba(255,255,255,0.25);
+    border-radius: 3px;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-shrink: 0;
   }
-  .mobile-nav-item {
+  .m-cube {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(-20deg) rotateY(30deg);
+  }
+  .m-cube-face {
+    position: absolute;
+    border: 1px solid rgba(255,255,255,0.6);
+  }
+  .m-cube-front {
+    width: 14px;
+    height: 14px;
+    background: rgba(107, 63, 160, 0.8);
+    bottom: 0;
+    left: 0;
+  }
+  .m-cube-right {
+    width: 6px;
+    height: 14px;
+    background: rgba(58, 138, 122, 0.8);
+    bottom: 0;
+    right: 0;
+    transform: skewY(-30deg);
+    transform-origin: bottom right;
+  }
+  .m-cube-top {
+    width: 14px;
+    height: 6px;
+    background: rgba(74, 111, 160, 0.8);
+    top: 0;
+    left: 0;
+    transform: skewX(-30deg);
+    transform-origin: top left;
+  }
+
+  /* ---- Desk Tabs ---- */
+  .m-desks {
+    display: flex;
+    gap: 2px;
+    padding: 4px 8px;
+    background: var(--sgi-widget);
+    border-bottom: 1px solid var(--sgi-widget-dark);
+  }
+  .m-desk-tab {
+    flex: 1;
+    padding: 6px 8px;
+    background: #B0B0B0;
+    border: 1px outset var(--sgi-widget-light);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: inherit;
+    color: var(--sgi-text);
+    text-align: center;
+  }
+  .m-desk-tab:hover { background: #C8C8C8; }
+  .m-desk-tab.active {
+    background: var(--sgi-title-gradient);
+    color: #fff;
+    border-style: inset;
+  }
+
+  /* ---- Quick Links ---- */
+  .m-quick-links {
+    display: flex;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--sgi-widget);
+    border-bottom: 2px inset var(--sgi-widget-dark);
+    justify-content: center;
+  }
+  .m-quick-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background: linear-gradient(180deg, var(--sgi-widget-light), #B8B8B8);
+    border: 2px outset var(--sgi-widget-light);
+    color: var(--sgi-text);
+    text-decoration: none;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .m-quick-btn:active { border-style: inset; }
+  .m-quick-icon { font-size: 16px; }
+
+  /* ---- Card Grid ---- */
+  .m-card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 12px;
+    flex: 1;
+  }
+  .m-card {
+    background: var(--sgi-widget);
+    border: 2px outset var(--sgi-widget-light);
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    font-family: inherit;
+    padding: 0;
+    min-height: 100px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .m-card:active {
+    transform: scale(0.97);
+    border-style: inset;
+  }
+  .m-card-titlebar {
+    background: var(--sgi-title-gradient);
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+  }
+  .m-card-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .m-card-title {
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .m-card-body {
+    padding: 8px 10px;
+    background: var(--sgi-content-bg);
+    flex: 1;
+  }
+  .m-card-desc {
+    margin: 0;
+    font-size: 14px;
+    color: var(--sgi-text-muted);
+    line-height: 1.4;
+  }
+
+  /* ---- Expanded View ---- */
+  .m-expanded {
+    flex: 1;
+    padding: 8px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .m-expanded-window {
+    background: var(--sgi-widget);
+    border: 2px outset var(--sgi-widget-light);
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 160px);
+  }
+  .m-expanded-titlebar {
+    background: var(--sgi-title-gradient);
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    flex-shrink: 0;
+  }
+  .m-expanded-icon { font-size: 20px; }
+  .m-expanded-title {
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .m-expanded-close {
+    width: 24px;
+    height: 24px;
+    background: var(--sgi-widget);
+    border: 1px outset var(--sgi-widget-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+    font-family: inherit;
+    flex-shrink: 0;
+  }
+  .m-expanded-close:active { border-style: inset; }
+  .m-expanded-content {
+    flex: 1;
+    background: var(--sgi-content-bg);
+    padding: 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--sgi-text);
+  }
+  .m-expanded-content h1 { font-size: 22px; margin: 0 0 12px; }
+  .m-expanded-content h2 { font-size: 19px; margin: 16px 0 8px; }
+  .m-expanded-content h3 { font-size: 17px; margin: 12px 0 6px; }
+  .m-expanded-content p { margin: 0 0 12px; }
+  .m-expanded-content ul, .m-expanded-content ol {
+    padding-left: 20px;
+    margin: 0 0 12px;
+  }
+  .m-expanded-content li { margin-bottom: 6px; }
+  .m-expanded-content a {
+    color: var(--sgi-primary);
+    text-decoration: underline;
+  }
+  .m-expanded-content em { color: var(--sgi-text-muted); }
+
+  /* ---- Footer ---- */
+  .m-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 90;
+    background: var(--sgi-widget);
+    border-top: 2px outset var(--sgi-widget-light);
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .m-footer-links {
     display: flex;
     gap: 12px;
-    padding: 12px 16px;
-    border-bottom: 1px solid #CCC;
+  }
+  .m-footer-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(180deg, var(--sgi-widget-light), #B0B0B0);
+    border: 2px outset var(--sgi-widget-light);
+    color: var(--sgi-text);
     text-decoration: none;
-    color: #222;
-    font-size: 15px;
+    font-size: 18px;
+    cursor: pointer;
   }
-  .mobile-nav-item:hover { background: #D8D8D8; }
-  .mobile-content {
-    padding: 16px;
-    max-width: 640px;
-    margin: 0 auto;
-    line-height: 1.6;
+  .m-footer-btn:active { border-style: inset; }
+  .m-footer-icon { line-height: 1; }
+  .m-footer-vol {
+    background: linear-gradient(180deg, var(--sgi-widget-light), #B0B0B0);
+    border: 2px outset var(--sgi-widget-light);
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    color: var(--sgi-text);
   }
+  .m-footer-vol:active { border-style: inset; }
+
+  /* ---- Animations ---- */
+  @keyframes m-card-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .m-card {
+    animation: m-card-in 0.3s ease both;
+  }
+  .m-card:nth-child(1) { animation-delay: 0s; }
+  .m-card:nth-child(2) { animation-delay: 0.05s; }
+  .m-card:nth-child(3) { animation-delay: 0.1s; }
+  .m-card:nth-child(4) { animation-delay: 0.15s; }
+  .m-card:nth-child(5) { animation-delay: 0.2s; }
+  .m-card:nth-child(6) { animation-delay: 0.25s; }
+
+  /* ---- Hide states ---- */
+  .m-card.hidden { display: none; }
 </style>
 
 <script>
-  // Hide mobile boot after 1.5s
-  setTimeout(() => {
-    const boot = document.getElementById("mobile-boot");
-    if (boot) {
-      boot.style.transition = "opacity 0.5s";
-      boot.style.opacity = "0";
-      setTimeout(() => boot.remove(), 500);
-    }
-  }, 1500);
+  // === Boot Splash ===
+  // Handles the SGI-style boot animation with cookie-based skip for return visitors
+  (function() {
+    const boot = document.getElementById("m-boot");
+    const fill = document.getElementById("m-boot-fill");
+    if (!boot || !fill) return;
 
-  // Toggle menu
-  document.getElementById("mobile-menu-toggle")?.addEventListener("click", () => {
-    const menu = document.getElementById("mobile-menu");
-    if (menu) menu.style.display = menu.style.display === "none" ? "block" : "none";
-  });
+    const visited = document.cookie.includes("toddlebaron-visited=1");
+
+    if (visited) {
+      boot.remove();
+      return;
+    }
+
+    // Animate progress bar
+    let progress = 0;
+    const tick = setInterval(() => {
+      progress += Math.random() * 25 + 10;
+      if (progress > 100) progress = 100;
+      fill.style.width = progress + "%";
+      if (progress >= 100) clearInterval(tick);
+    }, 200);
+
+    setTimeout(() => {
+      boot.classList.add("hidden");
+      setTimeout(() => boot.remove(), 500);
+      // Set cookie: expires in 24 hours
+      const d = new Date();
+      d.setTime(d.getTime() + 86400000);
+      document.cookie = "toddlebaron-visited=1;expires=" + d.toUTCString() + ";path=/;SameSite=Lax";
+    }, 1500);
+  })();
+
+  // === Card Navigation ===
+  // All content comes from Astro-rendered markdown sections (trusted server-side content).
+  // The slot sections are pre-rendered at build time and cloned into the expanded view.
+  (function() {
+    const grid = document.getElementById("m-card-grid");
+    const expanded = document.getElementById("m-expanded");
+    const expandedContent = document.getElementById("m-expanded-content");
+    const expandedTitle = document.getElementById("m-expanded-title");
+    const expandedIcon = document.getElementById("m-expanded-icon");
+    const expandedClose = document.getElementById("m-expanded-close");
+    const backBtn = document.getElementById("m-back-btn");
+    const headerTitle = document.getElementById("m-header-title");
+    const quickLinks = document.getElementById("m-quick-links");
+    const desksBar = document.getElementById("m-desks");
+    const slotContent = document.getElementById("m-slot-content");
+
+    if (!grid || !expanded || !expandedContent || !slotContent) return;
+
+    function showGrid() {
+      grid.style.display = "grid";
+      expanded.style.display = "none";
+      if (quickLinks) quickLinks.style.display = "flex";
+      if (desksBar) desksBar.style.display = "flex";
+      if (backBtn) backBtn.style.display = "none";
+      if (headerTitle) headerTitle.textContent = "toddlebaron.com";
+      window.scrollTo(0, 0);
+    }
+
+    function showExpanded(windowId: string, title: string, icon: string) {
+      const section = slotContent.querySelector("#mobile-" + windowId);
+      if (!section) return;
+
+      // Clone the server-rendered content into the expanded view
+      while (expandedContent.firstChild) expandedContent.removeChild(expandedContent.firstChild);
+      const clone = section.cloneNode(true) as HTMLElement;
+      clone.style.display = "block";
+      expandedContent.appendChild(clone);
+
+      if (expandedTitle) expandedTitle.textContent = title;
+      if (expandedIcon) expandedIcon.textContent = icon;
+      if (headerTitle) headerTitle.textContent = title;
+
+      grid.style.display = "none";
+      if (quickLinks) quickLinks.style.display = "none";
+      if (desksBar) desksBar.style.display = "none";
+      expanded.style.display = "block";
+      if (backBtn) backBtn.style.display = "inline";
+      window.scrollTo(0, 0);
+    }
+
+    // Card clicks
+    const cards = grid.querySelectorAll(".m-card");
+    for (let i = 0; i < cards.length; i++) {
+      const card = cards[i] as HTMLElement;
+      card.addEventListener("click", function() {
+        const id = card.getAttribute("data-card-id");
+        const titleEl = card.querySelector(".m-card-title");
+        const iconEl = card.querySelector(".m-card-icon");
+        if (id) {
+          showExpanded(id, titleEl ? titleEl.textContent || "" : "", iconEl ? iconEl.textContent || "" : "");
+        }
+      });
+    }
+
+    // Back / close
+    if (backBtn) backBtn.addEventListener("click", showGrid);
+    if (expandedClose) expandedClose.addEventListener("click", showGrid);
+
+    // Desk tab filtering
+    const deskTabs = document.querySelectorAll(".m-desk-tab");
+    for (let j = 0; j < deskTabs.length; j++) {
+      const tab = deskTabs[j] as HTMLElement;
+      tab.addEventListener("click", function() {
+        for (let k = 0; k < deskTabs.length; k++) {
+          (deskTabs[k] as HTMLElement).classList.remove("active");
+        }
+        tab.classList.add("active");
+
+        const windowIds = (tab.getAttribute("data-windows") || "").split(",");
+        const allCards = grid.querySelectorAll(".m-card");
+        for (let m = 0; m < allCards.length; m++) {
+          const c = allCards[m] as HTMLElement;
+          const cardId = c.getAttribute("data-card-id") || "";
+          if (windowIds.indexOf(cardId) >= 0) {
+            c.classList.remove("hidden");
+          } else {
+            c.classList.add("hidden");
+          }
+        }
+
+        // If currently in expanded view, go back to grid
+        if (expanded.style.display !== "none") {
+          showGrid();
+        }
+      });
+    }
+
+    // Show all cards on initial load
+    const initCards = grid.querySelectorAll(".m-card");
+    for (let n = 0; n < initCards.length; n++) {
+      (initCards[n] as HTMLElement).classList.remove("hidden");
+    }
+
+    // Cube toggle: scroll to top or go back from expanded
+    const cubeBtn = document.getElementById("m-cube-toggle");
+    if (cubeBtn) {
+      cubeBtn.addEventListener("click", function() {
+        if (expanded.style.display !== "none") {
+          showGrid();
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+    }
+
+    // Volume toggle
+    const volBtn = document.getElementById("m-volume-toggle");
+    if (volBtn) {
+      let muted = true;
+      volBtn.addEventListener("click", function() {
+        muted = !muted;
+        volBtn.textContent = muted ? "\uD83D\uDD07" : "\uD83D\uDD0A";
+      });
+    }
+  })();
 </script>

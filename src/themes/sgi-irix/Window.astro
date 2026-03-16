@@ -18,7 +18,7 @@ const { windowId, title, x = 150, y = 80, width = 520, height = 420, visible = f
   style={`left:${x}px; top:${y}px; width:${width}px; height:${height}px; display:${visible ? "flex" : "none"}`}
 >
   <div class="sgi-window-titlebar" data-drag-handle={windowId}>
-    <button class="sgi-window-menu-btn" data-window-menu={windowId} aria-label="Window menu">
+    <button class="sgi-window-menu-btn" data-window-menu={windowId} aria-label="Window menu" aria-expanded="false" aria-haspopup="true">
       <span class="sgi-menu-lines"></span>
     </button>
     <span class="sgi-window-title">{title}</span>
