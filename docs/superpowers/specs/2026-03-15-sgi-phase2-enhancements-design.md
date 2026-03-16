@@ -44,10 +44,10 @@ Replaces the static log-output Console window with a working shell. Visitors typ
 
 ### Shell Architecture
 
-- New file `src/engine/shell.ts` — command parser, cwd state, command handler registry
+- New file `src/engine/shell.ts` — command parser, cwd state, command handler registry. Returns string output for each command. For side effects (xeyes, doom), dispatches CustomEvents on `document`: `shell:xeyes-spawn`, `shell:xeyes-kill`, `shell:doom-dialog`. This keeps the engine pure and testable.
 - Reuses `src/data/filesystem.ts` — same folder/file tree the File Manager uses
 - New file `src/data/fortunes.ts` — array of 20-30 tech/programming quotes
-- Console.astro gets an `<input>` at the bottom for command entry
+- Console.astro gets an `<input>` at the bottom for command entry. The initial output area is blank except for a welcome line ("IRIX 6.5 console — type 'help' for commands"). `console-entries.ts` is no longer imported — the static log is fully replaced by the interactive shell. The RunningMan component is preserved in the console header.
 - Output is a scrollable div of previous commands + responses
 - Prompt format: `todd@indigo:~$ ` with colored segments (cyan user, purple path)
 
@@ -104,16 +104,15 @@ A compose-only mail window styled after IRIX MediaMail, launched from a "Contact
 
 ### Desktop Icon
 
-- New SVG icon in `icons.ts`: blue mailbox with envelope, `@` symbol, metallic shelf
-- Icon label: "Contact Me"
-- Window ID: `mediamail`
+- Replace the existing `contact` SVG in `icons.ts` with a MediaMail icon: blue mailbox with envelope, `@` symbol, metallic shelf
+- Icon label remains "Contact Me" (from the content collection `contact.md` title)
+- Window ID stays `contact` — this preserves the existing deskMap assignment (`contact: "personal"`) and icon registration
 - Opens a Window containing the MediaMail component
 
 ### Contact Content Page
 
-- The existing contact content page remains in the content collection
-- Its desktop icon is replaced by the MediaMail icon
-- The content page window is replaced by the MediaMail window
+- The existing contact content page remains in the content collection (provides the desktop icon entry)
+- In `index.astro`, add a special case for `windowId === "contact"` (same pattern as `resume` with GaugeCluster): render `<MediaMail />` instead of or alongside `<Content />`
 - Contact info (email, LinkedIn, GitHub) moves into a small footer section inside the MediaMail compose window
 
 ### Files
@@ -139,12 +138,14 @@ A 3D SGI cube floats across a dark starfield. It plays during the boot sequence 
 2. **Boot text starts:** Cube fades to 30% opacity, drifts to a corner
 3. **Boot complete:** Cube + starfield dissolve out (0.5s CSS fade)
 
+The `Screensaver.astro` component is statically included in `Boot.astro`. It renders into the DOM on page load (correct for boot phase). Boot.astro's existing phase-callback JS adds/removes a `.screensaver-active` CSS class to control visibility. The component is hidden by default (`opacity: 0; pointer-events: none`) and only visible when `.screensaver-active` is present on a parent.
+
 ### Screensaver Behavior
 
 1. **Idle timer:** After 90 seconds of no mouse/keyboard input, screensaver activates
-2. **Activation:** Full-screen dark overlay (z-index above all windows) fades in, cube + starfield resume
-3. **Deactivation:** Any mouse movement, click, or keypress dissolves the overlay (0.3s fade)
-4. **Timer reset:** Every input event resets the 90s counter
+2. **Activation:** Full-screen dark overlay (z-index above all windows) fades in. JS adds `.screensaver-active` class to the screensaver container, which triggers the CSS transition.
+3. **Deactivation:** Any mouse movement, click, or keypress removes `.screensaver-active` (0.3s fade out)
+4. **Timer reset:** Idle timer reset is added to the existing `keydown`/`mousemove`/`click` handlers in `Desktop.astro` — not a new listener, but an addition to the existing ones
 
 ### SGI Cube
 
@@ -181,11 +182,12 @@ A 3D SGI cube floats across a dark starfield. It plays during the boot sequence 
 
 ### What It Does
 
-Adds "Cascade All" and "Tile All" items to the existing window dropdown menu. Period-accurate to how 4Dwm actually managed windows.
+Adds "Cascade All" and "Tile All" items to the existing per-window dropdown menu (the menu that already has Minimize/Maximize/Close). In 4Dwm, each window's title bar menu included layout operations — this is period-accurate. These items are also added to the desktop right-click context menu for convenience.
 
 ### Cascade Behavior
 
-- Collects all currently visible (non-minimized) windows on the active desk
+- Collects all currently visible (non-minimized) windows on the active desk using filter: `!win.minimized && (win.desk === getActiveDesk() || !win.desk)`
+- Un-maximizes any maximized windows first (sets `win.maximized = false`)
 - Repositions them starting at (40, 40) with each subsequent window offset by (+30, +30)
 - Restores default width/height (500x400) for each window
 - Brings them all to sequential z-indexes
@@ -221,7 +223,7 @@ Adds Open Graph meta tags so the site renders a beautiful preview card when shar
 
 - Create `src/pages/og-preview.astro` — a standalone 1200x630 page that renders a desktop composition
 - Manually screenshot it and save as `public/og-image.png`
-- Add meta tags to the `<head>` in `src/layouts/Desktop.astro`
+- Add Twitter card meta tags to `src/components/SEOHead.astro` (which already has `og:title`, `og:description`, `og:type`, `og:url`, and `og:image` — the `og:image` already points to `/og-image.png`, so the main work is adding the Twitter-specific tags and ensuring the PNG file exists)
 
 ### Composition
 
@@ -251,7 +253,7 @@ Adds Open Graph meta tags so the site renders a beautiful preview card when shar
 |--------|------|---------|
 | Create | `src/pages/og-preview.astro` | 1200x630 preview composition page |
 | Create | `public/og-image.png` | Screenshot of og-preview (manual step) |
-| Modify | `src/layouts/Desktop.astro` | Add OG + Twitter meta tags to `<head>` |
+| Modify | `src/components/SEOHead.astro` | Add Twitter card meta tags (og:image already exists) |
 
 ---
 
@@ -283,7 +285,7 @@ Desktop icons can be repositioned by click+drag. Positions snap to an invisible 
 ### Persistence
 
 - On drop, all icon positions are saved to `localStorage` key `sgi-icon-positions`
-- Format: `Record<string, { col: number; row: number }>`
+- Format: `Record<string, { col: number; row: number }>` where the string key is the `windowId` (consistent with all other icon/window keying in the system)
 - On page load, saved positions are restored; new/unknown icons get auto-placed in first available cell
 - If localStorage is empty, icons default to vertical column layout (current behavior)
 
@@ -292,7 +294,8 @@ Desktop icons can be repositioned by click+drag. Positions snap to an invisible 
 | Action | File | Changes |
 |--------|------|---------|
 | Modify | `src/themes/sgi-irix/Desktop.astro` | Icon container switches to relative positioning, icons get absolute positioning |
-| Modify | `src/layouts/Desktop.astro` | Drag handlers, grid snap logic, localStorage read/write |
+| Modify | `src/engine/desktop.ts` | Add mousedown handler with 5px drag threshold; integrate with existing click/dblclick handling |
+| Modify | `src/layouts/Desktop.astro` | Grid snap logic, localStorage read/write, icon position restore on load |
 | Modify | `src/themes/sgi-irix/theme.css` | Drag state styles, ghost outline, snap animation |
 
 ---
