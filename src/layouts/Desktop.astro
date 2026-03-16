@@ -1,6 +1,7 @@
 ---
 // src/layouts/Desktop.astro
 import SEOHead from "../components/SEOHead.astro";
+import EraPickerOverlay from "../components/EraPickerOverlay.astro";
 import "../themes/sgi-irix/theme.css";
 export interface Props {
   title?: string;
@@ -16,6 +17,7 @@ const { title, description } = Astro.props;
   </head>
   <body style="margin:0; padding:0; overflow:hidden; background:#000">
     <slot />
+    <EraPickerOverlay />
     <script>
       import { initDesktopIcons } from "../engine/desktop";
       import { initAudio, playSound, toggleMute, isMuted } from "../engine/audio";
