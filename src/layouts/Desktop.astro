@@ -1,0 +1,154 @@
+---
+// src/layouts/Desktop.astro
+import SEOHead from "../components/SEOHead.astro";
+import "../themes/sgi-irix/theme.css";
+export interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead title={title} description={description} />
+  </head>
+  <body style="margin:0; padding:0; overflow:hidden; background:#000">
+    <slot />
+    <script>
+      import { initDesktopIcons } from "../engine/desktop";
+      import { initAudio, playSound, toggleMute, isMuted } from "../engine/audio";
+      import { registerWindow, openWindow, closeWindow, minimizeWindow, maximizeWindow, startDrag, startResize, bringToFront, initKeyboardNav } from "../engine/wm";
+
+      // Wait for boot to complete (or skip)
+      document.addEventListener("boot:complete", () => {
+        const desktop = document.getElementById("desktop");
+        if (desktop) desktop.style.opacity = "1";
+        initDesktopIcons();
+        initKeyboardNav();
+      });
+
+      // Register all windows from DOM
+      document.querySelectorAll<HTMLElement>("[data-window-id]").forEach((el) => {
+        if (!el.classList.contains("sgi-window")) return;
+        const id = el.dataset.windowId!;
+        const title = el.querySelector(".sgi-window-title")?.textContent ?? id;
+        registerWindow(id, title, {
+          x: parseInt(el.style.left) || undefined,
+          y: parseInt(el.style.top) || undefined,
+          width: parseInt(el.style.width) || undefined,
+          height: parseInt(el.style.height) || undefined,
+        });
+      });
+
+      // Wire up window controls
+      document.addEventListener("click", (e) => {
+        const target = e.target as HTMLElement;
+
+        // Window buttons
+        const action = target.dataset.action;
+        const windowTarget = target.dataset.target;
+        if (action && windowTarget) {
+          if (action === "close") closeWindow(windowTarget);
+          if (action === "minimize") minimizeWindow(windowTarget);
+          if (action === "maximize") maximizeWindow(windowTarget);
+          return;
+        }
+
+        // Toolchest menu items
+        const menuOpen = target.closest<HTMLElement>("[data-menu-open]");
+        if (menuOpen) {
+          openWindow(menuOpen.dataset.menuOpen!);
+          return;
+        }
+
+        // Menu actions
+        const menuAction = target.closest<HTMLElement>("[data-menu-action]");
+        if (menuAction) {
+          const action = menuAction.dataset.menuAction;
+          if (action === "logout") {
+            playSound("/audio/sgi-shutdown.mp3");
+            document.body.style.transition = "opacity 1s";
+            document.body.style.opacity = "0";
+            setTimeout(() => location.reload(), 1500);
+          } else if (action === "era-picker") {
+            const picker = document.getElementById("era-picker");
+            if (picker) picker.style.display = "flex";
+          }
+          return;
+        }
+
+        // Desk tabs
+        const deskWindow = target.closest<HTMLElement>("[data-desk-window]");
+        if (deskWindow) {
+          openWindow(deskWindow.dataset.deskWindow!);
+          document.querySelectorAll(".sgi-desk-tab").forEach((t) => t.classList.remove("active"));
+          deskWindow.classList.add("active");
+          return;
+        }
+
+        // Volume toggle
+        if (target.id === "volume-toggle") {
+          const nowMuted = toggleMute();
+          target.textContent = nowMuted ? "\u{1F507}" : "\u{1F50A}";
+          return;
+        }
+
+        // Click window to bring to front
+        const win = target.closest<HTMLElement>(".sgi-window");
+        if (win && win.dataset.windowId) {
+          bringToFront(win.dataset.windowId);
+        }
+      });
+
+      // Wire up drag handlers
+      document.addEventListener("mousedown", (e) => {
+        const target = e.target as HTMLElement;
+        const dragHandle = target.closest<HTMLElement>("[data-drag-handle]");
+        if (dragHandle) {
+          startDrag(dragHandle.dataset.dragHandle!, e);
+          return;
+        }
+        const resizeHandle = target.closest<HTMLElement>("[data-resize-handle]");
+        if (resizeHandle) {
+          startResize(resizeHandle.dataset.resizeHandle!, e);
+        }
+      });
+
+      // Right-click context menu on desktop background
+      document.getElementById("desktop")?.addEventListener("contextmenu", (e) => {
+        if ((e.target as HTMLElement).closest(".sgi-window, .sgi-icon, .sgi-toolchest, .sgi-desks-panel")) return;
+        e.preventDefault();
+        const existing = document.getElementById("sgi-context-menu");
+        if (existing) existing.remove();
+        const menu = document.createElement("div");
+        menu.id = "sgi-context-menu";
+        menu.style.cssText = `position:fixed; left:${(e as MouseEvent).clientX}px; top:${(e as MouseEvent).clientY}px; z-index:5000; background:#C0C0C0; border:2px outset #E0E0E0; font-family:Helvetica,sans-serif; font-size:13px; min-width:160px;`;
+        const items = [
+          { label: "IRIX 6.5", disabled: true },
+          { label: "Refresh Desktop", action: () => location.reload() },
+          { label: "About This Workstation", action: () => openWindow("about") },
+          { label: "Choose Era...", action: () => { const p = document.getElementById("era-picker"); if (p) p.style.display = "flex"; } },
+        ];
+        items.forEach((item) => {
+          const div = document.createElement("div");
+          div.textContent = item.label;
+          div.style.cssText = `padding:4px 12px; border-bottom:1px solid #AAA; cursor:${item.disabled ? "default" : "pointer"}; color:${item.disabled ? "#888" : "#000"};`;
+          if (!item.disabled && item.action) {
+            div.addEventListener("mouseenter", () => { div.style.background = "linear-gradient(90deg,#6B3FA0,#3A8A7A)"; div.style.color = "#fff"; });
+            div.addEventListener("mouseleave", () => { div.style.background = ""; div.style.color = ""; });
+            div.addEventListener("click", () => { menu.remove(); item.action!(); });
+          }
+          menu.appendChild(div);
+        });
+        document.body.appendChild(menu);
+        const close = () => { menu.remove(); document.removeEventListener("click", close); };
+        setTimeout(() => document.addEventListener("click", close), 0);
+      });
+
+      // Init audio
+      initAudio();
+    </script>
+  </body>
+</html>
