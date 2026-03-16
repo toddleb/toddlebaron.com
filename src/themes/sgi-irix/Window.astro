@@ -18,11 +18,21 @@ const { windowId, title, x = 150, y = 80, width = 520, height = 420, visible = f
   style={`left:${x}px; top:${y}px; width:${width}px; height:${height}px; display:${visible ? "flex" : "none"}`}
 >
   <div class="sgi-window-titlebar" data-drag-handle={windowId}>
+    <button class="sgi-window-menu-btn" data-window-menu={windowId} aria-label="Window menu">
+      <span class="sgi-menu-lines"></span>
+    </button>
     <span class="sgi-window-title">{title}</span>
     <div class="sgi-window-controls">
       <button class="sgi-window-btn" data-action="minimize" data-target={windowId} aria-label="Minimize">_</button>
       <button class="sgi-window-btn" data-action="maximize" data-target={windowId} aria-label="Maximize">□</button>
       <button class="sgi-window-btn" data-action="close" data-target={windowId} aria-label="Close">×</button>
+    </div>
+    <div class="sgi-window-dropdown" data-dropdown-for={windowId} style="display:none">
+      <div class="sgi-dropdown-item" data-action="minimize" data-target={windowId}>Minimize</div>
+      <div class="sgi-dropdown-item" data-action="maximize" data-target={windowId}>Maximize</div>
+      <div class="sgi-dropdown-item" data-action="raise" data-target={windowId}>Raise</div>
+      <div class="sgi-dropdown-divider"></div>
+      <div class="sgi-dropdown-item" data-action="close" data-target={windowId}>Close</div>
     </div>
   </div>
   <div class="sgi-window-content">

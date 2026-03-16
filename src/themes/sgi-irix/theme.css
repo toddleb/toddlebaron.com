@@ -318,6 +318,70 @@
   color: var(--sgi-text);
 }
 
+/* Window Menu Button */
+.sgi-window-menu-btn {
+  width: 16px;
+  height: 16px;
+  background: var(--sgi-widget);
+  border: 1px outset var(--sgi-widget-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.sgi-window-menu-btn:active {
+  border-style: inset;
+}
+
+.sgi-menu-lines {
+  display: block;
+  width: 10px;
+  height: 8px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #333 0px, #333 2px,
+    transparent 2px, transparent 4px
+  );
+}
+
+/* Dropdown Menu (shared style) */
+.sgi-window-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 5000;
+  background: var(--sgi-widget);
+  border: 2px outset var(--sgi-widget-light);
+  font-family: Helvetica, sans-serif;
+  font-size: 13px;
+  min-width: 160px;
+}
+
+.sgi-dropdown-item {
+  padding: 4px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #AAA;
+}
+
+.sgi-dropdown-item:hover {
+  background: var(--sgi-title-gradient);
+  color: #fff;
+}
+
+.sgi-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.sgi-dropdown-divider {
+  height: 1px;
+  background: #AAA;
+  margin: 2px 0;
+}
+
 @media (max-width: 768px) {
   .sgi-desktop { display: none; }
   .sgi-boot-logo { font-size: 48px; }
