@@ -1,0 +1,11 @@
+---
+// src/themes/sgi-irix/GaugeCluster.astro
+import Gauge from "./Gauge.astro";
+import { skills } from "../../data/skills";
+---
+
+<div class="sgi-gauge-cluster">
+  {skills.map((s) => (
+    <Gauge label={s.label} value={s.value} color={s.color} size={80} />
+  ))}
+</div>

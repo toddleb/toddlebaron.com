@@ -1,0 +1,74 @@
+---
+// src/themes/sgi-irix/Gauge.astro
+export interface Props {
+  label: string;
+  value: number;
+  color?: string;
+  size?: number;
+}
+const { label, value, color = "#6B3FA0", size = 80 } = Astro.props;
+
+const cx = size / 2;
+const cy = size / 2;
+const r = (size / 2) - 8;
+const startAngle = 135;
+const endAngle = 405;
+const sweepAngle = endAngle - startAngle; // 270 degrees
+const valueAngle = startAngle + (sweepAngle * value / 100);
+
+function polarToCart(angleDeg: number, radius: number) {
+  const rad = (angleDeg * Math.PI) / 180;
+  return { x: cx + radius * Math.cos(rad), y: cy + radius * Math.sin(rad) };
+}
+
+const arcStart = polarToCart(startAngle, r);
+const arcEnd = polarToCart(endAngle, r);
+const valueEnd = polarToCart(valueAngle, r);
+const needleEnd = polarToCart(valueAngle, r - 4);
+const largeArc = sweepAngle > 180 ? 1 : 0;
+const valueSweep = valueAngle - startAngle;
+const valueLargeArc = valueSweep > 180 ? 1 : 0;
+---
+
+<div class="sgi-gauge" style={`width:${size}px`}>
+  <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size}>
+    {/* Track arc (gray) */}
+    <path
+      d={`M ${arcStart.x} ${arcStart.y} A ${r} ${r} 0 ${largeArc} 1 ${arcEnd.x} ${arcEnd.y}`}
+      fill="none"
+      stroke="#AAA"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
+    {/* Value arc (colored) */}
+    <path
+      d={`M ${arcStart.x} ${arcStart.y} A ${r} ${r} 0 ${valueLargeArc} 1 ${valueEnd.x} ${valueEnd.y}`}
+      fill="none"
+      stroke={color}
+      stroke-width="3"
+      stroke-linecap="round"
+    />
+    {/* Needle */}
+    <line
+      x1={cx}
+      y1={cy}
+      x2={needleEnd.x}
+      y2={needleEnd.y}
+      stroke="#333"
+      stroke-width="2"
+      stroke-linecap="round"
+    />
+    {/* Center dot */}
+    <circle cx={cx} cy={cy} r="3" fill="#333" />
+    {/* Value text */}
+    <text
+      x={cx}
+      y={cx + r / 2 + 4}
+      text-anchor="middle"
+      font-size={size * 0.14}
+      fill="var(--sgi-text)"
+      font-family="Helvetica, sans-serif"
+    >{value}%</text>
+  </svg>
+  <div class="sgi-gauge-label">{label}</div>
+</div>
