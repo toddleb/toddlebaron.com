@@ -7,6 +7,9 @@ const { windows } = Astro.props;
 ---
 
 <div class="sgi-desktop" id="desktop">
+  <div class="sgi-desktop-logo" aria-hidden="true">
+    <span class="sgi-logo-s">s</span><span class="sgi-logo-g">g</span><span class="sgi-logo-i">i</span>
+  </div>
   <div class="sgi-desktop-icons">
     {windows.map((w) => (
       <div class="sgi-icon" data-window-id={w.windowId} tabindex="0" role="button" aria-label={`Open ${w.title}`}>

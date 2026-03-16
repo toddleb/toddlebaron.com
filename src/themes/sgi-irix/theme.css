@@ -947,6 +947,25 @@
   margin-top: 12px;
 }
 
+/* Desktop SGI Logo Watermark */
+.sgi-desktop-logo {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.sgi-logo-s { color: #3BB8D0; }
+.sgi-logo-g { color: #E8891E; }
+.sgi-logo-i { color: #7B52AE; }
+
 @media (max-width: 768px) {
   .sgi-desktop { display: none; }
   .sgi-boot-logo { font-size: 48px; }
