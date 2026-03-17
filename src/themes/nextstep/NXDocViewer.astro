@@ -1,0 +1,74 @@
+---
+import { skills } from "../../data/skills";
+---
+
+<div class="nx-doc-viewer">
+  <div class="nx-window-toolbar">
+    <button class="nx-toolbar-btn active" data-doc-tab="timeline">Timeline</button>
+    <button class="nx-toolbar-btn" data-doc-tab="skills">Skills</button>
+    <button class="nx-toolbar-btn" data-doc-tab="education">Education</button>
+  </div>
+  <div class="nx-doc-content" data-doc-panel="timeline">
+    <h2>Career Timeline</h2>
+    <div style="border-left:2px solid var(--nx-accent-blue);padding-left:16px;margin-left:8px;">
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:600;">U.S. Navy</div>
+        <div style="font-size:12px;color:var(--nx-text-muted);">Service Member</div>
+        <p style="font-size:13px;color:var(--nx-text-secondary);">Foundation for systems thinking, discipline, and leadership under pressure.</p>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:600;">USAF AI Programs</div>
+        <div style="font-size:12px;color:var(--nx-text-muted);">AI Advisory</div>
+        <p style="font-size:13px;color:var(--nx-text-secondary);">Air Force artificial intelligence initiatives and policy work.</p>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:600;">STRATCOM</div>
+        <div style="font-size:12px;color:var(--nx-text-muted);">Strategic Consulting</div>
+        <p style="font-size:13px;color:var(--nx-text-secondary);">Strategic Command consulting and support operations.</p>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:600;">Enterprise SPM Consulting</div>
+        <div style="font-size:12px;color:var(--nx-text-muted);">1994 — Present · 30+ Years</div>
+        <p style="font-size:13px;color:var(--nx-text-secondary);">Sales Performance Management consulting across Fortune 500. Built ISPM, AICR, Prizym, and the Foundry model.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nx-doc-content" data-doc-panel="skills" style="display:none;">
+    <h2>Skills Matrix</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      {skills.map((skill) => (
+        <span class="nx-info-tag">{skill.label}</span>
+      ))}
+    </div>
+  </div>
+
+  <div class="nx-doc-content" data-doc-panel="education" style="display:none;">
+    <h2>Education & Certifications</h2>
+    <div style="margin-bottom:16px;">
+      <div style="font-weight:600;">Physics</div>
+      <div style="font-size:12px;color:var(--nx-text-muted);">University Degree</div>
+      <p style="font-size:13px;color:var(--nx-text-secondary);">Foundation in analytical thinking, mathematical modeling, and first-principles reasoning.</p>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="font-weight:600;">Military Training</div>
+      <div style="font-size:12px;color:var(--nx-text-muted);">U.S. Navy & Air Force</div>
+      <p style="font-size:13px;color:var(--nx-text-secondary);">Leadership, systems engineering, strategic operations.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-doc-tab]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tab = btn.dataset.docTab;
+      btn.closest(".nx-doc-viewer")?.querySelectorAll(".nx-toolbar-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      const viewer = btn.closest(".nx-doc-viewer");
+      if (!viewer) return;
+      viewer.querySelectorAll<HTMLElement>("[data-doc-panel]").forEach((panel) => {
+        panel.style.display = panel.dataset.docPanel === tab ? "block" : "none";
+      });
+    });
+  });
+</script>
