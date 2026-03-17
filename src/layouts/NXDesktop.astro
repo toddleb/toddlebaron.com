@@ -1,0 +1,184 @@
+---
+// src/layouts/NXDesktop.astro
+import NXMenuBar from "../themes/nextstep/NXMenuBar.astro";
+import NXShelf from "../themes/nextstep/NXShelf.astro";
+import NXDock from "../themes/nextstep/NXDock.astro";
+import "../themes/nextstep/theme.css";
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Things That Matter" } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en" data-theme="nextstep">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content={description} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <title>{title}</title>
+</head>
+<body>
+  <div class="nx-desktop" id="nx-desktop">
+    <NXMenuBar />
+    <main
+      class="nx-window-area"
+      style="position:fixed;top:24px;left:0;right:72px;bottom:64px;overflow:hidden;"
+    >
+      <slot />
+    </main>
+    <NXShelf />
+    <NXDock />
+  </div>
+
+  <!-- Mobile layout placeholder (Task 8) -->
+
+  <script>
+    import {
+      registerWindow, openWindow, closeWindow, minimizeWindow,
+      maximizeWindow, bringToFront, startDrag, startResize,
+      getWindows, getActiveWindowId, initKeyboardNav,
+    } from "../engine/wm";
+    import "../themes/nextstep/theme";
+
+    // ── Clock ──────────────────────────────
+    function updateClock() {
+      const el = document.querySelector(".nx-menu-clock");
+      if (!el) return;
+      const now = new Date();
+      el.textContent = now.toLocaleDateString("en-US", {
+        weekday: "short", month: "short", day: "numeric",
+        hour: "2-digit", minute: "2-digit", hour12: false,
+      });
+    }
+    updateClock();
+    setInterval(updateClock, 60_000);
+
+    // ── Register all windows ───────────────
+    document.querySelectorAll<HTMLElement>(".nx-window").forEach((el) => {
+      const id = el.dataset.windowId;
+      if (!id) return;
+      const title = el.querySelector(".nx-titlebar-text")?.textContent || id;
+      registerWindow(id, title, {
+        x: parseInt(el.style.left) || 120,
+        y: parseInt(el.style.top) || 60,
+        width: parseInt(el.style.width) || 540,
+        height: parseInt(el.style.height) || 420,
+      });
+    });
+
+    // ── Click delegation ───────────────────
+    document.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      const action = target.closest<HTMLElement>("[data-action]");
+      if (action) {
+        const act = action.dataset.action;
+        const win = action.dataset.window || action.dataset.target;
+        if (!win) return;
+        switch (act) {
+          case "close": closeWindow(win); break;
+          case "minimize": minimizeWindow(win); break;
+          case "maximize": maximizeWindow(win); break;
+          case "open-window": openWindow(win); bringToFront(win); break;
+          case "open-easter-egg": openWindow(win); bringToFront(win); break;
+          case "open-recycler": break;
+          case "about-next":
+            openWindow("about-next-credits");
+            bringToFront("about-next-credits");
+            break;
+        }
+        return;
+      }
+      const windowEl = target.closest<HTMLElement>(".nx-window");
+      if (windowEl?.dataset.windowId) {
+        bringToFront(windowEl.dataset.windowId);
+      }
+    });
+
+    // ── Drag start ─────────────────────────
+    document.addEventListener("mousedown", (e) => {
+      const target = e.target as HTMLElement;
+      const dragHandle = target.closest<HTMLElement>("[data-drag-handle]");
+      if (dragHandle) {
+        const id = dragHandle.dataset.dragHandle;
+        if (id) startDrag(id, e);
+      }
+      const resizeHandle = target.closest<HTMLElement>("[data-resize-handle]");
+      if (resizeHandle) {
+        const id = resizeHandle.dataset.resizeHandle;
+        if (id) startResize(id, e);
+      }
+    });
+
+    // ── Shade (double-click title text) ────
+    document.addEventListener("dblclick", (e) => {
+      const target = e.target as HTMLElement;
+      const shadeToggle = target.closest<HTMLElement>("[data-shade-toggle]");
+      if (shadeToggle) {
+        const id = shadeToggle.dataset.shadeToggle;
+        const windowEl = document.querySelector<HTMLElement>(`.nx-window[data-window-id="${id}"]`);
+        if (windowEl) {
+          windowEl.classList.toggle("shaded");
+        }
+      }
+    });
+
+    // ── Shelf active tracking ──────────────
+    document.addEventListener("wm:window-focused", ((e: CustomEvent) => {
+      const focusedId = e.detail?.id;
+      document.querySelectorAll(".nx-shelf-item").forEach((item) => {
+        const el = item as HTMLElement;
+        el.classList.toggle("active", el.dataset.shelfItem === focusedId);
+      });
+    }) as EventListener);
+
+    // ── Window opened → Sync DOM ───────────
+    document.addEventListener("wm:window-opened", ((e: CustomEvent) => {
+      const id = e.detail?.id;
+      const windowEl = document.querySelector<HTMLElement>(`.nx-window[data-window-id="${id}"]`);
+      if (windowEl) {
+        windowEl.dataset.visible = "true";
+        windowEl.classList.add("opening");
+        setTimeout(() => windowEl.classList.remove("opening"), 200);
+      }
+      const dockTile = document.querySelector<HTMLElement>(`.nx-dock-tile[data-window="${id}"]`);
+      if (dockTile) {
+        dockTile.classList.add("running", "bouncing");
+        setTimeout(() => dockTile.classList.remove("bouncing"), 400);
+      }
+    }) as EventListener);
+
+    // ── Window closed → Sync DOM ───────────
+    document.addEventListener("wm:window-closed", ((e: CustomEvent) => {
+      const id = e.detail?.id;
+      const windowEl = document.querySelector<HTMLElement>(`.nx-window[data-window-id="${id}"]`);
+      if (windowEl) {
+        windowEl.classList.add("closing");
+        setTimeout(() => {
+          windowEl.dataset.visible = "false";
+          windowEl.classList.remove("closing");
+        }, 150);
+      }
+      const dockTile = document.querySelector<HTMLElement>(`.nx-dock-tile[data-window="${id}"]`);
+      if (dockTile) dockTile.classList.remove("running");
+    }) as EventListener);
+
+    // ── Window minimized → Sync DOM ────────
+    document.addEventListener("wm:window-minimized", ((e: CustomEvent) => {
+      const id = e.detail?.id;
+      const windowEl = document.querySelector<HTMLElement>(`.nx-window[data-window-id="${id}"]`);
+      if (windowEl) windowEl.dataset.visible = "false";
+    }) as EventListener);
+
+    // ── Open default windows ───────────────
+    setTimeout(() => openWindow("about"), 300);
+
+    // ── Keyboard nav ───────────────────────
+    initKeyboardNav();
+  </script>
+</body>
+</html>
