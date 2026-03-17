@@ -6,6 +6,7 @@ import NXWindow from "../themes/nextstep/NXWindow.astro";
 import NXInfoPanel from "../themes/nextstep/NXInfoPanel.astro";
 import NXDocViewer from "../themes/nextstep/NXDocViewer.astro";
 import NXMuseum from "../themes/nextstep/NXMuseum.astro";
+import NXMillerBrowser from "../themes/nextstep/NXMillerBrowser.astro";
 
 const pages = (await getCollection("pages")).sort((a, b) => a.data.order - b.data.order);
 const blog = await getCollection("blog");
@@ -31,10 +32,11 @@ const positions = [
     const isAbout = wid === "about";
     const isMuseum = wid === "computing-history";
     const isResume = wid === "resume";
+    const isProjects = wid === "projects";
 
     return (
       <NXWindow windowId={wid} title={page.data.title} {...pos}>
-        {isResume ? <NXDocViewer /> : isAbout ? <NXInfoPanel /> : isMuseum ? <NXMuseum /> : <Content />}
+        {isResume ? <NXDocViewer /> : isAbout ? <NXInfoPanel /> : isMuseum ? <NXMuseum /> : isProjects ? <NXMillerBrowser /> : <Content />}
         {isBlog && blog.length > 0 && (
           <ul style="list-style:none; padding:0; margin:8px 0 0;">
             {blog

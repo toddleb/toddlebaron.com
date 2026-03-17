@@ -1,0 +1,80 @@
+---
+const eras = [
+  {
+    name: "Apple IIe Era", icon: "🍎", years: "1983-1990",
+    machines: [
+      { name: "Apple IIe", desc: "First personal computer. Learned BASIC. The machine that started everything." },
+      { name: "Apple IIGS", desc: "Color graphics and sound. A revelation after the green screen." },
+    ],
+  },
+  {
+    name: "NeXT Era", icon: "⬛", years: "1990-1996",
+    machines: [
+      { name: "NeXT Cube", desc: "Steve Jobs' other computer. Object-oriented everything. Ahead of its time." },
+      { name: "NeXTstation", desc: "The pizza box. Matte black. This theme's spiritual ancestor." },
+    ],
+  },
+  {
+    name: "SGI Era", icon: "🟣", years: "1994-2002",
+    machines: [
+      { name: "SGI Indy", desc: "The machine that made you believe in 3D. IndyCam, IRIX, and purple everywhere." },
+      { name: "SGI O2", desc: "Unified memory architecture. Beautiful teal case. The site's SGI theme was born here." },
+      { name: "SGI Octane", desc: "Workstation powerhouse. Dual-head, real-time 3D. The dream machine." },
+    ],
+  },
+  {
+    name: "Sun SPARC Era", icon: "☀️", years: "1996-2006",
+    machines: [
+      { name: "SPARCstation 5", desc: "The pizza box that ran Solaris. CDE desktop. Enterprise computing." },
+      { name: "Ultra 60", desc: "Dual UltraSPARC. The machine that taught me about real multiprocessing." },
+    ],
+  },
+  {
+    name: "BeOS Era", icon: "🔵", years: "1998-2001",
+    machines: [
+      { name: "BeBox", desc: "Dual PowerPC. The Blinkenlights. An OS that was pure joy to use." },
+      { name: "BeOS R5", desc: "Real-time media OS on x86. Pervasive multithreading. Gone too soon." },
+    ],
+  },
+  {
+    name: "Modern Era", icon: "💻", years: "2006-Present",
+    machines: [
+      { name: "MacBook Pro", desc: "The daily driver. NeXT's DNA lives on in macOS." },
+      { name: "Custom Workstation", desc: "Multi-monitor, GPU compute, fractal rendering." },
+    ],
+  },
+];
+---
+
+<div class="nx-museum">
+  {eras.map((era) => (
+    <div class="nx-museum-era">
+      <div class="nx-museum-era-header" data-museum-toggle>
+        <span>▸</span>
+        <span>{era.icon}</span>
+        <span>{era.name}</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--nx-text-muted);">{era.years}</span>
+      </div>
+      <div class="nx-museum-machines">
+        {era.machines.map((m) => (
+          <div class="nx-museum-machine">
+            <div style="font-weight:600;color:var(--nx-text-primary);">{m.name}</div>
+            <div>{m.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-museum-toggle]").forEach((header) => {
+    header.addEventListener("click", () => {
+      const era = header.closest(".nx-museum-era");
+      if (!era) return;
+      era.classList.toggle("open");
+      const arrow = header.querySelector("span");
+      if (arrow) arrow.textContent = era.classList.contains("open") ? "▾" : "▸";
+    });
+  });
+</script>
