@@ -1,0 +1,137 @@
+---
+import { projects, categories } from "../../data/projects";
+---
+
+<div class="nx-miller">
+  <div class="nx-miller-col" id="nx-miller-categories">
+    {categories.map((cat) => (
+      <div class="nx-miller-row" data-miller-category={cat}>
+        <span>📁</span> {cat}
+        <span class="nx-miller-arrow">▸</span>
+      </div>
+    ))}
+  </div>
+  <div class="nx-miller-col" id="nx-miller-projects"></div>
+  <div class="nx-miller-col" id="nx-miller-detail"></div>
+</div>
+
+<script define:vars={{ projects }}>
+  // All data comes from static projects.ts — no user input, no XSS risk.
+  const projectData = projects;
+
+  function buildDetailPanel(proj) {
+    const container = document.createElement("div");
+    container.style.cssText = "padding:12px;";
+
+    const title = document.createElement("h3");
+    title.style.cssText = "margin:0 0 8px;font-size:16px;color:var(--nx-text-primary);";
+    title.textContent = proj.name;
+    container.appendChild(title);
+
+    const desc = document.createElement("p");
+    desc.style.cssText = "font-size:13px;color:var(--nx-text-secondary);margin:0 0 12px;";
+    desc.textContent = proj.description;
+    container.appendChild(desc);
+
+    if (proj.techStack.length) {
+      const stackSection = document.createElement("div");
+      stackSection.style.cssText = "margin-bottom:8px;";
+
+      const stackLabel = document.createElement("span");
+      stackLabel.style.cssText = "font-size:10px;text-transform:uppercase;color:var(--nx-text-muted);";
+      stackLabel.textContent = "Tech Stack";
+      stackSection.appendChild(stackLabel);
+
+      const tagRow = document.createElement("div");
+      tagRow.style.cssText = "display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;";
+      proj.techStack.forEach((t) => {
+        const tag = document.createElement("span");
+        tag.className = "nx-info-tag";
+        tag.textContent = t;
+        tagRow.appendChild(tag);
+      });
+      stackSection.appendChild(tagRow);
+      container.appendChild(stackSection);
+    }
+
+    const statusDiv = document.createElement("div");
+    statusDiv.style.cssText = "margin-top:8px;";
+    const statusTag = document.createElement("span");
+    statusTag.className = "nx-info-tag";
+    const isLive = proj.status === "live";
+    const isActive = proj.status === "active";
+    statusTag.style.background = isLive
+      ? "rgba(106,238,106,0.15)"
+      : isActive
+      ? "rgba(106,175,238,0.15)"
+      : "rgba(255,255,255,0.05)";
+    statusTag.style.color = isLive
+      ? "var(--nx-accent-green)"
+      : isActive
+      ? "var(--nx-accent-blue)"
+      : "var(--nx-text-muted)";
+    statusTag.textContent = "● " + proj.status.toUpperCase();
+    statusDiv.appendChild(statusTag);
+    container.appendChild(statusDiv);
+
+    if (proj.url) {
+      const link = document.createElement("a");
+      link.href = proj.url;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.style.cssText = "display:inline-block;margin-top:12px;font-size:12px;color:var(--nx-accent-blue);";
+      link.textContent = "Visit →";
+      container.appendChild(link);
+    }
+
+    return container;
+  }
+
+  document.querySelectorAll("[data-miller-category]").forEach((row) => {
+    row.addEventListener("click", () => {
+      document.querySelectorAll("[data-miller-category]").forEach((r) => r.classList.remove("selected"));
+      row.classList.add("selected");
+
+      const cat = row.dataset.millerCategory;
+      const filtered = projectData.filter((p) => p.category === cat);
+      const col = document.getElementById("nx-miller-projects");
+      if (!col) return;
+
+      // Clear and rebuild project column with DOM methods
+      col.replaceChildren();
+      filtered.forEach((p) => {
+        const projRow = document.createElement("div");
+        projRow.className = "nx-miller-row";
+        projRow.dataset.millerProject = p.id;
+
+        const icon = document.createElement("span");
+        icon.textContent = p.status === "live" ? "🟢" : p.status === "active" ? "🔵" : "⚪";
+        projRow.appendChild(icon);
+
+        projRow.appendChild(document.createTextNode(" " + p.name + " "));
+
+        const arrow = document.createElement("span");
+        arrow.className = "nx-miller-arrow";
+        arrow.textContent = "▸";
+        projRow.appendChild(arrow);
+
+        col.appendChild(projRow);
+      });
+
+      const detail = document.getElementById("nx-miller-detail");
+      if (detail) detail.replaceChildren();
+
+      col.querySelectorAll("[data-miller-project]").forEach((projRow) => {
+        projRow.addEventListener("click", () => {
+          col.querySelectorAll("[data-miller-project]").forEach((r) => r.classList.remove("selected"));
+          projRow.classList.add("selected");
+
+          const proj = projectData.find((p) => p.id === projRow.dataset.millerProject);
+          if (!proj || !detail) return;
+
+          detail.replaceChildren(buildDetailPanel(proj));
+        });
+      });
+    });
+  });
+</script>
