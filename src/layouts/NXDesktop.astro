@@ -191,6 +191,18 @@ const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Th
 
     // ── Keyboard nav ───────────────────────
     initKeyboardNav();
+
+    // ── Mail reader post switching ─────────
+    document.querySelectorAll<HTMLElement>("[data-mail-post]").forEach((item) => {
+      item.addEventListener("click", () => {
+        document.querySelectorAll(".nx-mail-item").forEach((i) => i.classList.remove("selected"));
+        item.classList.add("selected");
+        const postId = item.dataset.mailPost;
+        document.querySelectorAll<HTMLElement>("[data-mail-body]").forEach((body) => {
+          body.style.display = body.dataset.mailBody === postId ? "block" : "none";
+        });
+      });
+    });
   </script>
 </body>
 </html>

@@ -34,25 +34,43 @@ const positions = [
     const isResume = wid === "resume";
     const isProjects = wid === "projects";
 
+    if (isBlog) {
+      const sortedBlog = [...blog].sort((a, b) =>
+        new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+      );
+      return (
+        <NXWindow windowId={wid} title={page.data.title} {...pos}>
+          <div class="nx-mail-split">
+            <div class="nx-mail-list">
+              {sortedBlog.map((post, i) => (
+                <div class={`nx-mail-item ${i === 0 ? "selected" : ""}`} data-mail-post={post.id}>
+                  <div>{post.data.title}</div>
+                  <div class="nx-mail-date">{new Date(post.data.date).toLocaleDateString()}</div>
+                </div>
+              ))}
+            </div>
+            <div class="nx-mail-content">
+              {await Promise.all(sortedBlog.map(async (post, i) => {
+                const { Content: PostContent } = await render(post);
+                return (
+                  <div data-mail-body={post.id} style={i > 0 ? "display:none;" : ""}>
+                    <h2>{post.data.title}</h2>
+                    <p style="color:var(--nx-text-muted);font-size:12px;margin-bottom:16px;">
+                      {new Date(post.data.date).toLocaleDateString()} · {post.data.description}
+                    </p>
+                    <PostContent />
+                  </div>
+                );
+              }))}
+            </div>
+          </div>
+        </NXWindow>
+      );
+    }
+
     return (
       <NXWindow windowId={wid} title={page.data.title} {...pos}>
         {isResume ? <NXDocViewer /> : isAbout ? <NXInfoPanel /> : isMuseum ? <NXMuseum /> : isProjects ? <NXMillerBrowser /> : <Content />}
-        {isBlog && blog.length > 0 && (
-          <ul style="list-style:none; padding:0; margin:8px 0 0;">
-            {blog
-              .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-              .map((post) => (
-                <li style="padding:6px 0; border-bottom:1px solid var(--nx-border);">
-                  <a href={`/blog/${post.id}`} style="color:var(--nx-accent); text-decoration:none;">
-                    {post.data.title}
-                  </a>
-                  <span style="color:var(--nx-text-secondary); font-size:11px; margin-left:8px;">
-                    {post.data.date.toLocaleDateString()}
-                  </span>
-                </li>
-              ))}
-          </ul>
-        )}
       </NXWindow>
     );
   }))}
