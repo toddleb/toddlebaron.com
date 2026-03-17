@@ -216,10 +216,13 @@ const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Th
           flash.style.cssText = "position:fixed;inset:0;background:#fff;z-index:99999;opacity:0.8;pointer-events:none;";
           document.body.appendChild(flash);
           setTimeout(() => flash.remove(), 150);
-          document.querySelectorAll(".nx-window").forEach((w) => {
-            (w as HTMLElement).style.animation = "nx-shake 300ms ease";
-            setTimeout(() => (w as HTMLElement).style.animation = "", 300);
-          });
+          const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (!prefersReducedMotion) {
+            document.querySelectorAll(".nx-window").forEach((w) => {
+              (w as HTMLElement).style.animation = "nx-shake 300ms ease";
+              setTimeout(() => (w as HTMLElement).style.animation = "", 300);
+            });
+          }
           const termOutput = document.getElementById("nx-terminal-output");
           if (termOutput) {
             const msg = document.createElement("div");

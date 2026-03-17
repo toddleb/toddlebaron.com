@@ -5,10 +5,10 @@ import { projects, categories } from "../../data/projects";
 <div class="nx-miller">
   <div class="nx-miller-col" id="nx-miller-categories">
     {categories.map((cat) => (
-      <div class="nx-miller-row" data-miller-category={cat}>
+      <button class="nx-miller-row" data-miller-category={cat}>
         <span>📁</span> {cat}
         <span class="nx-miller-arrow">▸</span>
-      </div>
+      </button>
     ))}
   </div>
   <div class="nx-miller-col" id="nx-miller-projects"></div>
@@ -38,7 +38,7 @@ import { projects, categories } from "../../data/projects";
       stackSection.style.cssText = "margin-bottom:8px;";
 
       const stackLabel = document.createElement("span");
-      stackLabel.style.cssText = "font-size:10px;text-transform:uppercase;color:var(--nx-text-muted);";
+      stackLabel.style.cssText = "font-size:11px;text-transform:uppercase;color:var(--nx-text-muted);";
       stackLabel.textContent = "Tech Stack";
       stackSection.appendChild(stackLabel);
 
@@ -100,7 +100,7 @@ import { projects, categories } from "../../data/projects";
       // Clear and rebuild project column with DOM methods
       col.replaceChildren();
       filtered.forEach((p) => {
-        const projRow = document.createElement("div");
+        const projRow = document.createElement("button");
         projRow.className = "nx-miller-row";
         projRow.dataset.millerProject = p.id;
 

@@ -45,10 +45,10 @@ const positions = [
           <div class="nx-mail-split">
             <div class="nx-mail-list">
               {sortedBlog.map((post, i) => (
-                <div class={`nx-mail-item ${i === 0 ? "selected" : ""}`} data-mail-post={post.id}>
-                  <div>{post.data.title}</div>
-                  <div class="nx-mail-date">{new Date(post.data.date).toLocaleDateString()}</div>
-                </div>
+                <button class={`nx-mail-item ${i === 0 ? "selected" : ""}`} data-mail-post={post.id} aria-selected={i === 0 ? "true" : "false"}>
+                  <span>{post.data.title}</span>
+                  <span class="nx-mail-date">{new Date(post.data.date).toLocaleDateString()}</span>
+                </button>
               ))}
             </div>
             <div class="nx-mail-content">
@@ -57,7 +57,7 @@ const positions = [
                 return (
                   <div data-mail-body={post.id} style={i > 0 ? "display:none;" : ""}>
                     <h2>{post.data.title}</h2>
-                    <p style="color:var(--nx-text-muted);font-size:12px;margin-bottom:16px;">
+                    <p style="color:var(--nx-text-muted);font-size:13px;margin-bottom:16px;">
                       {new Date(post.data.date).toLocaleDateString()} · {post.data.description}
                     </p>
                     <PostContent />
@@ -83,7 +83,7 @@ const positions = [
       <div style="font-size:48px;margin-bottom:12px;">🌀</div>
       <h2>MineTheGap</h2>
       <p style="color:var(--nx-text-secondary);">Fractal art exploration. Mathematical beauty at infinite zoom.</p>
-      <p style="color:var(--nx-text-muted);font-size:12px;margin-top:16px;">Gallery images coming soon. Check back after the polish pass.</p>
+      <p style="color:var(--nx-text-muted);font-size:13px;margin-top:16px;">Gallery images coming soon. Check back after the polish pass.</p>
     </div>
   </NXWindow>
 
@@ -92,7 +92,7 @@ const positions = [
       <div style="font-size:48px;margin-bottom:12px;">🦎</div>
       <h2>Kaiju Registry</h2>
       <p style="color:var(--nx-text-secondary);">Collection &amp; tattoo photos.</p>
-      <p style="color:var(--nx-text-muted);font-size:12px;margin-top:16px;">Photos pending. In the meantime: yes, the tattoos are real.</p>
+      <p style="color:var(--nx-text-muted);font-size:13px;margin-top:16px;">Photos pending. In the meantime: yes, the tattoos are real.</p>
     </div>
   </NXWindow>
 
@@ -106,12 +106,12 @@ const positions = [
     <div style="text-align:center;padding:24px;">
       <div style="font-size:32px;margin-bottom:12px;">⬛</div>
       <h2 style="margin-bottom:4px;">toddlebaron.com</h2>
-      <p style="color:var(--nx-text-secondary);font-size:12px;">Astro 6 · TypeScript · Vanilla CSS</p>
-      <p style="color:var(--nx-text-muted);font-size:11px;margin-top:12px;">
+      <p style="color:var(--nx-text-secondary);font-size:13px;">Astro 6 · TypeScript · Vanilla CSS</p>
+      <p style="color:var(--nx-text-muted);font-size:13px;margin-top:12px;">
         Inspired by NeXT Computer, Inc. 1988–1997<br/>
         "The NeXT that kept evolving into 2026"
       </p>
-      <p style="color:var(--nx-text-muted);font-size:10px;margin-top:16px;">
+      <p style="color:var(--nx-text-muted);font-size:13px;margin-top:16px;">
         Built with ☕ and 🦎 by Todd LeBaron
       </p>
     </div>

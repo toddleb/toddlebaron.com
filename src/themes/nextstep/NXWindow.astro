@@ -20,6 +20,8 @@ const {
   data-window-id={windowId}
   data-visible={visible ? "true" : "false"}
   style={`left:${x}px;top:${y}px;width:${width}px;height:${height}px;`}
+  role="dialog"
+  aria-label={title}
 >
   <div class="nx-window-titlebar" data-drag-handle={windowId}>
     <button class="nx-titlebar-btn nx-btn-close" data-action="close" data-window={windowId} aria-label="Close">×</button>

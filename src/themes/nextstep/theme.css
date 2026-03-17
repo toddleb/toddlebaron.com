@@ -334,6 +334,9 @@
   align-items: center;
   cursor: pointer;
   white-space: nowrap;
+  background: none;
+  border: none;
+  font-family: inherit;
 }
 
 .nx-menu-item:hover {
@@ -407,7 +410,7 @@
 }
 
 .nx-shelf-label {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--nx-text-secondary);
   text-align: center;
   white-space: nowrap;
@@ -465,7 +468,7 @@
 }
 
 .nx-dock-label {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--nx-text-secondary);
   text-align: center;
   white-space: nowrap;
@@ -589,6 +592,14 @@
   .nx-dock-tile.bouncing .nx-dock-icon {
     animation: none;
   }
+
+  .nx-terminal-cursor {
+    animation: none;
+  }
+
+  .nx-window {
+    animation: none !important;
+  }
 }
 
 /* ── Terminal ────────────────────────────────────────────────── */
@@ -672,6 +683,13 @@
   cursor: pointer;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   gap: 6px;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
 }
 
 .nx-miller-row:hover {
@@ -686,7 +704,7 @@
 .nx-miller-arrow {
   margin-left: auto;
   color: var(--nx-text-muted);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .nx-miller-row.selected .nx-miller-arrow {
@@ -710,10 +728,17 @@
 }
 
 .nx-mail-item {
+  display: block;
+  width: 100%;
+  text-align: left;
   padding: 8px 10px;
+  border: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   cursor: pointer;
   font-size: 13px;
+  font-family: inherit;
+  background: none;
+  color: inherit;
 }
 
 .nx-mail-item:hover {
@@ -726,7 +751,7 @@
 }
 
 .nx-mail-item .nx-mail-date {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--nx-text-muted);
   float: right;
 }
@@ -873,6 +898,11 @@
   font-weight: 600;
   color: var(--nx-text-primary);
   user-select: none;
+  border: none;
+  border-bottom: 1px solid var(--nx-border);
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
 }
 
 .nx-museum-era-header:hover {
@@ -1016,7 +1046,7 @@
     align-items: center;
     justify-content: center;
     gap: 3px;
-    font-size: 10px;
+    font-size: 11px;
     color: var(--nx-text-secondary);
     cursor: pointer;
     border-right: 1px solid var(--nx-border-dark);

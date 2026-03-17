@@ -49,12 +49,12 @@ const eras = [
 <div class="nx-museum">
   {eras.map((era) => (
     <div class="nx-museum-era">
-      <div class="nx-museum-era-header" data-museum-toggle>
+      <button class="nx-museum-era-header" data-museum-toggle aria-expanded="false">
         <span>▸</span>
         <span>{era.icon}</span>
         <span>{era.name}</span>
-        <span style="margin-left:auto;font-size:11px;color:var(--nx-text-muted);">{era.years}</span>
-      </div>
+        <span style="margin-left:auto;font-size:13px;color:var(--nx-text-muted);">{era.years}</span>
+      </button>
       <div class="nx-museum-machines">
         {era.machines.map((m) => (
           <div class="nx-museum-machine">
@@ -73,8 +73,10 @@ const eras = [
       const era = header.closest(".nx-museum-era");
       if (!era) return;
       era.classList.toggle("open");
+      const isOpen = era.classList.contains("open");
+      header.setAttribute("aria-expanded", String(isOpen));
       const arrow = header.querySelector("span");
-      if (arrow) arrow.textContent = era.classList.contains("open") ? "▾" : "▸";
+      if (arrow) arrow.textContent = isOpen ? "▾" : "▸";
     });
   });
 </script>
