@@ -3,6 +3,7 @@
 import NXMenuBar from "../themes/nextstep/NXMenuBar.astro";
 import NXShelf from "../themes/nextstep/NXShelf.astro";
 import NXDock from "../themes/nextstep/NXDock.astro";
+import NXMobile from "../themes/nextstep/NXMobile.astro";
 import "../themes/nextstep/theme.css";
 
 export interface Props {
@@ -35,7 +36,15 @@ const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Th
     <NXDock />
   </div>
 
-  <!-- Mobile layout placeholder (Task 8) -->
+  <!-- Mobile layout -->
+  <NXMobile windows={[
+    { windowId: "about", title: "Home", icon: "🏠" },
+    { windowId: "resume", title: "Resume", icon: "📄" },
+    { windowId: "projects", title: "Projects", icon: "📁" },
+    { windowId: "blog", title: "Blog", icon: "📬" },
+    { windowId: "computing-history", title: "Museum", icon: "🖥️" },
+    { windowId: "contact", title: "Contact", icon: "💬" },
+  ]} />
 
   <script>
     import {
