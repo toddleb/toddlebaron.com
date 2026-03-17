@@ -203,6 +203,70 @@ const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Th
         });
       });
     });
+
+    // ── Konami Code ────────────────────────
+    const konami = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+    let konamiIndex = 0;
+    document.addEventListener("keydown", (e) => {
+      if (e.key === konami[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konami.length) {
+          konamiIndex = 0;
+          const flash = document.createElement("div");
+          flash.style.cssText = "position:fixed;inset:0;background:#fff;z-index:99999;opacity:0.8;pointer-events:none;";
+          document.body.appendChild(flash);
+          setTimeout(() => flash.remove(), 150);
+          document.querySelectorAll(".nx-window").forEach((w) => {
+            (w as HTMLElement).style.animation = "nx-shake 300ms ease";
+            setTimeout(() => (w as HTMLElement).style.animation = "", 300);
+          });
+          const termOutput = document.getElementById("nx-terminal-output");
+          if (termOutput) {
+            const msg = document.createElement("div");
+            const span = document.createElement("span");
+            span.style.color = "#6aee6a";
+            span.style.fontWeight = "bold";
+            span.textContent = "🎮 CHEAT MODE ACTIVATED";
+            msg.appendChild(span);
+            termOutput.appendChild(msg);
+          }
+        }
+      } else {
+        konamiIndex = 0;
+      }
+    });
+
+    // ── 5-click NeXT brand easter egg ──────
+    let brandClicks = 0;
+    let brandTimer: ReturnType<typeof setTimeout>;
+    document.querySelector(".nx-menu-brand")?.addEventListener("click", () => {
+      brandClicks++;
+      clearTimeout(brandTimer);
+      brandTimer = setTimeout(() => brandClicks = 0, 1500);
+      if (brandClicks >= 5) {
+        brandClicks = 0;
+        openWindow("about-next-credits");
+        bringToFront("about-next-credits");
+      }
+    });
+
+    // ── Now Playing — random album ─────────
+    import { playlist } from "../data/playlist";
+    const npEl = document.getElementById("nx-now-playing");
+    if (npEl && playlist.length > 0) {
+      const album = playlist[Math.floor(Math.random() * playlist.length)];
+      const track = album.tracks[Math.floor(Math.random() * album.tracks.length)];
+      npEl.innerHTML = `
+        <div style="font-size:11px;text-transform:uppercase;color:var(--nx-text-muted);letter-spacing:0.5px;">Now Playing</div>
+        <div style="font-size:16px;font-weight:600;margin-top:8px;">${track}</div>
+        <div style="font-size:13px;color:var(--nx-text-secondary);margin-top:4px;">${album.artist} — ${album.album}</div>
+        <div style="margin-top:16px;display:flex;gap:12px;justify-content:center;">
+          <span style="cursor:pointer;font-size:18px;">⏮</span>
+          <span style="cursor:pointer;font-size:18px;">▶️</span>
+          <span style="cursor:pointer;font-size:18px;">⏭</span>
+        </div>
+      `;
+    }
   </script>
 </body>
 </html>
