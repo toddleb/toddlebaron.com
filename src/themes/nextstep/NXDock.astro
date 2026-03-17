@@ -1,0 +1,87 @@
+---
+import { dockItems } from "./nx-icons";
+---
+
+<div class="nx-dock" role="toolbar" aria-label="Application dock">
+  {dockItems.map((item) => (
+    <button
+      class="nx-dock-tile"
+      data-action={item.easterEgg ? "open-easter-egg" : "open-window"}
+      data-window={item.windowId}
+      aria-label={`Open ${item.label}`}
+    >
+      <span class="nx-dock-icon">{item.icon}</span>
+      <span class="nx-dock-label">{item.label}</span>
+    </button>
+  ))}
+</div>
+
+<style>
+  .nx-dock {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 72px; /* leave room for the shelf */
+    height: 64px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0 1rem;
+    background: var(--nx-dock-bg, #1a1a1e);
+    border-top: 1px solid var(--nx-dock-border, #3a3a40);
+    z-index: 100;
+  }
+
+  .nx-dock-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    gap: 0.15rem;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--nx-dock-text, #c0c0c8);
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+    position: relative;
+  }
+
+  .nx-dock-tile:hover {
+    background: var(--nx-dock-hover, #2a2a30);
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+
+  .nx-dock-tile.running::after {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #6aafee;
+  }
+
+  .nx-dock-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .nx-dock-label {
+    font-size: 0.55rem;
+    text-align: center;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 52px;
+  }
+</style>
