@@ -3,6 +3,9 @@
 import { getCollection, render } from "astro:content";
 import NXDesktop from "../layouts/NXDesktop.astro";
 import NXWindow from "../themes/nextstep/NXWindow.astro";
+import NXInfoPanel from "../themes/nextstep/NXInfoPanel.astro";
+import NXDocViewer from "../themes/nextstep/NXDocViewer.astro";
+import NXMuseum from "../themes/nextstep/NXMuseum.astro";
 
 const pages = (await getCollection("pages")).sort((a, b) => a.data.order - b.data.order);
 const blog = await getCollection("blog");
@@ -25,9 +28,13 @@ const positions = [
     const wid = page.data.windowId;
     const isBlog = wid === "blog";
 
+    const isAbout = wid === "about";
+    const isMuseum = wid === "computing-history";
+    const isResume = wid === "resume";
+
     return (
       <NXWindow windowId={wid} title={page.data.title} {...pos}>
-        <Content />
+        {isResume ? <NXDocViewer /> : isAbout ? <NXInfoPanel /> : isMuseum ? <NXMuseum /> : <Content />}
         {isBlog && blog.length > 0 && (
           <ul style="list-style:none; padding:0; margin:8px 0 0;">
             {blog

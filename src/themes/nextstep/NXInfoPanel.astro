@@ -1,0 +1,62 @@
+---
+// NXInfoPanel.astro — Home/About window content for NeXTSTEP theme
+const fortunes = [
+  "The best code is no code at all.",
+  "Make it work, make it right, make it fast — in that order.",
+  "Complexity is the enemy of reliability.",
+  "Every great developer you know got there by solving problems they were unqualified to solve.",
+  "The art of programming is the art of organizing complexity.",
+  "First, solve the problem. Then, write the code.",
+  "Simplicity is the ultimate sophistication.",
+  "Code is like humor. When you have to explain it, it's bad.",
+  "Talk is cheap. Show me the code.",
+  "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+  "Programs must be written for people to read, and only incidentally for machines to execute.",
+  "The most dangerous phrase in the language is 'We've always done it this way.'",
+  "In theory, theory and practice are the same. In practice, they are not.",
+  "The trouble with programmers is that you can never tell what a programmer is doing until it's too late.",
+  "It works on my machine.",
+];
+
+const randomQuote = fortunes[Math.floor(Math.random() * fortunes.length)];
+---
+
+<div class="nx-info-panel">
+  <div class="nx-info-header">
+    <span class="nx-info-avatar">🦎</span>
+    <div>
+      <div class="nx-info-name">Todd LeBaron</div>
+      <div class="nx-info-title">Builder of Things That Matter Since 1994</div>
+      <div class="nx-info-tags">
+        <span class="nx-info-tag">Enterprise SPM</span>
+        <span class="nx-info-tag">AI Governance</span>
+        <span class="nx-info-tag">Fractal Art</span>
+        <span class="nx-info-tag">Warhammer 40K</span>
+        <span class="nx-info-tag">Retro Computing</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nx-status-grid">
+    <div class="nx-status-card">
+      <div class="nx-status-label">Years Active</div>
+      <div class="nx-status-value">{new Date().getFullYear() - 1994}+</div>
+    </div>
+    <div class="nx-status-card">
+      <div class="nx-status-label">Active Projects</div>
+      <div class="nx-status-value">6</div>
+    </div>
+    <div class="nx-status-card">
+      <div class="nx-status-label">Coffee Status</div>
+      <div class="nx-status-value" style="color:var(--nx-accent-green);">● BREWING</div>
+    </div>
+    <div class="nx-status-card">
+      <div class="nx-status-label">40K Backlog</div>
+      <div class="nx-status-value" style="color:var(--nx-accent-amber);">∞</div>
+    </div>
+  </div>
+
+  <blockquote style="margin-top:20px;padding:12px;border-left:3px solid var(--nx-accent-blue);font-style:italic;color:var(--nx-text-secondary);font-size:13px;">
+    {randomQuote}
+  </blockquote>
+</div>
