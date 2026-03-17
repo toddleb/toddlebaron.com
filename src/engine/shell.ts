@@ -87,21 +87,27 @@ const commands: Record<string, (args: string) => CommandResult> = {
     return {
       type: "output",
       html: `<span style="color:#70D8F0">Available commands:</span>
-  help          Show this help
-  ls [dir]      List directory contents
-  cd &lt;dir&gt;      Change directory
-  pwd           Print working directory
-  cat &lt;file&gt;    Show file description
-  whoami        Print current user
-  clear         Clear the console
-  echo &lt;text&gt;   Print text
-  neofetch      System information
-  motd          Show welcome message
-  fortune       Random tech quote
-  cowsay &lt;msg&gt;  ASCII cow says your message
-  xeyes         Launch xeyes (easter egg)
-  doom          Launch DOOM (easter egg)
-  killall &lt;app&gt; Kill a running application`,
+  help            Show this help
+  ls [dir]        List directory contents
+  cd &lt;dir&gt;        Change directory
+  pwd             Print working directory
+  cat &lt;file&gt;      Show file description
+  whoami          Print current user
+  clear           Clear the console
+  echo &lt;text&gt;     Print text
+  neofetch        System information
+  motd            Show welcome message
+  fortune         Random tech quote
+  uptime          How long Todd's been building
+  man todd        The man page
+  make coffee     Brew a fresh cup
+  deploy godzilla Attempt kaiju deployment
+  mail            Contact info
+  sudo &lt;cmd&gt;      Try your luck
+  cowsay &lt;msg&gt;    ASCII cow says your message
+  xeyes           Launch xeyes (easter egg)
+  doom            Launch DOOM (easter egg)
+  killall &lt;app&gt;   Kill a running application`,
     };
   },
 
@@ -241,6 +247,116 @@ Try: neofetch, fortune, ls, cat resume.pdf`,
       return { type: "event", name: "shell:xeyes-kill" };
     }
     return { type: "output", html: `<span style="color:#FF6666">killall: no process '${esc(target)}'</span>` };
+  },
+
+  // ── NeXTSTEP-specific commands ──────────────────
+
+  uptime() {
+    const careerStart = new Date("1994-06-01");
+    const now = new Date();
+    const years = now.getFullYear() - careerStart.getFullYear();
+    const days = Math.floor((now.getTime() - careerStart.getTime()) / (1000 * 60 * 60 * 24));
+    return {
+      type: "output",
+      html: ` up ${days} days (${years} years), load average: caffeine/high, ambition/maximum, regrets/zero`,
+    };
+  },
+
+  "make"(args: string) {
+    if (args.trim() === "coffee") {
+      return {
+        type: "output",
+        html: `<span style="color:#ccaa44">Brewing...</span>
+
+    ( (
+     ) )
+  .______.
+  |      |]
+  \\      /
+   \`----'
+
+<span style="color:#6aee6a">☕ Done. Black, no sugar. Like production deploys.</span>`,
+      };
+    }
+    return { type: "output", html: `<span style="color:#FF6666">make: *** No rule to make target '${esc(args.trim() || "(nothing)")}'. Stop.</span>` };
+  },
+
+  deploy(args: string) {
+    if (args.trim().toLowerCase() === "godzilla") {
+      return {
+        type: "output",
+        html: `<span style="color:#cc4444">⚠ WARNING: Kaiju deployment not authorized in production.</span>
+<span style="color:#ccaa44">Reason: Last deployment resulted in $4.7B in infrastructure damage.</span>
+<span style="color:#999999">See: INCIDENT-1954-TOKYO, INCIDENT-2014-SANFRANCISCO</span>
+<span style="color:#cc4444">Deployment blocked by kaiju-prevention-policy.yaml</span>`,
+      };
+    }
+    return { type: "output", html: `<span style="color:#FF6666">deploy: unknown target '${esc(args.trim() || "(nothing)")}'</span>` };
+  },
+
+  man(args: string) {
+    if (args.trim().toLowerCase() === "todd" || args.trim().toLowerCase() === "lebaron") {
+      return {
+        type: "output",
+        html: `<span style="color:#6aafee">TODD(1)                   User Commands                   TODD(1)</span>
+
+<span style="color:#e0e0e0;font-weight:bold">NAME</span>
+       todd - builder of things that matter since 1994
+
+<span style="color:#e0e0e0;font-weight:bold">SYNOPSIS</span>
+       todd [--coffee] [--focus] &lt;impossible-problem&gt;
+
+<span style="color:#e0e0e0;font-weight:bold">DESCRIPTION</span>
+       Full-stack architect and AI platform engineer. Former Navy
+       nuclear electronics technician (CVN-68). Built enterprise AI
+       governance platforms, military decision-support systems, and
+       the occasional retro desktop theme for fun.
+
+       Specializes in taking "that can't be done" and shipping it.
+
+<span style="color:#e0e0e0;font-weight:bold">OPTIONS</span>
+       --coffee      Required. System will not boot without it.
+       --focus       Enables deep work mode. Disables Slack.
+       --metal       Background music: Tool, Mastodon, Iron Maiden.
+       --kaiju       Enables Godzilla references in all outputs.
+
+<span style="color:#e0e0e0;font-weight:bold">ENVIRONMENT</span>
+       CAFFEINE_LEVEL    Must be &gt; 0 at all times
+       CURRENT_STACK     TypeScript, Python, Astro, React, AI/ML
+       HOBBY_MODE        Fractals, Warhammer 40K, Godzilla
+
+<span style="color:#e0e0e0;font-weight:bold">BUGS</span>
+       Occasionally mass-produces side projects. Known to over-engineer
+       personal websites. Refuses to write code without dark mode.
+
+<span style="color:#6aafee">toddlebaron.com              2026                         TODD(1)</span>`,
+      };
+    }
+    return { type: "output", html: `<span style="color:#FF6666">No manual entry for ${esc(args.trim() || "(nothing)")}</span>` };
+  },
+
+  sudo(args: string) {
+    const trimmed = args.trim().toLowerCase();
+    if (trimmed === "rm -rf /" || trimmed === "rm -rf / --no-preserve-root") {
+      return {
+        type: "output",
+        html: `<span style="color:#cc4444">Nice try. Access denied. This isn't your first rodeo.</span>
+<span style="color:#999999">(But I appreciate the audacity.)</span>`,
+      };
+    }
+    return {
+      type: "output",
+      html: `<span style="color:#ccaa44">todd is not in the sudoers file. This incident will be reported.</span>`,
+    };
+  },
+
+  mail() {
+    return {
+      type: "output",
+      html: `<span style="color:#6aafee">Opening contact form...</span>
+<span style="color:#999999">Reach me at: todd@toddlebaron.com</span>
+<span style="color:#999999">Or find me on GitHub, LinkedIn — links in the shelf.</span>`,
+    };
   },
 };
 
