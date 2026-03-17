@@ -15,6 +15,7 @@ const { title = "The Toddfather BBS", description = "I'm gonna make you an archi
 <html lang="en">
   <head>
     <SEOHead title={title} description={description} />
+    <slot name="head" />
   </head>
   <body class="bbs-body">
     <div class="bbs-crt">

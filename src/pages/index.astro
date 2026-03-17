@@ -10,6 +10,22 @@ const blog = await getCollection("blog");
 ---
 
 <BBS>
+  <script slot="head" is:inline>
+    // Client-side era-switcher redirect — runs before BBS renders to avoid flash
+    (function () {
+      var cookie = document.cookie.split("; ").find(function (c) {
+        return c.startsWith("toddlebaron-era=");
+      });
+      if (cookie && window.location.pathname === "/") {
+        var theme = cookie.split("=")[1];
+        if (theme === "nextstep") {
+          window.location.replace("/nextstep");
+        } else if (theme === "sgi-irix") {
+          window.location.replace("/sgi");
+        }
+      }
+    })();
+  </script>
   <Boot />
 
   <div id="bbs-main" style="display:none">

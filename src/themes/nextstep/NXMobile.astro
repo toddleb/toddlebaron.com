@@ -1,0 +1,57 @@
+---
+// src/themes/nextstep/NXMobile.astro
+import { shelfItems } from "./nx-icons";
+
+export interface Props {
+  windows: { windowId: string; title: string; icon: string }[];
+}
+const { windows } = Astro.props;
+---
+
+<div class="nx-mobile">
+  <header class="nx-mobile-bar">
+    <span class="nx-mobile-brand">NeXT</span>
+    <time class="nx-menu-clock nx-mobile-clock"></time>
+  </header>
+
+  <div class="nx-mobile-content">
+    {windows.map((win) => (
+      <article class="nx-mobile-card" data-mobile-window={win.windowId}>
+        <div class="nx-mobile-card-header">
+          <span>{win.icon}</span> {win.title}
+        </div>
+        <div class="nx-mobile-card-body nx-mobile-slot" data-slot={win.windowId}></div>
+      </article>
+    ))}
+    {/* Content injected by parent via JS or rendered inline */}
+    <div style="display:none"><slot /></div>
+  </div>
+
+  <nav class="nx-mobile-tabs" role="tablist" aria-label="Navigation">
+    {shelfItems.slice(0, 5).map((item) => (
+      <button class="nx-mobile-tab" data-mobile-tab={item.windowId} role="tab" aria-label={item.label}>
+        <span>{item.icon}</span>
+        <span class="nx-mobile-tab-label">{item.label}</span>
+      </button>
+    ))}
+    <button class="nx-mobile-tab" data-mobile-tab="more" role="tab" aria-label="More">
+      <span>⋯</span>
+      <span class="nx-mobile-tab-label">More</span>
+    </button>
+  </nav>
+</div>
+
+<script>
+  // Mobile tab switching
+  document.querySelectorAll<HTMLElement>(".nx-mobile-tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const targetId = tab.dataset.mobileTab;
+      const card = document.querySelector<HTMLElement>(`.nx-mobile-card[data-mobile-window="${targetId}"]`);
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.querySelectorAll(".nx-mobile-tab").forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+      }
+    });
+  });
+</script>
