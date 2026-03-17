@@ -7,6 +7,7 @@ import NXInfoPanel from "../themes/nextstep/NXInfoPanel.astro";
 import NXDocViewer from "../themes/nextstep/NXDocViewer.astro";
 import NXMuseum from "../themes/nextstep/NXMuseum.astro";
 import NXMillerBrowser from "../themes/nextstep/NXMillerBrowser.astro";
+import NXTerminal from "../themes/nextstep/NXTerminal.astro";
 
 const pages = (await getCollection("pages")).sort((a, b) => a.data.order - b.data.order);
 const blog = await getCollection("blog");
@@ -33,6 +34,7 @@ const positions = [
     const isMuseum = wid === "computing-history";
     const isResume = wid === "resume";
     const isProjects = wid === "projects";
+    const isContact = wid === "contact";
 
     if (isBlog) {
       const sortedBlog = [...blog].sort((a, b) =>
@@ -70,8 +72,48 @@ const positions = [
 
     return (
       <NXWindow windowId={wid} title={page.data.title} {...pos}>
-        {isResume ? <NXDocViewer /> : isAbout ? <NXInfoPanel /> : isMuseum ? <NXMuseum /> : isProjects ? <NXMillerBrowser /> : <Content />}
+        {isResume ? <NXDocViewer /> : isAbout ? <NXInfoPanel /> : isMuseum ? <NXMuseum /> : isProjects ? <NXMillerBrowser /> : isContact ? <NXTerminal /> : <Content />}
       </NXWindow>
     );
   }))}
+
+  <!-- Easter egg windows -->
+  <NXWindow windowId="fractals" title="MineTheGap — Fractal Gallery" x={200} y={80} width={480} height={400}>
+    <div style="text-align:center;padding:24px;">
+      <div style="font-size:48px;margin-bottom:12px;">🌀</div>
+      <h2>MineTheGap</h2>
+      <p style="color:var(--nx-text-secondary);">Fractal art exploration. Mathematical beauty at infinite zoom.</p>
+      <p style="color:var(--nx-text-muted);font-size:12px;margin-top:16px;">Gallery images coming soon. Check back after the polish pass.</p>
+    </div>
+  </NXWindow>
+
+  <NXWindow windowId="godzilla" title="Kaiju Registry" x={240} y={60} width={460} height={380}>
+    <div style="text-align:center;padding:24px;">
+      <div style="font-size:48px;margin-bottom:12px;">🦎</div>
+      <h2>Kaiju Registry</h2>
+      <p style="color:var(--nx-text-secondary);">Collection &amp; tattoo photos.</p>
+      <p style="color:var(--nx-text-muted);font-size:12px;margin-top:16px;">Photos pending. In the meantime: yes, the tattoos are real.</p>
+    </div>
+  </NXWindow>
+
+  <NXWindow windowId="music" title="Now Playing" x={300} y={120} width={320} height={280}>
+    <div id="nx-now-playing" style="padding:12px;">
+      <p style="color:var(--nx-text-muted);font-style:italic;">Loading playlist...</p>
+    </div>
+  </NXWindow>
+
+  <NXWindow windowId="about-next-credits" title="About NeXT" x={250} y={100} width={360} height={240}>
+    <div style="text-align:center;padding:24px;">
+      <div style="font-size:32px;margin-bottom:12px;">⬛</div>
+      <h2 style="margin-bottom:4px;">toddlebaron.com</h2>
+      <p style="color:var(--nx-text-secondary);font-size:12px;">Astro 6 · TypeScript · Vanilla CSS</p>
+      <p style="color:var(--nx-text-muted);font-size:11px;margin-top:12px;">
+        Inspired by NeXT Computer, Inc. 1988–1997<br/>
+        "The NeXT that kept evolving into 2026"
+      </p>
+      <p style="color:var(--nx-text-muted);font-size:10px;margin-top:16px;">
+        Built with ☕ and 🦎 by Todd LeBaron
+      </p>
+    </div>
+  </NXWindow>
 </NXDesktop>

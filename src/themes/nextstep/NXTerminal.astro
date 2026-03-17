@@ -1,0 +1,91 @@
+---
+// NXTerminal — NeXTSTEP terminal window connecting to shell.ts engine
+---
+
+<div class="nx-terminal" id="nx-terminal">
+  <div id="nx-terminal-output">
+    <div style="color:var(--nx-accent-blue);margin-bottom:8px;">
+      NeXTSTEP Terminal — toddlebaron.com<br/>
+      Type 'help' for available commands.<br/><br/>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;">
+    <span class="nx-terminal-prompt">lebaron@cube:~$&nbsp;</span>
+    <input
+      type="text"
+      class="nx-terminal-input"
+      id="nx-terminal-input"
+      autocomplete="off"
+      spellcheck="false"
+      aria-label="Terminal input"
+    />
+  </div>
+</div>
+
+<script>
+  import { executeCommand } from "../../engine/shell";
+
+  const output = document.getElementById("nx-terminal-output");
+  const input = document.getElementById("nx-terminal-input") as HTMLInputElement;
+  const history: string[] = [];
+  let historyIndex = -1;
+
+  function getPrompt(): string {
+    return '<span class="nx-terminal-prompt">lebaron@cube:~$</span>&nbsp;';
+  }
+
+  function addOutput(html: string) {
+    if (!output) return;
+    const line = document.createElement("div");
+    // shell.ts output is always escaped via esc() — safe controlled HTML
+    line.innerHTML = html; // NOSONAR: trusted shell output
+    output.appendChild(line);
+    const terminal = document.getElementById("nx-terminal");
+    if (terminal) terminal.scrollTop = terminal.scrollHeight;
+  }
+
+  input?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const cmd = input.value.trim();
+      if (!cmd) return;
+
+      addOutput(`${getPrompt()}${cmd}`);
+      history.unshift(cmd);
+      historyIndex = -1;
+      input.value = "";
+
+      const result = executeCommand(cmd);
+      switch (result.type) {
+        case "output":
+          addOutput(result.html);
+          break;
+        case "clear":
+          if (output) output.innerHTML = ""; // NOSONAR: clearing container
+          break;
+        case "event":
+          document.dispatchEvent(new CustomEvent(result.name, { detail: result.detail }));
+          break;
+      }
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (historyIndex < history.length - 1) {
+        historyIndex++;
+        input.value = history[historyIndex];
+      }
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        historyIndex--;
+        input.value = history[historyIndex];
+      } else {
+        historyIndex = -1;
+        input.value = "";
+      }
+    }
+  });
+
+  document.getElementById("nx-terminal")?.addEventListener("click", () => input?.focus());
+</script>
