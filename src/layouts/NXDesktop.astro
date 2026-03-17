@@ -78,6 +78,13 @@ const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Th
       if (action) {
         const act = action.dataset.action;
         const win = action.dataset.window || action.dataset.target;
+
+        // Handle actions that don't need a window ID
+        if (act === "about-next") {
+          // Will open credits window when it exists (Task 17)
+          return;
+        }
+
         if (!win) return;
         switch (act) {
           case "close": closeWindow(win); break;
@@ -86,10 +93,6 @@ const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Th
           case "open-window": openWindow(win); bringToFront(win); break;
           case "open-easter-egg": openWindow(win); bringToFront(win); break;
           case "open-recycler": break;
-          case "about-next":
-            openWindow("about-next-credits");
-            bringToFront("about-next-credits");
-            break;
         }
         return;
       }

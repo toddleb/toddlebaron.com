@@ -1,0 +1,50 @@
+---
+// src/pages/nextstep.astro — NeXTSTEP Color Desktop
+import { getCollection, render } from "astro:content";
+import NXDesktop from "../layouts/NXDesktop.astro";
+import NXWindow from "../themes/nextstep/NXWindow.astro";
+
+const pages = (await getCollection("pages")).sort((a, b) => a.data.order - b.data.order);
+const blog = await getCollection("blog");
+
+// Window positions — staggered cascade
+const positions = [
+  { x: 100, y: 50, width: 520, height: 400 },
+  { x: 160, y: 80, width: 560, height: 450 },
+  { x: 220, y: 60, width: 600, height: 420 },
+  { x: 140, y: 90, width: 500, height: 400 },
+  { x: 180, y: 70, width: 540, height: 380 },
+  { x: 130, y: 100, width: 480, height: 360 },
+];
+---
+
+<NXDesktop title="toddlebaron.com — NeXTSTEP">
+  {await Promise.all(pages.map(async (page, i) => {
+    const { Content } = await render(page);
+    const pos = positions[i] || positions[0];
+    const wid = page.data.windowId;
+    const isBlog = wid === "blog";
+
+    return (
+      <NXWindow windowId={wid} title={page.data.title} {...pos}>
+        <Content />
+        {isBlog && blog.length > 0 && (
+          <ul style="list-style:none; padding:0; margin:8px 0 0;">
+            {blog
+              .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+              .map((post) => (
+                <li style="padding:6px 0; border-bottom:1px solid var(--nx-border);">
+                  <a href={`/blog/${post.id}`} style="color:var(--nx-accent); text-decoration:none;">
+                    {post.data.title}
+                  </a>
+                  <span style="color:var(--nx-text-secondary); font-size:11px; margin-left:8px;">
+                    {post.data.date.toLocaleDateString()}
+                  </span>
+                </li>
+              ))}
+          </ul>
+        )}
+      </NXWindow>
+    );
+  }))}
+</NXDesktop>

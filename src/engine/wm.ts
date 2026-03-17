@@ -8,6 +8,7 @@ interface WindowState {
   zIndex: number;
   minimized: boolean;
   maximized: boolean;
+  shaded: boolean;
   contentUrl?: string;
   desk?: string;
 }
@@ -44,6 +45,7 @@ export function registerWindow(id: string, title: string, opts?: Partial<WindowS
     zIndex: ++topZ,
     minimized: false,
     maximized: false,
+    shaded: false,
     contentUrl: opts?.contentUrl,
   };
   windows.set(id, win);
@@ -113,6 +115,7 @@ export function bringToFront(id: string): void {
   document.querySelectorAll("[data-window-id]").forEach((w) => {
     w.classList.toggle("active", w.getAttribute("data-window-id") === id);
   });
+  document.dispatchEvent(new CustomEvent("wm:window-focused", { detail: { id } }));
 }
 
 export function startDrag(id: string, e: MouseEvent): void {
