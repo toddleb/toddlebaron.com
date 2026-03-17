@@ -1,0 +1,36 @@
+---
+// src/themes/nextstep/NXWindow.astro
+export interface Props {
+  windowId: string;
+  title: string;
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  visible?: boolean;
+  toolbar?: boolean;
+}
+const {
+  windowId, title, x = 120, y = 60, width = 540, height = 420, visible = false, toolbar = false,
+} = Astro.props;
+---
+
+<div
+  class="nx-window"
+  data-window-id={windowId}
+  data-visible={visible ? "true" : "false"}
+  style={`left:${x}px;top:${y}px;width:${width}px;height:${height}px;`}
+>
+  <div class="nx-window-titlebar" data-drag-handle={windowId}>
+    <button class="nx-titlebar-btn nx-btn-close" data-action="close" data-window={windowId} aria-label="Close">×</button>
+    <button class="nx-titlebar-btn nx-btn-minimize" data-action="minimize" data-window={windowId} aria-label="Minimize">−</button>
+    <span class="nx-titlebar-text" data-shade-toggle={windowId}>{title}</span>
+    <button class="nx-titlebar-btn nx-btn-resize" data-action="maximize" data-window={windowId} aria-label="Maximize">□</button>
+  </div>
+  <div class="nx-window-main">
+    <div class="nx-window-body">
+      <slot />
+    </div>
+  </div>
+  <div class="nx-resize-handle" data-resize-handle={windowId}></div>
+</div>
