@@ -33,7 +33,7 @@
   --ansi-bright-white: #FFFFFF;
 
   --bbs-font: "Cascadia Mono", "IBM Plex Mono", "Consolas", "Courier New", monospace;
-  --bbs-font-size: 18px;
+  --bbs-font-size: 20px;
   --bbs-border-color: var(--tf-purple);
   --bbs-accent: var(--tf-orange);
   --bbs-heading: var(--tf-orange-bright);
@@ -48,7 +48,7 @@
   font-family: var(--bbs-font);
   font-size: var(--bbs-font-size);
   color: var(--ansi-white);
-  line-height: 1.4;
+  line-height: 1.5;
   -webkit-font-smoothing: none;
 }
 
@@ -186,15 +186,6 @@
   margin: 0;
 }
 
-.bbs-splash-the {
-  font-size: 20px;
-  letter-spacing: 16px;
-  color: var(--tf-purple-bright);
-  text-shadow: 0 0 10px var(--tf-purple-glow);
-  display: block;
-  margin-bottom: 4px;
-}
-
 .bbs-splash-sub {
   font-size: 22px;
   letter-spacing: 14px;
@@ -302,7 +293,7 @@
 .bbs-prompt {
   text-align: center;
   margin-top: 16px;
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .bbs-cursor {
@@ -326,14 +317,14 @@
 }
 
 .bbs-section-body {
-  max-width: 700px;
+  max-width: 760px;
   margin: 0 auto;
   padding: 0 16px 24px;
 }
 
 .bbs-section-body h1 {
   color: var(--tf-orange);
-  font-size: 22px;
+  font-size: 26px;
   font-family: var(--bbs-font);
   margin: 0 0 12px;
 }
@@ -555,20 +546,19 @@
 
 /* ─── Responsive ─── */
 @media (max-width: 700px) {
-  :root { --bbs-font-size: 15px; }
+  :root { --bbs-font-size: 17px; }
   .bbs-terminal { padding: 12px 10px 72px; }
   .bbs-menu-row { flex-direction: column; padding: 0 12px; gap: 0; }
-  .bbs-banner { font-size: 12px; }
-  .bbs-sysinfo { font-size: 11px; }
-  .bbs-statusbar { font-size: 12px; padding: 3px 10px; }
+  .bbs-banner { font-size: 10px; }
+  .bbs-sysinfo { font-size: 13px; }
+  .bbs-statusbar { font-size: 13px; padding: 3px 10px; }
   .bbs-splash-title { font-size: 36px; letter-spacing: 4px; }
   .bbs-splash-sub { font-size: 16px; letter-spacing: 10px; }
-  .bbs-splash-the { font-size: 14px; letter-spacing: 10px; }
 }
 
 @media (max-width: 480px) {
-  :root { --bbs-font-size: 14px; }
-  .bbs-banner { font-size: 10px; }
+  :root { --bbs-font-size: 16px; }
+  .bbs-banner { font-size: 8px; }
   .bbs-splash-title { font-size: 28px; letter-spacing: 3px; }
   .bbs-splash-sub { font-size: 13px; letter-spacing: 8px; }
 }
