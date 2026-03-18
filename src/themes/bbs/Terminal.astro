@@ -6,21 +6,48 @@
 <div id="bbs-content">
   <!-- ═══ Main Menu Screen ═══ -->
   <section id="bbs-screen-menu" class="bbs-screen bbs-active">
-    <pre class="bbs-banner"><span class="ansi-white">      ╔═══════════════════════════════════════════════╗</span>
-<span class="ansi-white">      ║</span><span class="tf-purple">▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒</span><span class="ansi-white">║</span>
-<span class="ansi-white">      ║</span><span class="tf-purple">▒</span> <span class="tf-orange">████████╗   ███╗   ██╗ ███████╗ ████████╗</span>  <span class="tf-purple">▒</span><span class="ansi-white">║</span>
-<span class="ansi-white">      ║</span><span class="tf-purple">▒</span> <span class="tf-orange">╚══██╔══╝   ████╗  ██║ ██╔════╝ ╚══██╔══╝</span>  <span class="tf-purple">▒</span><span class="ansi-white">║</span>
-<span class="ansi-white">      ║</span><span class="tf-purple">▒</span> <span class="tf-orange">   ██║  ═══ ██╔██╗ ██║ █████╗      ██║</span>     <span class="tf-purple">▒</span><span class="ansi-white">║</span>
-<span class="ansi-white">      ║</span><span class="tf-purple">▒</span> <span class="tf-orange">   ██║      ██║╚██╗██║ ██╔══╝      ██║</span>     <span class="tf-purple">▒</span><span class="ansi-white">║</span>
-<span class="ansi-white">      ║</span><span class="tf-purple">▒</span> <span class="tf-orange">   ██║      ██║ ╚████║ ███████╗    ██║</span>     <span class="tf-purple">▒</span><span class="ansi-white">║</span>
-<span class="ansi-white">      ║</span><span class="tf-purple">▒</span> <span class="tf-orange">   ╚═╝      ╚═╝  ╚═══╝ ╚══════╝    ╚═╝</span>     <span class="tf-purple">▒</span><span class="ansi-white">║</span>
-<span class="ansi-white">      ║</span><span class="tf-purple">▒</span>                                             <span class="tf-purple">▒</span><span class="ansi-white">║</span>
-<span class="ansi-white">      ║</span><span class="tf-purple">▒</span>  <span class="tf-purple-bright">Personal Network of Todd LeBaron</span>           <span class="tf-purple">▒</span><span class="ansi-white">║</span>
-<span class="ansi-white">      ║</span><span class="tf-purple">▒</span>  <span class="ansi-bright-black">Est. 1984 · Scottsdale, AZ · Node 1</span>       <span class="tf-purple">▒</span><span class="ansi-white">║</span>
-<span class="ansi-white">      ║</span><span class="tf-purple">▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒</span><span class="ansi-white">║</span>
-<span class="ansi-white">      ║</span>  <span class="ansi-white">Apple XXVIe</span>                        <span class="tf-orange">⬤</span>       <span class="ansi-white">║</span>
-<span class="ansi-white">      ╚══════════════════════╤══╤══════════════════════╝</span>
-<span class="ansi-white">                             └──┘</span></pre>
+    <!-- Hardware Stack: Monitor → Computer → (Modem is fixed at bottom via Modem.astro) -->
+    <div class="hw-stack">
+      <!-- Monitor -->
+      <div class="hw-monitor">
+        <div class="hw-monitor-body">
+          <div class="hw-screen">
+            <pre class="hw-screen-text"><span class="tf-orange">████████╗   ███╗   ██╗ ███████╗ ████████╗</span>
+<span class="tf-orange">╚══██╔══╝   ████╗  ██║ ██╔════╝ ╚══██╔══╝</span>
+<span class="tf-orange">   ██║  ═══ ██╔██╗ ██║ █████╗      ██║</span>
+<span class="tf-orange">   ██║      ██║╚██╗██║ ██╔══╝      ██║</span>
+<span class="tf-orange">   ██║      ██║ ╚████║ ███████╗    ██║</span>
+<span class="tf-orange">   ╚═╝      ╚═╝  ╚═══╝ ╚══════╝    ╚═╝</span>
+
+  <span class="tf-purple-bright">Personal Network of Todd LeBaron</span>
+  <span class="ansi-bright-black">Est. 1984 · Scottsdale, AZ · Node 1</span></pre>
+          </div>
+          <div class="hw-monitor-chin">
+            <span class="hw-brand-label">Apple Monitor XXVIe</span>
+            <span class="hw-power-led"></span>
+          </div>
+        </div>
+        <div class="hw-stand-neck"></div>
+      </div>
+      <!-- Computer -->
+      <div class="hw-computer">
+        <div class="hw-computer-body">
+          <div class="hw-computer-brand">
+            <div class="hw-brand-logo">APPLE</div>
+            <div class="hw-brand-model">XXVIe · 2026</div>
+          </div>
+          <div class="hw-computer-ports">
+            <span class="hw-port"></span>
+            <span class="hw-port"></span>
+            <span class="hw-port hw-port-wide"></span>
+          </div>
+          <div class="hw-computer-power">
+            <span class="hw-power-led"></span>
+            <span class="hw-power-label">PWR</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- SysOp Status -->
     <div class="bbs-sysop-status">
