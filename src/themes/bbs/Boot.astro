@@ -88,16 +88,19 @@
     document.getElementById("bbs-main")!.style.display = "";
     requestAnimationFrame(() => document.dispatchEvent(new CustomEvent("boot:complete")));
   } else {
-    // Start modem audio on first user interaction
-    let audioStarted = false;
+    // Start modem audio — retry on user gesture if autoplay blocked
+    let audioPlaying = false;
     function startAudio() {
-      if (audioStarted) return;
-      audioStarted = true;
-      playModemHandshake().catch(() => {});
+      if (audioPlaying) return;
+      audioPlaying = true;
+      playModemHandshake().catch(() => { audioPlaying = false; });
     }
+    // Try immediately — works if user already interacted with the page
+    startAudio();
+    // If browser blocked autoplay, these fire on first interaction
     document.addEventListener("click", startAudio, { once: true });
     document.addEventListener("keydown", startAudio, { once: true });
-    setTimeout(startAudio, 100);
+    document.addEventListener("touchstart", startAudio, { once: true });
 
     let totalDelay = 0;
 

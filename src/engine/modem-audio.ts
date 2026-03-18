@@ -5,9 +5,13 @@
  * Sequence: dial tone → DTMF digits → ringback → CARRIER SCREECH → silence
  */
 
-export function playModemHandshake(): Promise<void> {
+export async function playModemHandshake(): Promise<void> {
+  const ctx = new AudioContext();
+  // Resume if browser suspended due to autoplay policy
+  if (ctx.state === "suspended") {
+    await ctx.resume();
+  }
   return new Promise((resolve) => {
-    const ctx = new AudioContext();
     const now = ctx.currentTime;
     const master = ctx.createGain();
     master.gain.value = 0.15;
@@ -106,8 +110,9 @@ export function playModemHandshake(): Promise<void> {
 }
 
 /** Disconnect tone (carrier drop) */
-export function playDisconnect(): void {
+export async function playDisconnect(): Promise<void> {
   const ctx = new AudioContext();
+  if (ctx.state === "suspended") await ctx.resume();
   const now = ctx.currentTime;
   const gain = ctx.createGain();
   gain.gain.value = 0.1;
