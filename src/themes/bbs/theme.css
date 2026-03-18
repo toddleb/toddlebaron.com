@@ -782,3 +782,83 @@
   .bbs-online-grid { grid-template-columns: 1fr; }
   .bbs-callers-box { display: none; }
 }
+
+/* ─── Message Board ─── */
+.bbs-msg-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bbs-msg {
+  border-left: 2px solid var(--tf-purple-deep);
+  padding: 8px 0 8px 14px;
+  transition: border-color 0.15s;
+}
+
+.bbs-msg:hover {
+  border-color: var(--tf-orange);
+}
+
+.bbs-msg-header {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.bbs-msg-body {
+  color: var(--ansi-white);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ─── Font Size Control ─── */
+.bbs-font-ctrl {
+  position: fixed;
+  bottom: 12px;
+  right: 16px;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--tf-purple-deep);
+  border-radius: 4px;
+  padding: 3px 4px;
+  font-family: var(--bbs-font);
+}
+
+.bbs-font-ctrl button {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--tf-purple-bright);
+  font-family: var(--bbs-font);
+  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.bbs-font-ctrl button:hover {
+  background: rgba(123, 47, 190, 0.2);
+  border-color: var(--tf-purple);
+}
+
+.bbs-font-ctrl-label {
+  color: var(--ansi-bright-black);
+  font-size: 12px;
+  padding: 0 4px;
+}
+
+@media (max-width: 700px) {
+  .bbs-msg-body { font-size: 14px; }
+  .bbs-msg-header { font-size: 12px; }
+}
+
+@media (max-width: 480px) {
+  .bbs-font-ctrl { bottom: 8px; right: 8px; }
+}
