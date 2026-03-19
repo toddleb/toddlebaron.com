@@ -5,8 +5,8 @@
  * Sequence: dial tone → DTMF digits → ringback → CARRIER SCREECH → silence
  */
 
-export async function playModemHandshake(): Promise<void> {
-  const ctx = new AudioContext();
+export async function playModemHandshake(externalCtx?: AudioContext): Promise<void> {
+  const ctx = externalCtx || new AudioContext();
   // Resume if browser suspended due to autoplay policy
   if (ctx.state === "suspended") {
     await ctx.resume();
@@ -103,7 +103,7 @@ export async function playModemHandshake(): Promise<void> {
     // Done — total duration ~5.5 seconds
     const totalDuration = screechStart + 3.0 - now;
     setTimeout(() => {
-      ctx.close();
+      if (!externalCtx) ctx.close();
       resolve();
     }, totalDuration * 1000);
   });
@@ -143,8 +143,8 @@ export function speakWOPR(text: string): Promise<void> {
 }
 
 /** THX Deep Note — synthesized with oscillators converging to a chord */
-export async function playTHXDeepNote(): Promise<void> {
-  const ctx = new AudioContext();
+export async function playTHXDeepNote(externalCtx?: AudioContext): Promise<void> {
+  const ctx = externalCtx || new AudioContext();
   if (ctx.state === "suspended") await ctx.resume();
   const now = ctx.currentTime;
   const master = ctx.createGain();
@@ -192,7 +192,7 @@ export async function playTHXDeepNote(): Promise<void> {
   master.connect(lfo).connect(ctx.destination);
 
   return new Promise((resolve) => {
-    setTimeout(() => { ctx.close(); resolve(); }, dur * 1000 + 200);
+    setTimeout(() => { if (!externalCtx) ctx.close(); resolve(); }, dur * 1000 + 200);
   });
 }
 

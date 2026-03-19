@@ -127,6 +127,7 @@
   // ─── Boot sequence runner (reusable for reboot) ───
   function runBootSequence() {
     let aborted = false;
+    let sharedBootCtx: AudioContext | null = null;
     const screenContent = document.querySelector(".hw-screen-content") as HTMLElement;
     const mainEl = document.getElementById("bbs-main")!;
 
@@ -168,7 +169,8 @@
     screenContent.prepend(splashEl, matrixEl, bootEl);
 
     // Play audio — called from user click so browser allows it
-    playModemHandshake().catch(() => {});
+    sharedBootCtx = new AudioContext();
+    playModemHandshake(sharedBootCtx).catch(() => {});
 
     // Modem text lines
     let totalDelay = 0;
@@ -221,7 +223,7 @@
         splashEl.classList.add("visible");
 
         // THX deep note on splash reveal
-        playTHXDeepNote().catch(() => {});
+        playTHXDeepNote(sharedBootCtx || undefined).catch(() => {});
 
         // Splash → main after THX plays (~4.5s)
         setTimeout(() => {
@@ -233,6 +235,7 @@
 
     function skipAll() {
       aborted = true;
+      if (sharedBootCtx) { sharedBootCtx.close(); sharedBootCtx = null; }
       [bootEl, matrixEl, splashEl].forEach((el) => {
         el.style.transition = "opacity 0.15s";
         el.style.opacity = "0";
@@ -248,6 +251,7 @@
     }
 
     function finish() {
+      if (sharedBootCtx) { sharedBootCtx.close(); sharedBootCtx = null; }
       splashEl.style.transition = "opacity 0.6s ease-out";
       splashEl.style.opacity = "0";
       mainEl.style.display = "";
@@ -273,6 +277,7 @@
   const matrixText = document.getElementById("bbs-matrix-text")!;
   const splashEl = document.getElementById("bbs-splash")!;
   let aborted = false;
+  let sharedBootCtx: AudioContext | null = null;
 
   const visited = document.cookie.includes("toddlebaron-visited=1");
   if (visited) {
@@ -287,7 +292,8 @@
     function startAudio() {
       if (audioPlaying) return;
       audioPlaying = true;
-      playModemHandshake().catch(() => { audioPlaying = false; });
+      sharedBootCtx = new AudioContext();
+      playModemHandshake(sharedBootCtx).catch(() => { audioPlaying = false; });
     }
     startAudio();
     document.addEventListener("click", startAudio, { once: true });
@@ -343,7 +349,7 @@
         splashEl.classList.add("visible");
 
         // THX deep note on splash reveal
-        playTHXDeepNote().catch(() => {});
+        playTHXDeepNote(sharedBootCtx || undefined).catch(() => {});
 
         // Splash → main after THX plays (~4.5s)
         setTimeout(() => {
@@ -361,6 +367,7 @@
   function skipAll() {
     aborted = true;
     if ("speechSynthesis" in window) speechSynthesis.cancel();
+    if (sharedBootCtx) { sharedBootCtx.close(); sharedBootCtx = null; }
     [bootEl, matrixEl, splashEl].forEach((el) => {
       el.style.transition = "opacity 0.15s";
       el.style.opacity = "0";
@@ -376,6 +383,7 @@
   }
 
   function finishBoot() {
+    if (sharedBootCtx) { sharedBootCtx.close(); sharedBootCtx = null; }
     splashEl.style.transition = "opacity 0.6s ease-out";
     splashEl.style.opacity = "0";
     document.getElementById("bbs-main")!.style.display = "";
