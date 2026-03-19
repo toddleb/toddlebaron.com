@@ -3,6 +3,7 @@
 // Desk layout: Monitor (screen = all content) → Computer → Modem
 import SEOHead from "../components/SEOHead.astro";
 import Modem from "../themes/bbs/Modem.astro";
+import AlbumPlayer from "../themes/bbs/AlbumPlayer.astro";
 import "../themes/bbs/theme.css";
 export interface Props {
   title?: string;
@@ -24,16 +25,16 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
       <div class="wall">
         <!-- Album shelf -->
         <div class="album-shelf">
-          <div class="album-cover"><img src="/albums/chicago.jpg" alt="Chicago 17" /></div>
-          <div class="album-cover"><img src="/albums/papa-roach.jpg" alt="Papa Roach - The Paramour Sessions" /></div>
-          <div class="album-cover"><img src="/albums/silversun-pickups.jpeg" alt="Silversun Pickups - Physical Thrills" /></div>
-          <div class="album-cover"><img src="/albums/linkin-park.jpg" alt="Linkin Park - Hybrid Theory" /></div>
-          <div class="album-cover"><img src="/albums/shinedown.jpg" alt="Shinedown - The Sound of Madness" /></div>
-          <div class="album-cover"><img src="/albums/halestorm.png" alt="Halestorm" /></div>
-          <div class="album-cover"><img src="/albums/evanescence.png" alt="Evanescence - The Bitter Truth" /></div>
-          <div class="album-cover"><img src="/albums/godsmack.png" alt="Godsmack - Lighting Up the Sky" /></div>
-          <div class="album-cover"><img src="/albums/fair-to-midland.jpg" alt="Fair to Midland - Fables from a Mayfly" /></div>
-          <div class="album-cover"><img src="/albums/breaking-benjamin.jpg" alt="Breaking Benjamin - Phobia" /></div>
+          <div class="album-cover" data-album="chicago-17"><img src="/albums/chicago.jpg" alt="Chicago 17" /></div>
+          <div class="album-cover" data-album="papa-roach-paramour"><img src="/albums/papa-roach.jpg" alt="Papa Roach - The Paramour Sessions" /></div>
+          <div class="album-cover" data-album="silversun-pickups"><img src="/albums/silversun-pickups.jpeg" alt="Silversun Pickups - Physical Thrills" /></div>
+          <div class="album-cover" data-album="linkin-park-hybrid-theory"><img src="/albums/linkin-park.jpg" alt="Linkin Park - Hybrid Theory" /></div>
+          <div class="album-cover" data-album="shinedown"><img src="/albums/shinedown.jpg" alt="Shinedown - The Sound of Madness" /></div>
+          <div class="album-cover" data-album="halestorm"><img src="/albums/halestorm.png" alt="Halestorm" /></div>
+          <div class="album-cover" data-album="evanescence"><img src="/albums/evanescence.png" alt="Evanescence - The Bitter Truth" /></div>
+          <div class="album-cover" data-album="godsmack"><img src="/albums/godsmack.png" alt="Godsmack - Lighting Up the Sky" /></div>
+          <div class="album-cover" data-album="fair-to-midland"><img src="/albums/fair-to-midland.jpg" alt="Fair to Midland - Fables from a Mayfly" /></div>
+          <div class="album-cover" data-album="breaking-benjamin"><img src="/albums/breaking-benjamin.jpg" alt="Breaking Benjamin - Phobia" /></div>
           <!-- B-wing model -->
           <div class="shelf-model">
             <img src="/bwing.png" alt="B-wing starfighter model" />
@@ -52,6 +53,7 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
                 <div class="bbs-scanlines"></div>
                 <div class="hw-screen-content">
                   <slot />
+                  <AlbumPlayer />
                 </div>
                 <div class="hw-screen-statusbar">
                   <span id="screen-baud" class="tf-purple-bright">14400</span>

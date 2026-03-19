@@ -1,0 +1,139 @@
+---
+// src/themes/bbs/AlbumPlayer.astro — Now Playing overlay
+---
+
+<div id="album-player" class="album-player" style="display:none">
+  <img id="album-player-art" class="album-player-art" src="" alt="" />
+  <div class="album-player-info">
+    <div id="album-player-track" class="album-player-track"></div>
+    <div id="album-player-artist" class="album-player-artist"></div>
+  </div>
+  <button id="album-player-toggle" class="album-player-toggle">▶</button>
+  <div class="album-player-progress">
+    <div id="album-player-bar" class="album-player-bar"></div>
+  </div>
+</div>
+
+<script>
+  import { albumTracks } from "../../data/album-tracks";
+  import { isMuted } from "../../engine/audio";
+
+  const playerEl = document.getElementById("album-player")!;
+  const artEl = document.getElementById("album-player-art") as HTMLImageElement;
+  const trackEl = document.getElementById("album-player-track")!;
+  const artistEl = document.getElementById("album-player-artist")!;
+  const toggleBtn = document.getElementById("album-player-toggle")!;
+  const barEl = document.getElementById("album-player-bar")!;
+
+  let currentAudio: HTMLAudioElement | null = null;
+  let currentAlbumId: string | null = null;
+  let crossfadeInterval: ReturnType<typeof setInterval> | null = null;
+
+  function showPlayer(albumId: string): void {
+    const data = albumTracks[albumId];
+    if (!data) return;
+    artEl.src = data.artworkUrl || "";
+    artEl.alt = data.album;
+    trackEl.textContent = data.track;
+    artistEl.textContent = `${data.artist} — ${data.album}`;
+    playerEl.style.display = "flex";
+  }
+
+  function playTrack(albumId: string): void {
+    const data = albumTracks[albumId];
+    if (!data || !data.previewUrl) {
+      showPlayer(albumId);
+      return;
+    }
+
+    if (currentAlbumId === albumId && currentAudio) {
+      if (currentAudio.paused) {
+        if (!isMuted()) currentAudio.play();
+        toggleBtn.textContent = "⏸";
+      } else {
+        currentAudio.pause();
+        toggleBtn.textContent = "▶";
+      }
+      return;
+    }
+
+    // Crossfade: fade out old, fade in new
+    const oldAudio = currentAudio;
+    if (oldAudio && crossfadeInterval) clearInterval(crossfadeInterval);
+
+    if (oldAudio) {
+      const fadeOut = setInterval(() => {
+        if (oldAudio.volume > 0.05) {
+          oldAudio.volume = Math.max(0, oldAudio.volume - 0.05);
+        } else {
+          clearInterval(fadeOut);
+          oldAudio.pause();
+          oldAudio.src = "";
+        }
+      }, 50);
+    }
+
+    const newAudio = new Audio(data.previewUrl);
+    newAudio.volume = 0;
+    currentAudio = newAudio;
+    currentAlbumId = albumId;
+
+    showPlayer(albumId);
+
+    if (!isMuted()) {
+      newAudio.play().catch(() => {});
+      crossfadeInterval = setInterval(() => {
+        if (newAudio.volume < 0.95) {
+          newAudio.volume = Math.min(1, newAudio.volume + 0.05);
+        } else {
+          newAudio.volume = 1;
+          if (crossfadeInterval) clearInterval(crossfadeInterval);
+          crossfadeInterval = null;
+        }
+      }, 50);
+    }
+
+    toggleBtn.textContent = "⏸";
+
+    newAudio.addEventListener("timeupdate", () => {
+      if (newAudio.duration) {
+        barEl.style.width = `${(newAudio.currentTime / newAudio.duration) * 100}%`;
+      }
+    });
+
+    newAudio.addEventListener("ended", () => {
+      toggleBtn.textContent = "▶";
+      barEl.style.width = "0%";
+    });
+  }
+
+  // Listen for album clicks
+  document.querySelectorAll<HTMLElement>("[data-album]").forEach((el) => {
+    el.style.cursor = "pointer";
+    el.addEventListener("click", () => {
+      const albumId = el.dataset.album;
+      if (albumId) playTrack(albumId);
+    });
+  });
+
+  // Toggle button
+  toggleBtn.addEventListener("click", () => {
+    if (currentAudio) {
+      if (currentAudio.paused) {
+        if (!isMuted()) currentAudio.play();
+        toggleBtn.textContent = "⏸";
+      } else {
+        currentAudio.pause();
+        toggleBtn.textContent = "▶";
+      }
+    }
+  });
+
+  // Respect mute
+  document.addEventListener("audio:mute-changed", () => {
+    if (currentAudio && !currentAudio.paused && isMuted()) {
+      currentAudio.pause();
+      toggleBtn.textContent = "▶";
+    }
+  });
+</script>

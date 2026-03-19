@@ -1473,3 +1473,89 @@
 @media (max-width: 480px) {
   .bbs-font-ctrl { bottom: 8px; right: 8px; }
 }
+
+/* ─── Album Player (Now Playing overlay) ─── */
+.album-player {
+  position: absolute;
+  bottom: 28px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgba(10, 0, 8, 0.92);
+  border: 1px solid var(--tf-purple-deep);
+  border-radius: 4px;
+  z-index: 50;
+  font-family: var(--bbs-font);
+}
+
+.album-player-art {
+  width: 36px;
+  height: 36px;
+  border-radius: 2px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.album-player-info {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.album-player-track {
+  font-size: 12px;
+  color: var(--tf-orange-bright);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album-player-artist {
+  font-size: 10px;
+  color: var(--ansi-bright-black);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album-player-toggle {
+  background: none;
+  border: 1px solid var(--tf-purple);
+  color: var(--tf-purple-bright);
+  font-size: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.album-player-toggle:hover {
+  background: rgba(123, 47, 190, 0.2);
+}
+
+.album-player-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(123, 47, 190, 0.2);
+}
+
+.album-player-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--tf-orange);
+  transition: width 0.2s linear;
+}
+
+.album-cover[data-album] {
+  cursor: pointer;
+}
