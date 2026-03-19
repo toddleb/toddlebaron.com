@@ -89,7 +89,7 @@ const { title, description } = Astro.props;
         document.addEventListener("wm:drag-end", () => playThud());
 
         // Wire folder open and context menu sounds
-        document.querySelectorAll(".fm-folder").forEach((el) => {
+        document.querySelectorAll("[data-fm-folder]").forEach((el) => {
           el.addEventListener("click", () => playNoiseBurst(2000, 8, 0.03));
         });
         document.addEventListener("contextmenu", () => playSoftClick());
@@ -509,8 +509,17 @@ const { title, description } = Astro.props;
         document.addEventListener("mousemove", resetIdleTimer);
         document.addEventListener("keydown", resetIdleTimer);
         document.addEventListener("click", resetIdleTimer);
-        // Re-arm timer when time period changes
-        onPeriodChange(() => resetIdleTimer());
+        // Re-arm timer when time period changes (only if not currently idle)
+        onPeriodChange(() => {
+          const desktop = document.getElementById("desktop");
+          if (!desktop?.classList.contains("screensaver-active")) {
+            if (idleTimer) clearTimeout(idleTimer);
+            idleTimer = setTimeout(() => {
+              const d = document.getElementById("desktop");
+              if (d) d.classList.add("screensaver-active");
+            }, getSSTimeout());
+          }
+        });
       });
 
       // ============================
