@@ -18,43 +18,95 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
     <slot name="head" />
   </head>
   <body class="bbs-body">
-    <div class="desk">
-      <!-- Monitor -->
-      <div class="hw-monitor">
-        <div class="hw-monitor-body">
-          <div class="hw-screen" id="bbs-terminal">
-            <div class="bbs-scanlines"></div>
-            <div class="hw-screen-content">
-              <slot />
+    <!-- Room -->
+    <div class="room">
+      <!-- Wall -->
+      <div class="wall">
+        <div class="wall-poster wall-poster-left">
+          <div class="poster-frame">
+            <div class="poster-content poster-bbs-ad">
+              <span class="poster-title">T-NET BBS</span>
+              <span class="poster-sub">EST. 1984</span>
+              <span class="poster-line"></span>
+              <span class="poster-detail">300/1200/2400 BAUD</span>
             </div>
           </div>
-          <div class="hw-monitor-chin">
-            <span class="hw-brand-label">Apple XXVIe</span>
-            <span class="hw-power-led"></span>
-          </div>
         </div>
-        <div class="hw-stand-neck"></div>
-      </div>
-      <!-- Computer -->
-      <div class="hw-computer">
-        <div class="hw-computer-body">
-          <div class="hw-computer-brand">
-            <div class="hw-brand-logo">APPLE</div>
-            <div class="hw-brand-model">XXVIe · 2026</div>
-          </div>
-          <div class="hw-computer-ports">
-            <span class="hw-port"></span>
-            <span class="hw-port"></span>
-            <span class="hw-port hw-port-wide"></span>
-          </div>
-          <div class="hw-computer-power">
-            <span class="hw-power-led"></span>
-            <span class="hw-power-label">PWR</span>
+        <div class="wall-poster wall-poster-right">
+          <div class="poster-frame">
+            <div class="poster-content poster-wargames">
+              <span class="poster-title">SHALL WE</span>
+              <span class="poster-title">PLAY A</span>
+              <span class="poster-title poster-accent">GAME?</span>
+              <span class="poster-detail">— WOPR, 1983</span>
+            </div>
           </div>
         </div>
       </div>
-      <!-- Modem -->
-      <Modem />
+
+      <!-- Desk -->
+      <div class="desk">
+        <!-- Hardware stack -->
+        <div class="hw-stack">
+          <!-- Monitor -->
+          <div class="hw-monitor">
+            <div class="hw-monitor-body">
+              <div class="hw-screen" id="bbs-terminal">
+                <div class="bbs-scanlines"></div>
+                <div class="hw-screen-content">
+                  <slot />
+                </div>
+              </div>
+              <div class="hw-monitor-chin">
+                <span class="hw-brand-label">Apple XXVIe</span>
+                <div class="hw-power-indicator">
+                  <span class="hw-power-led"></span>
+                  <span class="hw-power-label">POWER</span>
+                </div>
+              </div>
+            </div>
+            <div class="hw-stand-neck"></div>
+          </div>
+          <!-- Computer (on top of modem) -->
+          <div class="hw-computer">
+            <div class="hw-computer-body">
+              <div class="hw-computer-brand">
+                <span class="hw-brand-label">Apple XXVIe</span>
+              </div>
+              <div class="hw-computer-ports">
+                <span class="hw-port"></span>
+                <span class="hw-port"></span>
+                <span class="hw-port hw-port-wide"></span>
+              </div>
+              <div class="hw-power-indicator">
+                <span class="hw-power-led"></span>
+                <span class="hw-power-label">POWER</span>
+              </div>
+            </div>
+            <div class="hw-felt-feet">
+              <span class="felt-foot"></span>
+              <span class="felt-foot"></span>
+              <span class="felt-foot"></span>
+              <span class="felt-foot"></span>
+            </div>
+          </div>
+          <!-- Modem (bottom of stack) -->
+          <div class="hw-modem-wrap">
+            <Modem />
+            <div class="hw-felt-feet">
+              <span class="felt-foot"></span>
+              <span class="felt-foot"></span>
+              <span class="felt-foot"></span>
+              <span class="felt-foot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desk surface -->
+      <div class="desk-surface">
+        <div class="desk-edge"></div>
+      </div>
     </div>
   </body>
 </html>

@@ -73,6 +73,184 @@
     { text: "Entering T-NET...", color: "tf-purple-bright", delay: 500 },
   ];
 
+  const matrixLines = [
+    { text: "WOPR STRATEGIC DEFENSE COMPUTER", color: "ansi-bright-green", delay: 400 },
+    { text: "NORAD / USSTRATCOM", color: "ansi-green", delay: 300 },
+    { text: "", delay: 200 },
+    { text: "LOGON: JOSHUA", color: "ansi-green", delay: 600 },
+    { text: "", delay: 400 },
+    { text: "GREETINGS, PROFESSOR FALKEN.", color: "ansi-bright-green", delay: 800 },
+    { text: "", delay: 300 },
+    { text: "SHALL WE PLAY A GAME?", color: "ansi-bright-white", delay: 800 },
+    { text: "", delay: 400 },
+    { text: "> T-NET BBS", color: "ansi-bright-green", delay: 600 },
+    { text: "", delay: 300 },
+    { text: "EXCELLENT CHOICE.", color: "ansi-green", delay: 500 },
+    { text: "CONNECTING TO NODE 1...", color: "ansi-green", delay: 600 },
+  ];
+
+  function escapeHtml(s: string): string {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function makeBootLine(text: string, color: string): HTMLDivElement {
+    const el = document.createElement("div");
+    el.className = "bbs-boot-line visible";
+    if (color) {
+      const span = document.createElement("span");
+      span.className = color;
+      span.textContent = text;
+      el.appendChild(span);
+    } else {
+      el.textContent = " ";
+    }
+    return el;
+  }
+
+  function makeMatrixLine(text: string, color: string): HTMLDivElement {
+    const div = document.createElement("div");
+    div.style.whiteSpace = "pre-wrap";
+    div.style.marginBottom = "4px";
+    div.style.fontFamily = "var(--bbs-font)";
+    div.style.fontSize = "var(--bbs-font-size)";
+    if (text) {
+      const span = document.createElement("span");
+      span.className = color;
+      span.textContent = text;
+      div.appendChild(span);
+    } else {
+      div.textContent = " ";
+    }
+    return div;
+  }
+
+  // ─── Boot sequence runner (reusable for reboot) ───
+  function runBootSequence() {
+    let aborted = false;
+    const screenContent = document.querySelector(".hw-screen-content") as HTMLElement;
+    const mainEl = document.getElementById("bbs-main")!;
+
+    // Build overlay elements fresh
+    const bootEl = document.createElement("div");
+    bootEl.className = "bbs-boot";
+    bootEl.style.cursor = "pointer";
+
+    const skipHint = document.createElement("div");
+    skipHint.style.cssText = "position:absolute;top:12px;right:16px;font-size:12px;";
+    skipHint.className = "ansi-bright-black";
+    skipHint.textContent = "click to skip";
+    bootEl.appendChild(skipHint);
+
+    const linesEl = document.createElement("div");
+    linesEl.style.cssText = "overflow-y:auto;flex:1;display:flex;flex-direction:column;justify-content:flex-end;";
+    bootEl.appendChild(linesEl);
+
+    const matrixEl = document.createElement("div");
+    matrixEl.className = "bbs-matrix";
+    matrixEl.style.cursor = "pointer";
+    const matrixTextEl = document.createElement("div");
+    matrixTextEl.style.cssText = "max-width:600px;margin:0 auto;padding:40px 24px;";
+    matrixEl.appendChild(matrixTextEl);
+
+    const splashEl = document.createElement("div");
+    splashEl.className = "bbs-splash";
+    splashEl.innerHTML = [
+      '<div class="bbs-splash-logo">',
+      '<div class="bbs-splash-title">T &ndash; N E T</div>',
+      '<div class="bbs-splash-sub">B  B  S</div>',
+      '<div class="bbs-splash-line"></div>',
+      '<div class="bbs-splash-tagline">PERSONAL NETWORK OF TODD LEBARON &middot; EST. 1984</div>',
+      '</div>',
+    ].join("");
+
+    // Hide main, inject overlays
+    mainEl.style.display = "none";
+    screenContent.prepend(splashEl, matrixEl, bootEl);
+
+    // Play audio — called from user click so browser allows it
+    playModemHandshake().catch(() => {});
+
+    // Modem text lines
+    let totalDelay = 0;
+    modemLines.forEach((line) => {
+      totalDelay += line.delay;
+      setTimeout(() => {
+        if (aborted) return;
+        linesEl.appendChild(makeBootLine(line.text, line.color));
+        linesEl.scrollTop = linesEl.scrollHeight;
+      }, totalDelay);
+    });
+
+    // Phase 1.5: WarGames matrix
+    const matrixStart = totalDelay + 400;
+    setTimeout(() => {
+      if (aborted) return;
+      bootEl.style.transition = "opacity 0.3s";
+      bootEl.style.opacity = "0";
+      setTimeout(() => bootEl.remove(), 300);
+      matrixEl.classList.add("visible");
+
+      let d = 0;
+      for (const line of matrixLines) {
+        d += line.delay;
+        setTimeout(() => {
+          if (aborted) return;
+          matrixTextEl.appendChild(makeMatrixLine(line.text, line.color));
+        }, d);
+      }
+
+      // Matrix → splash
+      setTimeout(() => {
+        if (aborted) return;
+        matrixEl.style.transition = "opacity 0.4s";
+        matrixEl.style.opacity = "0";
+        setTimeout(() => matrixEl.remove(), 400);
+        splashEl.classList.add("visible");
+      }, d + 600);
+
+      // Splash → main
+      setTimeout(() => {
+        if (aborted) return;
+        finish();
+      }, d + 600 + 2800);
+    }, matrixStart);
+
+    function skipAll() {
+      aborted = true;
+      [bootEl, matrixEl, splashEl].forEach((el) => {
+        el.style.transition = "opacity 0.15s";
+        el.style.opacity = "0";
+      });
+      mainEl.style.display = "";
+      setTimeout(() => {
+        bootEl.remove();
+        matrixEl.remove();
+        splashEl.remove();
+        document.dispatchEvent(new CustomEvent("boot:complete"));
+      }, 150);
+      document.cookie = "toddlebaron-visited=1;path=/;max-age=" + (365 * 86400);
+    }
+
+    function finish() {
+      splashEl.style.transition = "opacity 0.6s ease-out";
+      splashEl.style.opacity = "0";
+      mainEl.style.display = "";
+      setTimeout(() => {
+        splashEl.remove();
+        document.dispatchEvent(new CustomEvent("boot:complete"));
+      }, 600);
+      document.cookie = "toddlebaron-visited=1;path=/;max-age=" + (365 * 86400);
+    }
+
+    bootEl.addEventListener("click", skipAll);
+    matrixEl.addEventListener("click", skipAll);
+    splashEl.addEventListener("click", skipAll);
+  }
+
+  // Expose reboot for Terminal.astro
+  (window as any).__rebootBBS = runBootSequence;
+
+  // ─── Initial boot on first visit ───
   const bootEl = document.getElementById("bbs-boot")!;
   const linesEl = document.getElementById("bbs-boot-lines")!;
   const matrixEl = document.getElementById("bbs-wargames-matrix")!;
@@ -88,34 +266,24 @@
     document.getElementById("bbs-main")!.style.display = "";
     requestAnimationFrame(() => document.dispatchEvent(new CustomEvent("boot:complete")));
   } else {
-    // Start modem audio — retry on user gesture if autoplay blocked
+    // Start modem audio
     let audioPlaying = false;
     function startAudio() {
       if (audioPlaying) return;
       audioPlaying = true;
       playModemHandshake().catch(() => { audioPlaying = false; });
     }
-    // Try immediately — works if user already interacted with the page
     startAudio();
-    // If browser blocked autoplay, these fire on first interaction
     document.addEventListener("click", startAudio, { once: true });
     document.addEventListener("keydown", startAudio, { once: true });
     document.addEventListener("touchstart", startAudio, { once: true });
 
     let totalDelay = 0;
-
     modemLines.forEach((line) => {
       totalDelay += line.delay;
       setTimeout(() => {
         if (aborted) return;
-        const el = document.createElement("div");
-        el.className = "bbs-boot-line visible";
-        if (line.color) {
-          el.innerHTML = `<span class="${line.color}">${escapeHtml(line.text)}</span>`;
-        } else {
-          el.textContent = " ";
-        }
-        linesEl.appendChild(el);
+        linesEl.appendChild(makeBootLine(line.text, line.color));
         linesEl.scrollTop = linesEl.scrollHeight;
       }, totalDelay);
     });
@@ -128,77 +296,41 @@
       bootEl.style.opacity = "0";
       setTimeout(() => bootEl.remove(), 300);
       matrixEl.classList.add("visible");
-      runMatrixSequence();
+
+      let d = 0;
+      for (const line of matrixLines) {
+        d += line.delay;
+        setTimeout(() => {
+          if (aborted) return;
+          matrixText.appendChild(makeMatrixLine(line.text, line.color));
+        }, d);
+      }
+
+      setTimeout(() => {
+        if (aborted) return;
+        matrixEl.style.transition = "opacity 0.4s";
+        matrixEl.style.opacity = "0";
+        setTimeout(() => matrixEl.remove(), 400);
+        splashEl.classList.add("visible");
+      }, d + 600);
+
+      setTimeout(() => {
+        if (aborted) return;
+        finishBoot();
+      }, d + 600 + 2800);
     }, matrixStart);
 
-    // Skip on click
     bootEl.addEventListener("click", skipAll);
     matrixEl.addEventListener("click", skipAll);
     splashEl.addEventListener("click", skipAll);
   }
 
-  async function runMatrixSequence(): Promise<void> {
-    if (aborted) return;
-
-    const lines = [
-      { text: "WOPR STRATEGIC DEFENSE COMPUTER", color: "ansi-bright-green", delay: 400 },
-      { text: "NORAD / USSTRATCOM", color: "ansi-green", delay: 300 },
-      { text: "", delay: 200 },
-      { text: "LOGON: JOSHUA", color: "ansi-green", delay: 600 },
-      { text: "", delay: 400 },
-      { text: "GREETINGS, PROFESSOR FALKEN.", color: "ansi-bright-green", delay: 800 },
-      { text: "", delay: 300 },
-      { text: "SHALL WE PLAY A GAME?", color: "ansi-bright-white", delay: 800 },
-      { text: "", delay: 400 },
-      { text: "> T-NET BBS", color: "ansi-bright-green", delay: 600 },
-      { text: "", delay: 300 },
-      { text: "EXCELLENT CHOICE.", color: "ansi-green", delay: 500 },
-      { text: "CONNECTING TO NODE 1...", color: "ansi-green", delay: 600 },
-    ];
-
-    let d = 0;
-    for (const line of lines) {
-      d += line.delay;
-      setTimeout(() => {
-        if (aborted) return;
-        const div = document.createElement("div");
-        div.style.whiteSpace = "pre-wrap";
-        div.style.marginBottom = "4px";
-        div.style.fontFamily = "var(--bbs-font)";
-        div.style.fontSize = "var(--bbs-font-size)";
-        if (line.text) {
-          div.innerHTML = `<span class="${line.color}">${escapeHtml(line.text)}</span>`;
-        } else {
-          div.textContent = " ";
-        }
-        matrixText.appendChild(div);
-      }, d);
-    }
-
-    // After matrix → splash
-    setTimeout(() => {
-      if (aborted) return;
-      matrixEl.style.transition = "opacity 0.4s";
-      matrixEl.style.opacity = "0";
-      setTimeout(() => matrixEl.remove(), 400);
-      splashEl.classList.add("visible");
-    }, d + 600);
-
-    // Splash → main
-    setTimeout(() => {
-      if (aborted) return;
-      finishBoot();
-    }, d + 600 + 2800);
-  }
-
   function skipAll() {
     aborted = true;
-    bootEl.style.transition = "opacity 0.15s";
-    bootEl.style.opacity = "0";
-    matrixEl.style.transition = "opacity 0.15s";
-    matrixEl.style.opacity = "0";
-    splashEl.style.transition = "opacity 0.15s";
-    splashEl.style.opacity = "0";
+    [bootEl, matrixEl, splashEl].forEach((el) => {
+      el.style.transition = "opacity 0.15s";
+      el.style.opacity = "0";
+    });
     document.getElementById("bbs-main")!.style.display = "";
     setTimeout(() => {
       bootEl.remove();
@@ -218,9 +350,5 @@
       document.dispatchEvent(new CustomEvent("boot:complete"));
     }, 600);
     document.cookie = "toddlebaron-visited=1;path=/;max-age=" + (365 * 86400);
-  }
-
-  function escapeHtml(s: string): string {
-    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 </script>

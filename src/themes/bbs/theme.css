@@ -45,7 +45,7 @@
   padding: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  background: #111;
+  background: #0a0a0a;
   font-family: var(--bbs-font);
   font-size: var(--bbs-font-size);
   color: var(--ansi-white);
@@ -53,19 +53,241 @@
   -webkit-font-smoothing: none;
 }
 
-/* ─── Desk Layout (Monitor → Computer → Modem stacked) ─── */
-.desk {
+/* ─── Room (wall + desk + surface) ─── */
+.room {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50vw;
-  max-width: 640px;
-  min-width: 420px;
-  margin: 20px auto;
-  gap: 0;
+  min-height: 100vh;
 }
 
-/* ─── Scanlines (inside monitor only) ─── */
+/* ─── Wall ─── */
+.wall {
+  width: 100%;
+  background: linear-gradient(180deg, #1a1410 0%, #1e1812 40%, #201a14 100%);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 20px 40px 0;
+  position: relative;
+  gap: 40px;
+  min-height: 90px;
+}
+
+/* Wall texture overlay */
+.wall::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(0,0,0,0.03) 60px, rgba(0,0,0,0.03) 61px),
+    repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(0,0,0,0.02) 30px, rgba(0,0,0,0.02) 31px);
+  pointer-events: none;
+}
+
+/* ─── Wall Posters ─── */
+.wall-poster {
+  flex-shrink: 0;
+  transform: translateY(8px);
+}
+
+.poster-frame {
+  border: 2px solid #333;
+  border-radius: 2px;
+  padding: 2px;
+  background: #111;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+.poster-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 16px;
+  gap: 2px;
+  min-width: 100px;
+}
+
+.poster-title {
+  font-family: var(--bbs-font);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  line-height: 1.2;
+}
+
+.poster-sub {
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: #555;
+}
+
+.poster-line {
+  width: 40px;
+  height: 1px;
+  margin: 4px 0;
+}
+
+.poster-detail {
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: #555;
+}
+
+.poster-bbs-ad .poster-title { color: var(--tf-orange); }
+.poster-bbs-ad .poster-line { background: linear-gradient(90deg, transparent, var(--tf-purple), transparent); }
+.poster-bbs-ad .poster-detail { color: var(--tf-purple-bright); }
+
+.poster-wargames .poster-title { color: #33cc33; }
+.poster-wargames .poster-accent { color: #55ff55; text-shadow: 0 0 8px rgba(51,204,51,0.4); }
+.poster-wargames .poster-detail { color: #338833; }
+
+/* ─── Desk Layout ─── */
+.desk {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 65vw;
+  max-width: 860px;
+  min-width: 420px;
+  padding: 0;
+  background: none;
+}
+
+.hw-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 65vw;
+  max-width: 860px;
+  min-width: 380px;
+  gap: 0;
+  padding-top: 12px;
+}
+
+/* ─── Desk Items ─── */
+.desk-item {
+  position: absolute;
+  bottom: 0;
+  z-index: 5;
+}
+
+.desk-item-left { left: 10px; }
+.desk-item-right { right: 10px; }
+
+/* Coffee mug */
+.desk-mug {
+  display: flex;
+  align-items: flex-end;
+}
+
+.mug-body {
+  width: 28px;
+  height: 32px;
+  background: linear-gradient(180deg, #555 0%, #3a3a3a 100%);
+  border-radius: 0 0 4px 4px;
+  border: 1px solid #444;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.mug-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 2px;
+  right: 2px;
+  height: 3px;
+  background: #6a4e37;
+  border-radius: 0 0 2px 2px;
+}
+
+.mug-label {
+  font-size: 12px;
+  filter: grayscale(0.5);
+}
+
+.mug-handle {
+  width: 8px;
+  height: 14px;
+  border: 2px solid #444;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+  margin-bottom: 6px;
+}
+
+/* Floppy disks */
+.desk-floppies {
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  padding-bottom: 2px;
+}
+
+.floppy {
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
+  border: 1px solid #333;
+  position: relative;
+}
+
+.floppy::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  right: 6px;
+  height: 5px;
+  background: #222;
+  border-radius: 1px;
+}
+
+.floppy-1 { background: #2a2a5a; transform: rotate(-5deg); }
+.floppy-2 { background: #1a4a2a; }
+.floppy-3 { background: #4a1a1a; transform: rotate(3deg); }
+
+/* ─── Desk Surface ─── */
+.desk-surface {
+  width: 92vw;
+  max-width: 1200px;
+  min-width: 460px;
+}
+
+.desk-edge {
+  height: 18px;
+  background: linear-gradient(180deg, #5a3a20 0%, #4a2e18 40%, #3a2210 100%);
+  border-radius: 0 0 4px 4px;
+  border: 1px solid #2a1a0a;
+  border-top: 2px solid #6a4a2a;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+/* ─── Felt Feet ─── */
+.hw-felt-feet {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 4px;
+}
+
+.felt-foot {
+  width: 10px;
+  height: 4px;
+  background: #333;
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.hw-modem-wrap {
+  width: 100%;
+}
+
+/* ─── Scanlines + CRT effects (inside monitor only) ─── */
 .bbs-scanlines {
   position: absolute;
   inset: 0;
@@ -75,9 +297,46 @@
     0deg,
     transparent,
     transparent 2px,
-    rgba(0, 0, 0, 0.05) 2px,
-    rgba(0, 0, 0, 0.05) 4px
+    rgba(0, 0, 0, 0.06) 2px,
+    rgba(0, 0, 0, 0.06) 4px
   );
+}
+
+/* Subtle screen flicker */
+.hw-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 11;
+  animation: crt-flicker 8s linear infinite;
+  border-radius: 4px;
+}
+
+@keyframes crt-flicker {
+  0%, 95%, 100% { opacity: 0; }
+  96% { opacity: 0.015; background: rgba(255, 255, 255, 0.5); }
+  97% { opacity: 0; }
+}
+
+/* CRT glow on the wall behind monitor */
+.hw-monitor::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 60%;
+  background: radial-gradient(ellipse, rgba(123, 47, 190, 0.08) 0%, rgba(255, 107, 0, 0.04) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+  animation: crt-glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes crt-glow {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
 }
 
 /* ─── Color Utilities ─── */
@@ -220,6 +479,7 @@
 
 .hw-monitor {
   width: 100%;
+  position: relative;
 }
 
 .hw-monitor-body {
@@ -250,14 +510,11 @@
 .hw-screen-content {
   padding: 16px 20px;
   overflow-y: auto;
-  max-height: 70vh;
-  scrollbar-width: thin;
-  scrollbar-color: var(--tf-purple) #111;
+  scrollbar-width: none;
 }
 
-.hw-screen-content::-webkit-scrollbar { width: 6px; }
-.hw-screen-content::-webkit-scrollbar-track { background: #0a0008; }
-.hw-screen-content::-webkit-scrollbar-thumb { background: var(--tf-purple); border-radius: 3px; }
+.hw-screen-content::-webkit-scrollbar { display: none; }
+
 
 .hw-screen-text {
   font-family: var(--bbs-font);
@@ -284,12 +541,26 @@
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
+.hw-power-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .hw-power-led {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--tf-orange);
   box-shadow: 0 0 6px var(--tf-orange-glow), 0 0 12px var(--tf-orange-glow);
+}
+
+.hw-power-label {
+  font-family: var(--bbs-font);
+  font-size: 8px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  color: #555;
 }
 
 .hw-stand-neck {
@@ -322,21 +593,6 @@
 
 .hw-computer-brand { flex-shrink: 0; }
 
-.hw-brand-logo {
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  color: #888;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-}
-
-.hw-brand-model {
-  font-size: 9px;
-  color: #555;
-  letter-spacing: 1px;
-  margin-top: 1px;
-}
-
 .hw-computer-ports {
   display: flex;
   gap: 8px;
@@ -357,21 +613,54 @@
   width: 24px;
 }
 
-.hw-computer-power {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+/* power-indicator is shared between monitor and computer */
+
+/* ─── Hero Title (splash-style) ─── */
+.bbs-hero {
+  text-align: center;
+  padding: 32px 0 8px;
 }
 
-.hw-power-label {
-  font-size: 8px;
-  color: #555;
-  letter-spacing: 0.5px;
-  font-weight: bold;
+.bbs-hero-title {
+  font-family: var(--bbs-font);
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: var(--tf-orange);
+  text-shadow: 0 0 30px var(--tf-orange-glow), 0 0 60px rgba(255, 107, 0, 0.15);
 }
 
-/* ─── Welcome Banner (legacy) ─── */
+.bbs-hero-sub {
+  font-size: 18px;
+  letter-spacing: 14px;
+  color: var(--tf-purple-bright);
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+.bbs-hero-tagline {
+  font-size: 13px;
+  color: var(--ansi-bright-white);
+  letter-spacing: 3px;
+  margin-top: 16px;
+  font-weight: 400;
+}
+
+.bbs-hero-meta {
+  font-size: 12px;
+  color: var(--ansi-bright-black);
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+/* Shared gradient divider — the splash line, reused everywhere */
+.bbs-gradient-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--tf-purple), var(--tf-orange), var(--tf-purple), transparent);
+  margin: 12px auto;
+  max-width: 500px;
+}
+
 .bbs-banner {
   font-family: var(--bbs-font);
   font-size: var(--bbs-font-size);
@@ -391,41 +680,93 @@
 
 /* ─── Main Menu ─── */
 .bbs-menu {
-  max-width: 640px;
-  margin: 0 auto;
+  max-width: 520px;
+  margin: 16px auto 0;
 }
 
-.bbs-menu-border {
-  white-space: pre;
+.bbs-menu-label {
   text-align: center;
+  font-size: 12px;
+  letter-spacing: 4px;
+  font-weight: 700;
+  margin-bottom: 4px;
 }
 
 .bbs-menu-items {
-  padding: 10px 0;
+  padding: 14px 0;
 }
 
 .bbs-menu-row {
   display: flex;
-  justify-content: space-between;
-  padding: 3px 20px;
-  gap: 16px;
+  justify-content: center;
+  padding: 0;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .bbs-menu-item {
   cursor: pointer;
   flex: 1;
-  padding: 5px 10px;
-  border-radius: 2px;
-  transition: background 0.15s;
+  max-width: 220px;
+  padding: 10px 14px;
+  border: 1px solid rgba(123, 47, 190, 0.2);
+  border-radius: 4px;
+  transition: all 0.2s ease;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(123, 47, 190, 0.04);
 }
 
 .bbs-menu-item:hover {
-  background: rgba(123, 47, 190, 0.2);
+  background: rgba(123, 47, 190, 0.15);
+  border-color: var(--tf-purple);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 12px rgba(123, 47, 190, 0.2);
 }
 
 .bbs-menu-item:active {
-  background: rgba(255, 107, 0, 0.15);
+  transform: translateY(0);
+  background: rgba(255, 107, 0, 0.12);
+  border-color: var(--tf-orange);
+}
+
+.bbs-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--tf-orange);
+  border-radius: 3px;
+  color: var(--tf-orange);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--bbs-font);
+  flex-shrink: 0;
+  background: rgba(255, 107, 0, 0.08);
+}
+
+.bbs-menu-item:hover .bbs-key {
+  background: var(--tf-orange);
+  color: #0a0008;
+}
+
+.bbs-label {
+  color: var(--ansi-bright-white);
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+/* ─── Status Line ─── */
+.bbs-status-line {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  font-size: 11px;
+  letter-spacing: 1px;
 }
 
 /* ─── Prompt ─── */
@@ -453,6 +794,15 @@
   margin: 0 0 16px;
   white-space: pre;
   text-align: center;
+}
+
+.bbs-section-header + .bbs-section-body::before {
+  content: "";
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--tf-purple), var(--tf-orange), var(--tf-purple), transparent);
+  margin: 0 auto 20px;
+  max-width: 400px;
 }
 
 .bbs-section-body {
@@ -670,13 +1020,24 @@
 
 /* ─── Responsive ─── */
 @media (max-width: 900px) {
-  .desk { width: 70vw; }
+  .desk { width: 80vw; }
+  .hw-stack { width: 60vw; }
+  .desk-surface { width: 96vw; }
+  .wall { padding: 16px 20px 0; gap: 20px; }
 }
 
 @media (max-width: 700px) {
   :root { --bbs-font-size: 16px; }
-  .desk { width: 96vw; min-width: 320px; margin: 8px auto; }
-  .bbs-menu-row { flex-direction: column; padding: 0 12px; gap: 0; }
+  .desk { width: 96vw; min-width: 320px; }
+  .hw-stack { width: 90vw; min-width: 300px; }
+  .desk-surface { width: 100vw; min-width: 340px; }
+  .desk-item { display: none; }
+  .wall-poster { display: none; }
+  .wall { min-height: 30px; padding: 10px 0 0; }
+  .bbs-menu-row { flex-direction: column; gap: 8px; }
+  .bbs-menu-item { max-width: 100%; }
+  .bbs-hero-title { font-size: 36px; letter-spacing: 4px; }
+  .bbs-hero-sub { font-size: 14px; letter-spacing: 10px; }
   .bbs-banner { font-size: 10px; }
   .bbs-splash-title { font-size: 36px; letter-spacing: 4px; }
   .bbs-splash-sub { font-size: 16px; letter-spacing: 10px; }
@@ -684,17 +1045,18 @@
   .hw-monitor-body { padding: 8px 8px 0; }
   .hw-brand-label { font-size: 9px; letter-spacing: 1px; }
   .hw-computer-body { padding: 6px 12px; gap: 12px; }
-  .hw-brand-logo { font-size: 10px; }
-  .hw-brand-model { display: none; }
 }
 
 @media (max-width: 480px) {
   :root { --bbs-font-size: 14px; }
   .bbs-banner { font-size: 8px; }
+  .bbs-hero-title { font-size: 28px; letter-spacing: 3px; }
+  .bbs-hero-sub { font-size: 12px; letter-spacing: 8px; }
   .bbs-splash-title { font-size: 28px; letter-spacing: 3px; }
   .bbs-splash-sub { font-size: 13px; letter-spacing: 8px; }
   .hw-computer-ports { display: none; }
   .hw-stand-neck { height: 14px; width: 30px; }
+  .desk-edge { height: 12px; }
 }
 
 @media print {

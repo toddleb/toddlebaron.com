@@ -6,54 +6,64 @@
 <div id="bbs-content">
   <!-- ═══ Main Menu Screen ═══ -->
   <section id="bbs-screen-menu" class="bbs-screen bbs-active">
-    <!-- T-NET Banner (inside monitor screen) -->
-    <pre class="bbs-banner"><span class="tf-orange">████████╗   ███╗   ██╗ ███████╗ ████████╗</span>
-<span class="tf-orange">╚══██╔══╝   ████╗  ██║ ██╔════╝ ╚══██╔══╝</span>
-<span class="tf-orange">   ██║  ═══ ██╔██╗ ██║ █████╗      ██║</span>
-<span class="tf-orange">   ██║      ██║╚██╗██║ ██╔══╝      ██║</span>
-<span class="tf-orange">   ██║      ██║ ╚████║ ███████╗    ██║</span>
-<span class="tf-orange">   ╚═╝      ╚═╝  ╚═══╝ ╚══════╝    ╚═╝</span>
-
-  <span class="tf-purple-bright">Personal Network of Todd LeBaron</span>
-  <span class="ansi-bright-black">Est. 1984 · Scottsdale, AZ · Node 1</span></pre>
+    <!-- T-NET Title (matches splash aesthetic) -->
+    <div class="bbs-hero">
+      <div class="bbs-hero-title">T – N E T</div>
+      <div class="bbs-hero-sub">B  B  S</div>
+      <div class="bbs-gradient-line"></div>
+      <div class="bbs-hero-tagline">PERSONAL NETWORK OF TODD LEBARON</div>
+      <div class="bbs-hero-meta">Est. 1984 · Scottsdale, AZ · Node 1</div>
+    </div>
 
     <div class="bbs-menu">
-      <div class="bbs-menu-border">
-        <span class="tf-purple">┌─── </span><span class="tf-orange">MAIN MENU</span><span class="tf-purple"> ──────────────────────────────────────────────┐</span>
-      </div>
+      <div class="bbs-menu-label"><span class="tf-orange">MAIN MENU</span></div>
+      <div class="bbs-gradient-line"></div>
       <div class="bbs-menu-items">
         <div class="bbs-menu-row">
           <span class="bbs-menu-item" data-bbs-nav="about">
-            <span class="tf-orange">[A]</span> <span class="ansi-bright-white">About the SysOp</span>
+            <span class="bbs-key">A</span> <span class="bbs-label">About the SysOp</span>
           </span>
           <span class="bbs-menu-item" data-bbs-nav="blog">
-            <span class="tf-orange">[B]</span> <span class="ansi-bright-white">Bulletins</span>
+            <span class="bbs-key">B</span> <span class="bbs-label">Bulletins</span>
           </span>
         </div>
         <div class="bbs-menu-row">
           <span class="bbs-menu-item" data-bbs-nav="computing-history">
-            <span class="tf-orange">[H]</span> <span class="ansi-bright-white">Computing History</span>
+            <span class="bbs-key">H</span> <span class="bbs-label">Computing History</span>
           </span>
           <span class="bbs-menu-item" data-bbs-nav="contact">
-            <span class="tf-orange">[M]</span> <span class="ansi-bright-white">Mail SysOp</span>
+            <span class="bbs-key">M</span> <span class="bbs-label">Mail SysOp</span>
           </span>
         </div>
         <div class="bbs-menu-row">
           <span class="bbs-menu-item" data-bbs-nav="resume">
-            <span class="tf-orange">[R]</span> <span class="ansi-bright-white">Résumé / Dossier</span>
+            <span class="bbs-key">R</span> <span class="bbs-label">Résumé / Dossier</span>
           </span>
           <span class="bbs-menu-item" data-bbs-nav="goodbye">
-            <span class="tf-orange">[G]</span> <span class="ansi-bright-white">Goodbye (Logoff)</span>
+            <span class="bbs-key">G</span> <span class="bbs-label">Goodbye (Logoff)</span>
+          </span>
+        </div>
+        <div class="bbs-menu-row">
+          <span class="bbs-menu-item" id="bbs-reboot">
+            <span class="bbs-key">!</span> <span class="bbs-label">Reboot System</span>
           </span>
         </div>
       </div>
-      <div class="bbs-menu-border">
-        <span class="tf-purple">└──────────────────────────────────────────────────────────────────┘</span>
-      </div>
+      <div class="bbs-gradient-line"></div>
     </div>
 
     <div class="bbs-prompt">
       <span class="tf-purple-bright">Command: </span><span class="bbs-cursor">█</span>
+    </div>
+
+    <div class="bbs-status-line">
+      <span class="ansi-bright-black">14400 baud</span>
+      <span class="ansi-bright-black">·</span>
+      <span class="ansi-bright-black">ANSI color</span>
+      <span class="ansi-bright-black">·</span>
+      <span class="ansi-bright-black">Caller #48,291</span>
+      <span class="ansi-bright-black">·</span>
+      <span class="tf-gold">3 new messages</span>
     </div>
   </section>
 
@@ -82,6 +92,7 @@
     m: "contact",
     r: "resume",
     g: "goodbye",
+    "!": "reboot",
   };
 
   function showScreen(id: string): void {
@@ -127,12 +138,25 @@
       if (screen) {
         if (screen === "goodbye") {
           triggerLogoff();
+        } else if (screen === "reboot") {
+          triggerReboot();
         } else {
           showScreen(screen);
         }
       }
     }
   });
+
+  // Reboot — replay boot sequence in-place (no reload = keeps audio activation)
+  function triggerReboot(): void {
+    document.cookie = "toddlebaron-visited=;path=/;max-age=0";
+    showScreen("menu");
+    if (typeof (window as any).__rebootBBS === "function") {
+      (window as any).__rebootBBS();
+    }
+  }
+
+  document.getElementById("bbs-reboot")?.addEventListener("click", triggerReboot);
 
   // Logoff
   function triggerLogoff(): void {
