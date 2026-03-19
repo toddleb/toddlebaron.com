@@ -1604,3 +1604,12 @@
   .sgi-ss-matrix-col { animation: none !important; }
   .sgi-ss-nebula { animation: none !important; }
 }
+
+/* ─── Time-of-Day ─── */
+body[data-time="night"] .sgi-desktop {
+  filter: brightness(0.85);
+}
+
+body[data-time="morning"] .sgi-desktop {
+  filter: brightness(1.05);
+}

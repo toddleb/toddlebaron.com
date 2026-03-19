@@ -1067,3 +1067,25 @@
     height: 22px;
   }
 }
+
+/* ─── Time-of-Day ─── */
+body[data-time="night"] .nx-dock { opacity: 0.85; }
+body[data-time="night"] .nx-shelf-btn { box-shadow: 0 0 8px rgba(255,200,100,0.15); }
+
+/* ─── Idle ─── */
+.idle-active .nx-desktop::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9000;
+}
+
+.idle-active .nx-dock-tile {
+  animation: nx-idle-pulse 3s ease-in-out infinite;
+}
+
+@keyframes nx-idle-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}

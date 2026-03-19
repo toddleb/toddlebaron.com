@@ -66,6 +66,9 @@ const { title, description } = Astro.props;
       import { initDesktopIcons } from "../engine/desktop";
       import { initAudio, playSound, toggleMute, isMuted } from "../engine/audio";
       import { registerWindow, openWindow, closeWindow, minimizeWindow, maximizeWindow, startDrag, startResize, bringToFront, initKeyboardNav, setWindowDesk, switchDesk, cascadeAll, tileAll } from "../engine/wm";
+      import { initTimeOfDay, getTimePeriod, onPeriodChange } from "../engine/time-of-day";
+      import { startAmbient } from "../engine/ambient";
+      import { initTypingSounds, playSoftClick, playThud, playNoiseBurst } from "../engine/typing-sounds";
 
       // Wait for boot to complete (or skip)
       document.addEventListener("boot:complete", () => {
@@ -75,6 +78,35 @@ const { title, description } = Astro.props;
         initDesktopIcons();
         initKeyboardNav();
         openWindow("console");
+
+        // Time-of-day + ambient
+        initTimeOfDay();
+        startAmbient("sgi");
+        initTypingSounds("sgi");
+
+        // Wire drag sounds
+        document.addEventListener("wm:drag-start", () => playSoftClick());
+        document.addEventListener("wm:drag-end", () => playThud());
+
+        // Wire folder open and context menu sounds
+        document.querySelectorAll(".fm-folder").forEach((el) => {
+          el.addEventListener("click", () => playNoiseBurst(2000, 8, 0.03));
+        });
+        document.addEventListener("contextmenu", () => playSoftClick());
+
+        // Status bar time indicator (sun/moon)
+        const statusTimeSpan = document.createElement("span");
+        statusTimeSpan.className = "sgi-status-time-icon";
+        statusTimeSpan.style.cssText = "margin-left:8px;font-size:12px;";
+        const statusBar = document.querySelector(".sgi-status-bar-right, .sgi-toolchest");
+        if (statusBar) statusBar.appendChild(statusTimeSpan);
+
+        function updateTimeIcon() {
+          const p = getTimePeriod();
+          statusTimeSpan.textContent = (p === "night" || p === "evening") ? "🌙" : "☀️";
+        }
+        updateTimeIcon();
+        onPeriodChange(updateTimeIcon);
         // Assign desks
         const deskMap: Record<string, string> = {
           about: "work", resume: "work", console: "work",
@@ -450,10 +482,14 @@ const { title, description } = Astro.props;
       });
 
       // ============================
-      // Screensaver idle timer (90s)
+      // Screensaver idle timer (time-aware)
       // ============================
       let idleTimer: ReturnType<typeof setTimeout> | null = null;
-      const IDLE_TIMEOUT = 90000;
+
+      function getSSTimeout(): number {
+        const p = getTimePeriod();
+        return (p === "night" || p === "evening") ? 60_000 : 90_000;
+      }
 
       function resetIdleTimer(): void {
         if (idleTimer) clearTimeout(idleTimer);
@@ -465,7 +501,7 @@ const { title, description } = Astro.props;
         idleTimer = setTimeout(() => {
           const desktop = document.getElementById("desktop");
           if (desktop) desktop.classList.add("screensaver-active");
-        }, IDLE_TIMEOUT);
+        }, getSSTimeout());
       }
 
       document.addEventListener("boot:complete", () => {
@@ -473,6 +509,8 @@ const { title, description } = Astro.props;
         document.addEventListener("mousemove", resetIdleTimer);
         document.addEventListener("keydown", resetIdleTimer);
         document.addEventListener("click", resetIdleTimer);
+        // Re-arm timer when time period changes
+        onPeriodChange(() => resetIdleTimer());
       });
 
       // ============================

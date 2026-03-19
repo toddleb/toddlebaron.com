@@ -53,6 +53,9 @@ const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Th
       getWindows, getActiveWindowId, initKeyboardNav, shadeWindow,
     } from "../engine/wm";
     import "../themes/nextstep/theme";
+    import { initTimeOfDay } from "../engine/time-of-day";
+    import { startAmbient } from "../engine/ambient";
+    import { initTypingSounds, playShelfClick, playSpringBounce, playSwoosh } from "../engine/typing-sounds";
 
     // ── Clock ──────────────────────────────
     function updateClock() {
@@ -249,6 +252,31 @@ const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Th
         bringToFront("about-next-credits");
       }
     });
+
+    // ── Ambient + Time-of-Day + Idle ───────
+    initTimeOfDay();
+    startAmbient("nextstep");
+    initTypingSounds("nextstep");
+
+    // NX UI sounds
+    document.querySelectorAll(".nx-shelf-btn, .nx-shelf-item").forEach((el) => {
+      el.addEventListener("click", () => playShelfClick());
+    });
+    document.addEventListener("wm:window-opened", () => playSpringBounce());
+    document.addEventListener("wm:window-shaded", () => playSwoosh(false));
+    document.addEventListener("wm:window-unshaded", () => playSwoosh(true));
+
+    // NX idle timer (2 minutes)
+    let nxIdleTimer: ReturnType<typeof setTimeout>;
+    function resetNXIdle() {
+      document.body.classList.remove("idle-active");
+      clearTimeout(nxIdleTimer);
+      nxIdleTimer = setTimeout(() => document.body.classList.add("idle-active"), 120_000);
+    }
+    resetNXIdle();
+    document.addEventListener("mousemove", resetNXIdle);
+    document.addEventListener("keydown", resetNXIdle);
+    document.addEventListener("click", resetNXIdle);
 
     // ── Now Playing — random album ─────────
     import { playlist } from "../data/playlist";
