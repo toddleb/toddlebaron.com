@@ -1,0 +1,26 @@
+---
+// src/themes/bbs/DeskLamp.astro — Desk lamp with light cone and dust motes
+const motes = Array.from({ length: 12 }, (_, i) => ({
+  x: 20 + Math.random() * 60,
+  size: 2 + Math.random() * 2,
+  duration: 8 + Math.random() * 7,
+  delay: Math.random() * 10,
+  opacity: 0.3 + Math.random() * 0.3,
+}));
+---
+
+<div class="desk-lamp">
+  <div class="lamp-shade"></div>
+  <div class="lamp-stem"></div>
+  <div class="lamp-base"></div>
+  <div class="lamp-light-cone">
+    <div class="lamp-dust-motes">
+      {motes.map((m) => (
+        <div
+          class="dust-mote"
+          style={`left:${m.x}%;width:${m.size}px;height:${m.size}px;animation-duration:${m.duration}s;animation-delay:${m.delay}s;opacity:${m.opacity}`}
+        />
+      ))}
+    </div>
+  </div>
+</div>
