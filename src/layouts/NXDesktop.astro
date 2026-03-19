@@ -50,7 +50,7 @@ const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Th
     import {
       registerWindow, openWindow, closeWindow, minimizeWindow,
       maximizeWindow, bringToFront, startDrag, startResize,
-      getWindows, getActiveWindowId, initKeyboardNav,
+      getWindows, getActiveWindowId, initKeyboardNav, shadeWindow,
     } from "../engine/wm";
     import "../themes/nextstep/theme";
 
@@ -132,10 +132,7 @@ const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Th
       const shadeToggle = target.closest<HTMLElement>("[data-shade-toggle]");
       if (shadeToggle) {
         const id = shadeToggle.dataset.shadeToggle;
-        const windowEl = document.querySelector<HTMLElement>(`.nx-window[data-window-id="${id}"]`);
-        if (windowEl) {
-          windowEl.classList.toggle("shaded");
-        }
+        if (id) shadeWindow(id);
       }
     });
 

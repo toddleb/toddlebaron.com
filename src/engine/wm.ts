@@ -118,6 +118,16 @@ export function bringToFront(id: string): void {
   document.dispatchEvent(new CustomEvent("wm:window-focused", { detail: { id } }));
 }
 
+export function shadeWindow(id: string): void {
+  const win = windows.get(id);
+  if (!win) return;
+  win.shaded = !win.shaded;
+  const el = getWindowEl(id);
+  if (el) el.classList.toggle("shaded", win.shaded);
+  const eventName = win.shaded ? "wm:window-shaded" : "wm:window-unshaded";
+  document.dispatchEvent(new CustomEvent(eventName, { detail: { id } }));
+}
+
 export function startDrag(id: string, e: MouseEvent): void {
   const win = windows.get(id);
   if (!win || win.maximized) return;
@@ -131,6 +141,7 @@ export function startDrag(id: string, e: MouseEvent): void {
   };
   document.addEventListener("mousemove", onDragMove);
   document.addEventListener("mouseup", onDragEnd);
+  document.dispatchEvent(new CustomEvent("wm:drag-start", { detail: { id } }));
 }
 
 function onDragMove(e: MouseEvent): void {
@@ -143,6 +154,9 @@ function onDragMove(e: MouseEvent): void {
 }
 
 function onDragEnd(): void {
+  if (dragState) {
+    document.dispatchEvent(new CustomEvent("wm:drag-end", { detail: { id: dragState.windowId } }));
+  }
   dragState = null;
   document.removeEventListener("mousemove", onDragMove);
   document.removeEventListener("mouseup", onDragEnd);
