@@ -1,6 +1,6 @@
 ---
 // src/layouts/BBS.astro — T-NET BBS
-// Screen: CRT terminal at top, physical modem hardware at bottom
+// Desk layout: Monitor (screen = all content) → Computer → Modem
 import SEOHead from "../components/SEOHead.astro";
 import Modem from "../themes/bbs/Modem.astro";
 import "../themes/bbs/theme.css";
@@ -18,12 +18,43 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
     <slot name="head" />
   </head>
   <body class="bbs-body">
-    <div class="bbs-crt">
-      <div class="bbs-scanlines"></div>
-      <div class="bbs-terminal" id="bbs-terminal">
-        <slot />
+    <div class="desk">
+      <!-- Monitor -->
+      <div class="hw-monitor">
+        <div class="hw-monitor-body">
+          <div class="hw-screen" id="bbs-terminal">
+            <div class="bbs-scanlines"></div>
+            <div class="hw-screen-content">
+              <slot />
+            </div>
+          </div>
+          <div class="hw-monitor-chin">
+            <span class="hw-brand-label">Apple XXVIe</span>
+            <span class="hw-power-led"></span>
+          </div>
+        </div>
+        <div class="hw-stand-neck"></div>
       </div>
+      <!-- Computer -->
+      <div class="hw-computer">
+        <div class="hw-computer-body">
+          <div class="hw-computer-brand">
+            <div class="hw-brand-logo">APPLE</div>
+            <div class="hw-brand-model">XXVIe · 2026</div>
+          </div>
+          <div class="hw-computer-ports">
+            <span class="hw-port"></span>
+            <span class="hw-port"></span>
+            <span class="hw-port hw-port-wide"></span>
+          </div>
+          <div class="hw-computer-power">
+            <span class="hw-power-led"></span>
+            <span class="hw-power-label">PWR</span>
+          </div>
+        </div>
+      </div>
+      <!-- Modem -->
+      <Modem />
     </div>
-    <Modem />
   </body>
 </html>

@@ -43,8 +43,9 @@
 .bbs-body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  background: #000;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #111;
   font-family: var(--bbs-font);
   font-size: var(--bbs-font-size);
   color: var(--ansi-white);
@@ -52,18 +53,24 @@
   -webkit-font-smoothing: none;
 }
 
-/* ─── CRT Container ─── */
-.bbs-crt {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
+/* ─── Desk Layout (Monitor → Computer → Modem stacked) ─── */
+.desk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50vw;
+  max-width: 640px;
+  min-width: 420px;
+  margin: 20px auto;
+  gap: 0;
 }
 
+/* ─── Scanlines (inside monitor only) ─── */
 .bbs-scanlines {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 10;
   background: repeating-linear-gradient(
     0deg,
     transparent,
@@ -72,31 +79,6 @@
     rgba(0, 0, 0, 0.05) 4px
   );
 }
-
-.bbs-crt::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 999;
-  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.4) 100%);
-}
-
-/* ─── Terminal ─── */
-.bbs-terminal {
-  position: relative;
-  z-index: 1;
-  height: 100vh;
-  overflow-y: auto;
-  padding: 20px 24px 80px;
-  box-sizing: border-box;
-  scrollbar-width: thin;
-  scrollbar-color: var(--tf-purple) #111;
-}
-
-.bbs-terminal::-webkit-scrollbar { width: 8px; }
-.bbs-terminal::-webkit-scrollbar-track { background: #0a0a0a; }
-.bbs-terminal::-webkit-scrollbar-thumb { background: var(--tf-purple); border-radius: 4px; }
 
 /* ─── Color Utilities ─── */
 .ansi-black { color: var(--ansi-black); }
@@ -123,19 +105,20 @@
 .tf-orange-bright { color: var(--tf-orange-bright); }
 .tf-gold { color: var(--tf-gold); }
 
-/* ─── Boot Screen ─── */
+/* ─── Boot Screen (inside monitor) ─── */
 .bbs-boot {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  background: #000;
-  z-index: 5000;
+  background: #0a0008;
+  z-index: 100;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 20px 24px 80px;
+  padding: 16px 20px;
   font-family: var(--bbs-font);
   font-size: var(--bbs-font-size);
   overflow: hidden;
+  border-radius: 4px;
 }
 
 .bbs-boot-line {
@@ -149,18 +132,19 @@
   opacity: 1;
 }
 
-/* ─── Splash Screen (after modem, before menu) ─── */
+/* ─── Splash Screen (inside monitor) ─── */
 .bbs-splash {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  background: #000;
-  z-index: 4500;
+  background: #0a0008;
+  z-index: 90;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   opacity: 0;
   transition: opacity 0.6s ease-in;
+  border-radius: 4px;
 }
 
 .bbs-splash.visible {
@@ -232,13 +216,10 @@
   to { opacity: 1; }
 }
 
-/* ─── Hardware Stack (Monitor + Computer) ─── */
-.hw-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 auto 16px;
-  max-width: 640px;
+/* ─── Hardware Stack (Monitor + Computer + Modem) ─── */
+
+.hw-monitor {
+  width: 100%;
 }
 
 .hw-monitor-body {
@@ -251,19 +232,32 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     inset 0 -1px 0 rgba(0, 0, 0, 0.3);
   width: 100%;
-  max-width: 580px;
+  box-sizing: border-box;
 }
 
 .hw-screen {
+  position: relative;
   background: #0a0008;
   border: 2px solid #333;
   border-radius: 4px;
-  padding: 16px 20px;
   box-shadow:
     inset 0 0 30px rgba(74, 26, 122, 0.15),
     inset 0 0 60px rgba(0, 0, 0, 0.5);
-  overflow-x: auto;
+  overflow: hidden;
+  min-height: 60vh;
 }
+
+.hw-screen-content {
+  padding: 16px 20px;
+  overflow-y: auto;
+  max-height: 70vh;
+  scrollbar-width: thin;
+  scrollbar-color: var(--tf-purple) #111;
+}
+
+.hw-screen-content::-webkit-scrollbar { width: 6px; }
+.hw-screen-content::-webkit-scrollbar-track { background: #0a0008; }
+.hw-screen-content::-webkit-scrollbar-thumb { background: var(--tf-purple); border-radius: 3px; }
 
 .hw-screen-text {
   font-family: var(--bbs-font);
@@ -309,7 +303,6 @@
 
 .hw-computer {
   width: 100%;
-  max-width: 500px;
 }
 
 .hw-computer-body {
@@ -623,36 +616,21 @@
   pointer-events: none;
 }
 
-/* ─── Status Bar ─── */
-.bbs-statusbar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(90deg, var(--tf-purple-deep), var(--tf-purple));
-  color: var(--ansi-bright-white);
-  font-family: var(--bbs-font);
-  font-size: 14px;
-  font-weight: bold;
-  padding: 4px 16px;
-  display: flex;
-  justify-content: space-between;
-  z-index: 500;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
+/* ─── Status Bar (unused, kept for future) ─── */
 
-/* ─── Logoff Overlay ─── */
+/* ─── Logoff Overlay (inside monitor) ─── */
 .bbs-logoff {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  background: #000;
-  z-index: 6000;
+  background: #0a0008;
+  z-index: 200;
   display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-family: var(--bbs-font);
   font-size: var(--bbs-font-size);
+  border-radius: 4px;
 }
 
 .bbs-logoff.active {
@@ -691,17 +669,18 @@
 }
 
 /* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .desk { width: 70vw; }
+}
+
 @media (max-width: 700px) {
-  :root { --bbs-font-size: 17px; }
-  .bbs-terminal { padding: 12px 10px 72px; }
+  :root { --bbs-font-size: 16px; }
+  .desk { width: 96vw; min-width: 320px; margin: 8px auto; }
   .bbs-menu-row { flex-direction: column; padding: 0 12px; gap: 0; }
   .bbs-banner { font-size: 10px; }
-  .bbs-sysinfo { font-size: 13px; }
-  .bbs-statusbar { font-size: 13px; padding: 3px 10px; }
   .bbs-splash-title { font-size: 36px; letter-spacing: 4px; }
   .bbs-splash-sub { font-size: 16px; letter-spacing: 10px; }
-  .hw-screen-text { font-size: 12px; }
-  .hw-screen { padding: 10px 12px; }
+  .hw-screen-content { padding: 10px 12px; }
   .hw-monitor-body { padding: 8px 8px 0; }
   .hw-brand-label { font-size: 9px; letter-spacing: 1px; }
   .hw-computer-body { padding: 6px 12px; gap: 12px; }
@@ -710,11 +689,10 @@
 }
 
 @media (max-width: 480px) {
-  :root { --bbs-font-size: 16px; }
+  :root { --bbs-font-size: 14px; }
   .bbs-banner { font-size: 8px; }
   .bbs-splash-title { font-size: 28px; letter-spacing: 3px; }
   .bbs-splash-sub { font-size: 13px; letter-spacing: 8px; }
-  .hw-screen-text { font-size: 10px; }
   .hw-computer-ports { display: none; }
   .hw-stand-neck { height: 14px; width: 30px; }
 }
@@ -862,17 +840,18 @@
   border-color: var(--tf-orange);
 }
 
-/* ─── WarGames Matrix Login ─── */
+/* ─── WarGames Matrix Login (inside monitor) ─── */
 .bbs-matrix {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  background: #000;
-  z-index: 4800;
+  background: #0a0008;
+  z-index: 95;
   display: none;
   flex-direction: column;
   justify-content: center;
   font-family: var(--bbs-font);
   font-size: var(--bbs-font-size);
+  border-radius: 4px;
 }
 
 .bbs-matrix.visible {

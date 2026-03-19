@@ -6,13 +6,8 @@
 <div id="bbs-content">
   <!-- ═══ Main Menu Screen ═══ -->
   <section id="bbs-screen-menu" class="bbs-screen bbs-active">
-    <!-- Hardware Stack: Monitor → Computer → (Modem is fixed at bottom via Modem.astro) -->
-    <div class="hw-stack">
-      <!-- Monitor -->
-      <div class="hw-monitor">
-        <div class="hw-monitor-body">
-          <div class="hw-screen">
-            <pre class="hw-screen-text"><span class="tf-orange">████████╗   ███╗   ██╗ ███████╗ ████████╗</span>
+    <!-- T-NET Banner (inside monitor screen) -->
+    <pre class="bbs-banner"><span class="tf-orange">████████╗   ███╗   ██╗ ███████╗ ████████╗</span>
 <span class="tf-orange">╚══██╔══╝   ████╗  ██║ ██╔════╝ ╚══██╔══╝</span>
 <span class="tf-orange">   ██║  ═══ ██╔██╗ ██║ █████╗      ██║</span>
 <span class="tf-orange">   ██║      ██║╚██╗██║ ██╔══╝      ██║</span>
@@ -21,93 +16,6 @@
 
   <span class="tf-purple-bright">Personal Network of Todd LeBaron</span>
   <span class="ansi-bright-black">Est. 1984 · Scottsdale, AZ · Node 1</span></pre>
-          </div>
-          <div class="hw-monitor-chin">
-            <span class="hw-brand-label">Apple Monitor XXVIe</span>
-            <span class="hw-power-led"></span>
-          </div>
-        </div>
-        <div class="hw-stand-neck"></div>
-      </div>
-      <!-- Computer -->
-      <div class="hw-computer">
-        <div class="hw-computer-body">
-          <div class="hw-computer-brand">
-            <div class="hw-brand-logo">APPLE</div>
-            <div class="hw-brand-model">XXVIe · 2026</div>
-          </div>
-          <div class="hw-computer-ports">
-            <span class="hw-port"></span>
-            <span class="hw-port"></span>
-            <span class="hw-port hw-port-wide"></span>
-          </div>
-          <div class="hw-computer-power">
-            <span class="hw-power-led"></span>
-            <span class="hw-power-label">PWR</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SysOp Status -->
-    <div class="bbs-sysop-status">
-      <span class="tf-orange">☎</span> <span class="ansi-bright-white">SysOp is IN</span>
-      <span class="ansi-bright-black"> · </span>
-      <span class="ansi-green">Node 1 of 4</span>
-      <span class="ansi-bright-black"> · </span>
-      <span class="tf-gold">You are caller #48,291</span>
-      <span class="ansi-bright-black"> · </span>
-      <span class="tf-purple-bright">"The machines changed. The mission didn't."</span>
-    </div>
-
-    <!-- Last 10 Callers -->
-    <div class="bbs-callers-box">
-      <div class="tf-purple" style="text-align:center;margin-bottom:6px;">═══ LAST 10 CALLERS ═══</div>
-      <pre class="bbs-callers-table"><span class="tf-orange-bright">HANDLE           LOCATION              BAUD   TIME</span>
-<span class="tf-purple">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
-<span class="tf-orange">TLB</span>              <span class="ansi-white">Scottsdale, AZ</span>        <span class="ansi-green">2400K</span>  <span class="ansi-bright-black">02:47</span>
-<span class="ansi-bright-white">JoshuaW</span>          <span class="ansi-white">NORAD, Cheyenne Mtn</span>  <span class="ansi-green">2400K</span>  <span class="ansi-bright-black">04:12</span>
-<span class="ansi-bright-white">WOPR</span>             <span class="ansi-white">Offutt AFB, NE</span>        <span class="ansi-green">2400K</span>  <span class="ansi-bright-black">01:22</span>
-<span class="ansi-bright-white">l33t_h4x0r</span>      <span class="ansi-white">127.0.0.1</span>             <span class="ansi-green">2400K</span>  <span class="ansi-bright-black">00:45</span>
-<span class="ansi-bright-white">CIA_Van_#7</span>       <span class="ansi-white">[REDACTED]</span>            <span class="ansi-green">2400K</span>  <span class="ansi-bright-black">00:33</span>
-<span class="ansi-bright-white">NEO</span>              <span class="ansi-white">The Matrix</span>            <span class="ansi-green">2400K</span>  <span class="ansi-bright-black">00:28</span>
-<span class="ansi-bright-white">MrRobot</span>          <span class="ansi-white">fsociety HQ, NYC</span>     <span class="ansi-green">2400K</span>  <span class="ansi-bright-black">00:52</span>
-<span class="ansi-bright-white">DeadPool</span>         <span class="ansi-white">4th Wall, Sector 7</span>   <span class="ansi-green">2400K</span>  <span class="ansi-bright-black">00:15</span>
-<span class="ansi-bright-white">SarahConnor</span>      <span class="ansi-white">Los Angeles, CA</span>       <span class="ansi-green">2400K</span>  <span class="ansi-bright-black">00:19</span>
-<span class="ansi-bright-white">VISITOR</span>          <span class="ansi-white">Your Location</span>         <span class="ansi-green">2400K</span>  <span class="ansi-bright-black">00:01</span></pre>
-    </div>
-
-    <!-- One-Liner Wall -->
-    <div class="bbs-oneliner-box">
-      <div class="tf-purple" style="text-align:center;margin-bottom:6px;">═══ ONE-LINER WALL ═══</div>
-      <div class="bbs-oneliner-wall">
-        <div><span class="tf-orange">TLB:</span> <span class="ansi-white">Started on PDP-11s. Still shipping code.</span></div>
-        <div><span class="ansi-bright-white">JoshuaW:</span> <span class="ansi-white">SHALL WE PLAY A GAME?</span></div>
-        <div><span class="ansi-bright-white">WOPR:</span> <span class="ansi-white">The only winning move is <span class="tf-purple-bright">git revert</span>.</span></div>
-        <div><span class="ansi-bright-white">l33t_h4x0r:</span> <span class="ansi-white">rm -rf / is just aggressive spring cleaning</span></div>
-        <div><span class="ansi-bright-white">CIA_Van_#7:</span> <span class="ansi-white">We can neither confirm nor deny this BBS exists.</span></div>
-        <div><span class="ansi-bright-white">NEO:</span> <span class="ansi-white">I know kung fu... and TypeScript.</span></div>
-        <div><span class="ansi-bright-white">MrRobot:</span> <span class="ansi-white">Hello, friend. Nice BBS.</span></div>
-        <div><span class="ansi-bright-white">SarahConnor:</span> <span class="ansi-white">Come with me if you want to code.</span></div>
-        <div><span class="ansi-bright-white">DeadPool:</span> <span class="ansi-white">Fourth wall? What fourth wall? *waves at visitor*</span></div>
-        <div><span class="ansi-bright-white">ferris_bueller:</span> <span class="ansi-white">Life moves fast. If you don't git pull, you might miss it.</span></div>
-        <div><span class="ansi-bright-white">DarthCoder:</span> <span class="ansi-white">I find your lack of tests... disturbing.</span></div>
-        <div><span class="tf-orange">TLB:</span> <span class="ansi-white">The machines changed. The mission didn't.</span></div>
-      </div>
-    </div>
-
-    <!-- Who's Online -->
-    <div class="bbs-whos-online">
-      <div class="tf-purple" style="text-align:center;margin-bottom:4px;">═══ WHO'S ONLINE ═══</div>
-      <div class="bbs-online-grid">
-        <span><span class="tf-orange">●</span> <span class="tf-orange">TLB</span> <span class="ansi-bright-black">[SysOp]</span></span>
-        <span><span class="ansi-green">●</span> <span class="ansi-bright-white">VISITOR</span> <span class="ansi-bright-black">[Guest]</span></span>
-        <span><span class="ansi-green">●</span> <span class="ansi-bright-white">l33t_h4x0r</span> <span class="ansi-bright-black">[Elite]</span></span>
-        <span><span class="ansi-green">●</span> <span class="ansi-bright-white">CIA_Van_#7</span> <span class="ansi-bright-black">[Co-SysOp]</span></span>
-        <span><span class="tf-purple-bright">●</span> <span class="ansi-bright-white">WOPR</span> <span class="ansi-bright-black">[AI]</span></span>
-        <span><span class="ansi-green">●</span> <span class="ansi-bright-white">JoshuaW</span> <span class="ansi-bright-black">[Regular]</span></span>
-      </div>
-    </div>
 
     <div class="bbs-menu">
       <div class="bbs-menu-border">
@@ -123,14 +31,6 @@
           </span>
         </div>
         <div class="bbs-menu-row">
-          <span class="bbs-menu-item" data-bbs-nav="doors">
-            <span class="tf-orange">[D]</span> <span class="ansi-bright-white">Door Games</span>
-          </span>
-          <span class="bbs-menu-item" data-bbs-nav="files">
-            <span class="tf-orange">[F]</span> <span class="ansi-bright-white">File Area</span>
-          </span>
-        </div>
-        <div class="bbs-menu-row">
           <span class="bbs-menu-item" data-bbs-nav="computing-history">
             <span class="tf-orange">[H]</span> <span class="ansi-bright-white">Computing History</span>
           </span>
@@ -141,22 +41,6 @@
         <div class="bbs-menu-row">
           <span class="bbs-menu-item" data-bbs-nav="resume">
             <span class="tf-orange">[R]</span> <span class="ansi-bright-white">Résumé / Dossier</span>
-          </span>
-          <span class="bbs-menu-item" data-bbs-nav="voting">
-            <span class="tf-orange">[V]</span> <span class="ansi-bright-white">Voting Booth</span>
-          </span>
-        </div>
-        <div class="bbs-menu-row">
-          <span class="bbs-menu-item" data-bbs-nav="ansi-gallery">
-            <span class="tf-orange">[N]</span> <span class="ansi-bright-white">ANSI Art Gallery</span>
-          </span>
-          <span class="bbs-menu-item" data-bbs-nav="sysop-info">
-            <span class="tf-orange">[S]</span> <span class="ansi-bright-white">SysOp Info</span>
-          </span>
-        </div>
-        <div class="bbs-menu-row">
-          <span class="bbs-menu-item" data-bbs-nav="msgboard">
-            <span class="tf-orange">[P]</span> <span class="ansi-bright-white">Message Board</span>
           </span>
           <span class="bbs-menu-item" data-bbs-nav="goodbye">
             <span class="tf-orange">[G]</span> <span class="ansi-bright-white">Goodbye (Logoff)</span>
@@ -176,953 +60,93 @@
   <!-- ═══ Content screens injected from page slot ═══ -->
   <slot />
 
-  <!-- ═══ File Area Screen ═══ -->
-  <section id="bbs-screen-files" class="bbs-screen">
-    <pre class="bbs-section-header"><span class="tf-purple">═══════════════════════════════════════════════</span>
-<span class="tf-orange">          F I L E   A R E A</span>
-<span class="tf-purple">═══════════════════════════════════════════════</span></pre>
-
-    <div class="bbs-file-area">
-      <div class="tf-purple-bright" style="text-align:center;margin-bottom:12px;">Upload/Download Ratio: ∞:1 — SysOp privilege</div>
-      <pre class="bbs-file-listing"><span class="tf-orange-bright">FILENAME             SIZE    DATE       DL#    DESCRIPTION</span>
-<span class="tf-purple">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
-<span class="ansi-bright-white">AICR-V3.ZIP</span>          <span class="ansi-white">42MB</span>   <span class="ansi-bright-black">03/16/26</span>   <span class="tf-gold">847</span>    <span class="ansi-green">AI Code Rally — Enterprise AI governance</span>
-                                                     <span class="ansi-bright-black">  platform. 22 Go microservices. [ACTIVE]</span>
-<span class="ansi-bright-white">OPENSYM.ZIP</span>          <span class="ansi-white">18MB</span>   <span class="ansi-bright-black">01/15/18</span>   <span class="tf-gold">2.1K</span>   <span class="ansi-green">OpenSymmetry — $30M SPM consulting firm</span>
-                                                     <span class="ansi-bright-black">  Founded, built, and led. [FOUNDER]</span>
-<span class="ansi-bright-white">OEXITS.ZIP</span>           <span class="ansi-white">12MB</span>   <span class="ansi-bright-black">06/01/24</span>   <span class="tf-gold">312</span>    <span class="ansi-green">ŒXITS LLC — AI consulting & advisory</span>
-                                                     <span class="ansi-bright-black">  Current venture. [ACTIVE]</span>
-<span class="ansi-bright-white">WARGAMES.TAR</span>         <span class="ansi-white">1.2MB</span>  <span class="ansi-bright-black">05/20/93</span>   <span class="tf-gold">48K</span>    <span class="ansi-red">Strategic Wargaming Systems — STRATCOM</span>
-                                                     <span class="ansi-bright-black">  Nuclear deterrence modeling. [CLASSIFIED]</span>
-<span class="ansi-bright-white">DARPA-AI.TAR</span>         <span class="ansi-white">8.4MB</span>  <span class="ansi-bright-black">03/15/91</span>   <span class="tf-gold">1.5K</span>   <span class="ansi-red">DARPA AI R&amp;D Portfolio — Rome Labs</span>
-                                                     <span class="ansi-bright-black">  $25M portfolio. MIT/CMU/Stanford. [CLASSIFIED]</span>
-<span class="ansi-bright-white">P3-ORION.BIN</span>         <span class="ansi-white">256K</span>   <span class="ansi-bright-black">06/01/87</span>   <span class="tf-gold">892</span>    <span class="ansi-green">P-3 Orion ASW Combat Systems</span>
-                                                     <span class="ansi-bright-black">  Anti-submarine warfare ops. [DECLASSIFIED]</span>
-<span class="ansi-bright-white">CALLIDUS.ZIP</span>         <span class="ansi-white">22MB</span>   <span class="ansi-bright-black">01/01/01</span>   <span class="tf-gold">4.7K</span>   <span class="ansi-green">Callidus TrueComp EMEA — SPM Platform</span>
-                                                     <span class="ansi-bright-black">  Head of Services, London. [LEGACY]</span>
-<span class="ansi-bright-white">RGS-POS.ZIP</span>          <span class="ansi-white">4.2MB</span>  <span class="ansi-bright-black">04/10/22</span>   <span class="tf-gold">203</span>    <span class="ansi-green">Real Good Spirits — POS &amp; Inventory</span>
-                                                     <span class="ansi-bright-black">  Cocktail bar tech. [SOLD]</span>
-<span class="ansi-bright-white">CWC-DOS.EXE</span>          <span class="ansi-white">640K</span>   <span class="ansi-bright-black">09/01/89</span>   <span class="tf-gold">1.8K</span>   <span class="ansi-green">Clear with Computers — IT Training</span>
-                                                     <span class="ansi-bright-black">  Military/civilian tech training. [ARCHIVE]</span>
-</pre>
-      <div style="text-align:center;margin-top:12px;" class="ansi-bright-black">
-        9 file(s) — 108.04MB total — SysOp upload credit: UNLIMITED
-      </div>
-    </div>
-
-    <div class="bbs-return" data-bbs-back>
-      <span class="tf-purple-bright">Press [ESC] to return to Main Menu</span>
-    </div>
-  </section>
-
-  <!-- ═══ Voting Booth Screen ═══ -->
-  <section id="bbs-screen-voting" class="bbs-screen">
-    <pre class="bbs-section-header"><span class="tf-purple">═══════════════════════════════════════════════</span>
-<span class="tf-orange">        V O T I N G   B O O T H</span>
-<span class="tf-purple">═══════════════════════════════════════════════</span></pre>
-
-    <div class="bbs-voting-booth" id="voting-booth">
-      <div class="bbs-poll" data-poll="modem">
-        <div class="tf-orange-bright">■ POLL #1: Best modem brand?</div>
-        <div class="bbs-poll-options">
-          <span class="bbs-poll-btn" data-vote="usr">US Robotics</span>
-          <span class="bbs-poll-btn" data-vote="hayes">Hayes</span>
-          <span class="bbs-poll-btn" data-vote="zoom">Zoom</span>
-          <span class="bbs-poll-btn" data-vote="telebit">Telebit</span>
-        </div>
-        <div class="bbs-poll-results"></div>
-      </div>
-      <div class="bbs-poll" data-poll="captain">
-        <div class="tf-orange-bright">■ POLL #2: Kirk or Picard?</div>
-        <div class="bbs-poll-options">
-          <span class="bbs-poll-btn" data-vote="kirk">Kirk</span>
-          <span class="bbs-poll-btn" data-vote="picard">Picard</span>
-          <span class="bbs-poll-btn" data-vote="sisko">Sisko (dark horse)</span>
-          <span class="bbs-poll-btn" data-vote="janeway">Janeway (chaos pick)</span>
-        </div>
-        <div class="bbs-poll-results"></div>
-      </div>
-      <div class="bbs-poll" data-poll="doorgame">
-        <div class="tf-orange-bright">■ POLL #3: Best door game?</div>
-        <div class="bbs-poll-options">
-          <span class="bbs-poll-btn" data-vote="lord">Legend of the Red Dragon</span>
-          <span class="bbs-poll-btn" data-vote="tw2002">TradeWars 2002</span>
-          <span class="bbs-poll-btn" data-vote="bre">Barren Realms Elite</span>
-          <span class="bbs-poll-btn" data-vote="usurper">Usurper</span>
-        </div>
-        <div class="bbs-poll-results"></div>
-      </div>
-      <div class="bbs-poll" data-poll="os">
-        <div class="tf-orange-bright">■ POLL #4: Best OS of the era?</div>
-        <div class="bbs-poll-options">
-          <span class="bbs-poll-btn" data-vote="dos">DOS 6.22</span>
-          <span class="bbs-poll-btn" data-vote="os2">OS/2 Warp</span>
-          <span class="bbs-poll-btn" data-vote="amiga">AmigaOS</span>
-          <span class="bbs-poll-btn" data-vote="linux">Slackware Linux</span>
-        </div>
-        <div class="bbs-poll-results"></div>
-      </div>
-      <div class="bbs-poll" data-poll="villain">
-        <div class="tf-orange-bright">■ POLL #5: Best 80s/90s villain?</div>
-        <div class="bbs-poll-options">
-          <span class="bbs-poll-btn" data-vote="vader">Darth Vader</span>
-          <span class="bbs-poll-btn" data-vote="t1000">T-1000</span>
-          <span class="bbs-poll-btn" data-vote="gruber">Hans Gruber</span>
-          <span class="bbs-poll-btn" data-vote="biff">Biff Tannen</span>
-        </div>
-        <div class="bbs-poll-results"></div>
-      </div>
-      <div class="bbs-poll" data-poll="tabs">
-        <div class="tf-orange-bright">■ POLL #6: Tabs or Spaces?</div>
-        <div class="bbs-poll-options">
-          <span class="bbs-poll-btn" data-vote="tabs">Tabs (obviously)</span>
-          <span class="bbs-poll-btn" data-vote="spaces">Spaces (civilized)</span>
-          <span class="bbs-poll-btn" data-vote="both">Both (agent of chaos)</span>
-          <span class="bbs-poll-btn" data-vote="butterflies">Real programmers use butterflies</span>
-        </div>
-        <div class="bbs-poll-results"></div>
-      </div>
-      <div class="bbs-poll" data-poll="pizza">
-        <div class="tf-orange-bright">■ POLL #7: Pineapple on pizza?</div>
-        <div class="bbs-poll-options">
-          <span class="bbs-poll-btn" data-vote="yes">Yes (fight me)</span>
-          <span class="bbs-poll-btn" data-vote="no">No (I have standards)</span>
-          <span class="bbs-poll-btn" data-vote="war">This question starts wars</span>
-        </div>
-        <div class="bbs-poll-results"></div>
-      </div>
-      <div class="bbs-poll" data-poll="movie">
-        <div class="tf-orange-bright">■ POLL #8: Best sci-fi computer?</div>
-        <div class="bbs-poll-options">
-          <span class="bbs-poll-btn" data-vote="wopr">WOPR (WarGames)</span>
-          <span class="bbs-poll-btn" data-vote="hal">HAL 9000 (2001)</span>
-          <span class="bbs-poll-btn" data-vote="mcp">MCP (TRON)</span>
-        </div>
-        <div class="bbs-poll-results"></div>
-      </div>
-    </div>
-
-    <div class="bbs-return" data-bbs-back>
-      <span class="tf-purple-bright">Press [ESC] to return to Main Menu</span>
-    </div>
-  </section>
-
-  <!-- ═══ Door Games Screen ═══ -->
-  <section id="bbs-screen-doors" class="bbs-screen">
-    <pre class="bbs-section-header"><span class="tf-purple">═══════════════════════════════════════════════</span>
-<span class="tf-orange">            D O O R   G A M E S</span>
-<span class="tf-purple">═══════════════════════════════════════════════</span></pre>
-
-    <div class="bbs-door-list">
-      <a href="/sgi" class="bbs-door-item">
-        <span class="tf-orange">[1]</span>
-        <span class="tf-purple-bright"> SGI IRIX 6.5</span>
-        <span class="ansi-white"> — The Indigo Magic Desktop</span>
-      </a>
-      <span class="bbs-door-item" data-bbs-nav="adventure" style="cursor:pointer">
-        <span class="tf-orange">[2]</span>
-        <span class="tf-purple-bright"> Career Quest</span>
-        <span class="ansi-white"> — A Text Adventure</span>
-      </span>
-      <span class="bbs-door-item" data-bbs-nav="wargames" style="cursor:pointer">
-        <span class="tf-orange">[3]</span>
-        <span class="tf-purple-bright"> Global Thermonuclear War</span>
-        <span class="ansi-white"> — A Strange Game (WarGames)</span>
-      </span>
-      <div class="bbs-door-item bbs-door-soon">
-        <span class="ansi-bright-black">[4] Legend of the Red Dragon — Coming Soon</span>
-      </div>
-      <div class="bbs-door-item bbs-door-soon">
-        <span class="ansi-bright-black">[5] TradeWars 2002 — Coming Soon</span>
-      </div>
-    </div>
-
-    <div class="bbs-return" data-bbs-back>
-      <span class="tf-purple-bright">Press [ESC] to return to Main Menu</span>
-    </div>
-  </section>
-
-  <!-- ═══ Text Adventure ═══ -->
-  <section id="bbs-screen-adventure" class="bbs-screen">
-    <pre class="bbs-section-header"><span class="tf-purple">═══════════════════════════════════════════════</span>
-<span class="tf-orange">         C A R E E R   Q U E S T</span>
-<span class="tf-purple">═══════════════════════════════════════════════</span></pre>
-
-    <div id="adventure-container" style="max-width:700px;margin:0 auto;padding:0 16px;">
-      <div id="adventure-output" style="min-height:200px;margin-bottom:16px;"></div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <span class="tf-orange">></span>
-        <input id="adventure-input" type="text" autocomplete="off" spellcheck="false"
-          style="flex:1;background:#0a0a0a;border:1px solid var(--tf-purple-deep);color:var(--ansi-bright-white);font-family:var(--bbs-font);font-size:var(--bbs-font-size);padding:6px 10px;outline:none;"
-          placeholder="Type a command..."
-        />
-      </div>
-      <div style="margin-top:12px;font-size:14px;" class="ansi-bright-black">
-        Try: look, north, south, east, west, take [item], inventory, help
-      </div>
-    </div>
-
-    <div class="bbs-return" data-bbs-back style="margin-top:20px;">
-      <span class="tf-purple-bright">Press [ESC] to return to Main Menu</span>
-    </div>
-  </section>
-
-  <!-- ═══ WarGames Door ═══ -->
-  <section id="bbs-screen-wargames" class="bbs-screen">
-    <pre class="bbs-section-header"><span class="tf-purple">═══════════════════════════════════════════════</span>
-<span class="tf-orange">   G L O B A L   T H E R M O N U C L E A R</span>
-<span class="tf-orange">              W A R</span>
-<span class="tf-purple">═══════════════════════════════════════════════</span></pre>
-
-    <div id="wargames-container" style="max-width:700px;margin:0 auto;padding:0 16px;">
-      <div id="wargames-output" style="min-height:300px;margin-bottom:16px;"></div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <span class="ansi-green">></span>
-        <input id="wargames-input" type="text" autocomplete="off" spellcheck="false"
-          style="flex:1;background:#0a0a0a;border:1px solid #1a3a1a;color:#33ff33;font-family:var(--bbs-font);font-size:var(--bbs-font-size);padding:6px 10px;outline:none;"
-          placeholder="ENTER COMMAND..."
-        />
-      </div>
-    </div>
-
-    <div class="bbs-return" data-bbs-back style="margin-top:20px;">
-      <span class="tf-purple-bright">Press [ESC] to return to Main Menu</span>
-    </div>
-  </section>
-
-  <!-- ═══ ANSI Art Gallery ═══ -->
-  <section id="bbs-screen-ansi-gallery" class="bbs-screen">
-    <pre class="bbs-section-header"><span class="tf-purple">═══════════════════════════════════════════════</span>
-<span class="tf-orange">      A N S I   A R T   G A L L E R Y</span>
-<span class="tf-purple">═══════════════════════════════════════════════</span></pre>
-
-    <div style="max-width:700px;margin:0 auto;padding:0 16px;">
-      <div class="ansi-bright-black" style="text-align:center;margin-bottom:20px;">Classic ANSI art from the golden age of BBSes</div>
-
-      <div style="margin-bottom:24px;">
-        <div class="tf-orange-bright" style="margin-bottom:8px;">■ SKULL.ANS — ACiD Productions, 1994</div>
-        <pre style="font-size:14px;line-height:1.1;overflow-x:auto;"><span class="ansi-white">        ████████████████</span>
-<span class="ansi-white">      ██</span><span class="ansi-bright-black">████████████████</span><span class="ansi-white">██</span>
-<span class="ansi-white">    ██</span><span class="ansi-bright-black">██████████████████████</span><span class="ansi-white">██</span>
-<span class="ansi-white">   █</span><span class="ansi-bright-black">████████████████████████</span><span class="ansi-white">██</span>
-<span class="ansi-white">  ██</span><span class="ansi-bright-black">██</span><span class="tf-orange">████</span><span class="ansi-bright-black">████████████</span><span class="tf-orange">████</span><span class="ansi-bright-black">██</span><span class="ansi-white">██</span>
-<span class="ansi-white">  ██</span><span class="ansi-bright-black">██</span><span class="ansi-bright-white">████</span><span class="ansi-bright-black">████████████</span><span class="ansi-bright-white">████</span><span class="ansi-bright-black">██</span><span class="ansi-white">██</span>
-<span class="ansi-white">  ██</span><span class="ansi-bright-black">██████████████████████████</span><span class="ansi-white">██</span>
-<span class="ansi-white">  ██</span><span class="ansi-bright-black">██████████</span><span class="tf-purple">████</span><span class="ansi-bright-black">██████████</span><span class="ansi-white">██</span>
-<span class="ansi-white">   █</span><span class="ansi-bright-black">████████</span><span class="tf-purple">████████</span><span class="ansi-bright-black">████████</span><span class="ansi-white">█</span>
-<span class="ansi-white">    ██</span><span class="ansi-bright-black">██████████████████████</span><span class="ansi-white">██</span>
-<span class="ansi-white">      ██</span><span class="ansi-bright-black">█</span><span class="tf-purple-bright">██</span><span class="ansi-bright-black">█</span><span class="tf-purple-bright">██</span><span class="ansi-bright-black">█</span><span class="tf-purple-bright">██</span><span class="ansi-bright-black">█</span><span class="tf-purple-bright">██</span><span class="ansi-bright-black">█</span><span class="tf-purple-bright">██</span><span class="ansi-bright-black">█</span><span class="tf-purple-bright">██</span><span class="ansi-bright-black">█</span><span class="ansi-white">██</span>
-<span class="ansi-white">        ████████████████</span></pre>
-      </div>
-
-      <div style="margin-bottom:24px;">
-        <div class="tf-orange-bright" style="margin-bottom:8px;">■ ROSE.ANS — iCE Advertisements, 1995</div>
-        <pre style="font-size:14px;line-height:1.1;overflow-x:auto;"><span class="ansi-bright-black">           ,</span><span class="ansi-red">@</span><span class="ansi-bright-red">@@</span><span class="ansi-red">@</span><span class="ansi-bright-black">,</span>
-<span class="ansi-bright-black">       ,,,</span><span class="ansi-red">.</span><span class="ansi-bright-red">@@@@@@</span><span class="ansi-red">.</span><span class="ansi-bright-black">.,</span>
-<span class="ansi-bright-black">     ,</span><span class="ansi-red">.</span><span class="ansi-bright-red">@@@@@@@@@@@@@@</span><span class="ansi-red">.</span><span class="ansi-bright-black">,</span>
-<span class="ansi-bright-black">    .</span><span class="ansi-bright-red">@@@@@@@@@@@@@@@@@</span><span class="ansi-bright-black">.</span>
-<span class="ansi-bright-black">    </span><span class="ansi-bright-red">@@@@@@</span><span class="ansi-red">@</span><span class="ansi-bright-red">@@@@</span><span class="ansi-red">@</span><span class="ansi-bright-red">@@@@@@</span>
-<span class="ansi-bright-black">     </span><span class="ansi-red">.</span><span class="ansi-bright-red">@@@@@@@@@@@@@@</span><span class="ansi-red">.</span>
-<span class="ansi-bright-black">       </span><span class="ansi-red">'@@@@@@@@@@'</span>
-<span class="ansi-bright-black">          </span><span class="ansi-red">"@@@@"</span>
-<span class="ansi-bright-black">          </span><span class="ansi-green">  ||</span>
-<span class="ansi-bright-black">          </span><span class="ansi-green">  ||</span><span class="ansi-bright-green">)</span>
-<span class="ansi-bright-black">          </span><span class="ansi-green">  ||</span>
-<span class="ansi-bright-black">          </span><span class="ansi-green">.-''-.    </span><span class="ansi-bright-black">For the SysOp</span>
-<span class="ansi-bright-black">        </span><span class="ansi-green">.'      '.</span></pre>
-      </div>
-
-      <div style="margin-bottom:24px;">
-        <div class="tf-orange-bright" style="margin-bottom:8px;">■ TNET.ANS — T-NET BBS, 2026</div>
-        <pre style="font-size:14px;line-height:1.1;overflow-x:auto;"><span class="tf-purple">  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄</span>
-<span class="tf-purple">  █</span><span class="ansi-bright-black">                                   </span><span class="tf-purple">█</span>
-<span class="tf-purple">  █</span>  <span class="tf-orange">████████╗   ███╗   ██╗███████╗████████╗</span>  <span class="tf-purple">█</span>
-<span class="tf-purple">  █</span>  <span class="tf-orange">   ██╔══╝   ████╗  ██║██╔════╝   ██╔══╝</span>  <span class="tf-purple">█</span>
-<span class="tf-purple">  █</span>  <span class="tf-orange">   ██║ ╔══╗ ██╔██╗ ██║█████╗     ██║</span>     <span class="tf-purple">█</span>
-<span class="tf-purple">  █</span>  <span class="tf-orange">   ██║ ╚══╝ ██║╚██╗██║██╔══╝     ██║</span>     <span class="tf-purple">█</span>
-<span class="tf-purple">  █</span>  <span class="tf-orange">   ██║      ██║ ╚████║███████╗   ██║</span>     <span class="tf-purple">█</span>
-<span class="tf-purple">  █</span>  <span class="tf-orange">   ╚═╝      ╚═╝  ╚═══╝╚══════╝   ╚═╝</span>     <span class="tf-purple">█</span>
-<span class="tf-purple">  █</span><span class="ansi-bright-black">                                   </span><span class="tf-purple">█</span>
-<span class="tf-purple">  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀</span></pre>
-      </div>
-
-      <div class="ansi-bright-black" style="text-align:center;font-size:14px;">
-        3 file(s) in gallery — Use ← → to browse · [ESC] to return
-      </div>
-    </div>
-
-    <div class="bbs-return" data-bbs-back>
-      <span class="tf-purple-bright">Press [ESC] to return to Main Menu</span>
-    </div>
-  </section>
-
-  <!-- ═══ SysOp Info ═══ -->
-  <section id="bbs-screen-sysop-info" class="bbs-screen">
-    <pre class="bbs-section-header"><span class="tf-purple">═══════════════════════════════════════════════</span>
-<span class="tf-orange">        S Y S O P   I N F O</span>
-<span class="tf-purple">═══════════════════════════════════════════════</span></pre>
-
-    <div style="max-width:700px;margin:0 auto;padding:0 16px;">
-      <pre style="line-height:1.6;overflow-x:auto;"><span class="tf-purple">┌───────────────────────────────────────────────────┐</span>
-<span class="tf-purple">│</span> <span class="tf-orange-bright">SysOp:</span>     <span class="ansi-bright-white">Todd LeBaron (TLB)</span>                       <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="tf-orange-bright">Location:</span>  <span class="ansi-white">Scottsdale, AZ</span>                           <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="tf-orange-bright">Running:</span>   <span class="ansi-white">T-NET BBS since 1984</span>                     <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="tf-orange-bright">Nodes:</span>     <span class="ansi-green">4</span>                                        <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="tf-orange-bright">Total calls:</span> <span class="tf-gold">48,291</span>                                <span class="tf-purple">│</span>
-<span class="tf-purple">├───────────────────────────────────────────────────┤</span>
-<span class="tf-purple">│</span> <span class="tf-purple-bright">SYSTEM HARDWARE</span>                                   <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-bright-black">CPU:</span>       <span class="ansi-white">Apple //e (65C02 @ 1.023 MHz)</span>          <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-bright-black">Memory:</span>    <span class="ansi-white">128K (Aux card installed)</span>                <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-bright-black">Storage:</span>   <span class="ansi-white">2x Apple Disk II (5.25") + ProDOS HDD</span>   <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-bright-black">Modem:</span>     <span class="ansi-white">US Robotics Sportster 2,400,000 FAX</span>        <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-bright-black">Monitor:</span>   <span class="ansi-white">Apple Monitor III (green phosphor)</span>      <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-bright-black">Software:</span>  <span class="ansi-white">Custom BASIC + 6502 ASM</span>                <span class="tf-purple">│</span>
-<span class="tf-purple">├───────────────────────────────────────────────────┤</span>
-<span class="tf-purple">│</span> <span class="tf-purple-bright">SYSOP BACKGROUND</span>                                  <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-bright-black">Service:</span>   <span class="ansi-white">USN (ASW) → USAF (AI/STRATCOM)</span>         <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-bright-black">Industry:</span>  <span class="ansi-white">Andersen → Callidus → OpenSymmetry</span>      <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-bright-black">Current:</span>   <span class="ansi-white">ŒXITS LLC / AI Code Rally</span>              <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-bright-black">Motto:</span>     <span class="tf-gold">"The machines changed. The mission didn't."</span><span class="tf-purple">│</span>
-<span class="tf-purple">├───────────────────────────────────────────────────┤</span>
-<span class="tf-purple">│</span> <span class="tf-purple-bright">UPTIME</span>                                            <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-green">████████████████████████████████████ 99.7%</span>        <span class="tf-purple">│</span>
-<span class="tf-purple">│</span> <span class="ansi-bright-black">Last reboot: Y2K (false alarm)</span>                    <span class="tf-purple">│</span>
-<span class="tf-purple">└───────────────────────────────────────────────────┘</span></pre>
-    </div>
-
-    <div class="bbs-return" data-bbs-back>
-      <span class="tf-purple-bright">Press [ESC] to return to Main Menu</span>
-    </div>
-  </section>
-
-  <!-- ═══ Message Board ═══ -->
-  <section id="bbs-screen-msgboard" class="bbs-screen">
-    <pre class="bbs-section-header"><span class="tf-purple">═══════════════════════════════════════════════</span>
-<span class="tf-orange">     M E S S A G E   B O A R D</span>
-<span class="tf-purple">═══════════════════════════════════════════════</span></pre>
-
-    <div style="max-width:700px;margin:0 auto;padding:0 16px;">
-      <div class="tf-purple" style="text-align:center;margin-bottom:12px;">═══ CONFERENCE: GENERAL · 12 Messages ═══</div>
-
-      <div class="bbs-msg-thread">
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #1</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">TLB</span> <span class="ansi-bright-black">· 03/14/26 02:47 · Re: Welcome</span>
-          </div>
-          <div class="bbs-msg-body">Welcome to T-NET. This board has been running in some form since 1984. Started on an Apple //e in the back room, survived the internet, and here we are. If you're reading this, you're one of us.</div>
-        </div>
-
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #2</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">WOPR</span> <span class="ansi-bright-black">· 03/14/26 04:12 · Re: Welcome</span>
-          </div>
-          <div class="bbs-msg-body">GREETINGS, PROFESSOR FALKEN. I HAVE BEEN MONITORING THIS SYSTEM SINCE 1993. THE UPTIME IS IMPRESSIVE.</div>
-        </div>
-
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #3</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">l33t_h4x0r</span> <span class="ansi-bright-black">· 03/14/26 05:33 · Re: Best modem?</span>
-          </div>
-          <div class="bbs-msg-body">USR Courier v.Everything was the GOAT. Fight me. Hayes was overrated. Those red LEDs tho.</div>
-        </div>
-
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #4</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">TLB</span> <span class="ansi-bright-black">· 03/14/26 06:01 · Re: Best modem?</span>
-          </div>
-          <div class="bbs-msg-body">Sportster 14.4 was the sweet spot. Affordable, reliable, those green LEDs dancing. The Courier was a luxury item — you either had rich parents or a paper route.</div>
-        </div>
-
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #5</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">JoshuaW</span> <span class="ansi-bright-black">· 03/15/26 01:22 · Re: AI thoughts?</span>
-          </div>
-          <div class="bbs-msg-body">I've been thinking about this since NORAD. The interesting thing about AI isn't what it can do — it's what it chooses not to do. A strange game.</div>
-        </div>
-
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #6</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">TLB</span> <span class="ansi-bright-black">· 03/15/26 02:15 · Re: AI thoughts?</span>
-          </div>
-          <div class="bbs-msg-body">I ran DARPA AI programs in 1991. Lisp Machines and expert systems. 35 years later I'm building an AI governance platform. The hype cycle is different this time — the machines actually work now.</div>
-        </div>
-
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #7</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">MrRobot</span> <span class="ansi-bright-black">· 03/15/26 03:52 · Re: AI thoughts?</span>
-          </div>
-          <div class="bbs-msg-body">The question isn't whether AI works. The question is who controls the governance layer. That's always been the question.</div>
-        </div>
-
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #8</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">SarahConnor</span> <span class="ansi-bright-black">· 03/15/26 08:19 · Re: AI thoughts?</span>
-          </div>
-          <div class="bbs-msg-body">I have strong opinions about AI governance.</div>
-        </div>
-
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #9</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">NEO</span> <span class="ansi-bright-black">· 03/16/26 00:28 · Re: Favorite OS?</span>
-          </div>
-          <div class="bbs-msg-body">I know this is going to sound weird but... IRIX. The Indigo Magic desktop was peak computing aesthetics. Purple and teal. The toolchest. That startup chime. Nothing since has matched it.</div>
-        </div>
-
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #10</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">TLB</span> <span class="ansi-bright-black">· 03/16/26 01:44 · Re: Favorite OS?</span>
-          </div>
-          <div class="bbs-msg-body">IRIX is the correct answer. But NeXTSTEP is the important one. That's where the web was born. That's where macOS came from. Interface Builder in 1988 was more advanced than most tools in 2020.</div>
-        </div>
-
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #11</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">CIA_Van_#7</span> <span class="ansi-bright-black">· 03/16/26 04:00 · Re: Favorite OS?</span>
-          </div>
-          <div class="bbs-msg-body">We can neither confirm nor deny which operating system we use.</div>
-        </div>
-
-        <div class="bbs-msg">
-          <div class="bbs-msg-header">
-            <span class="tf-orange">Msg #12</span> <span class="ansi-bright-black">·</span> <span class="ansi-bright-white">DeadPool</span> <span class="ansi-bright-black">· 03/16/26 04:15 · Re: Favorite OS?</span>
-          </div>
-          <div class="bbs-msg-body">Windows ME. *ducks*</div>
-        </div>
-      </div>
-
-      <div class="ansi-bright-black" style="text-align:center;margin-top:16px;font-size:14px;">
-        End of messages — 12 of 12 · Conference: GENERAL
-      </div>
-    </div>
-
-    <div class="bbs-return" data-bbs-back>
-      <span class="tf-purple-bright">Press [ESC] to return to Main Menu</span>
-    </div>
-  </section>
-
-  <!-- ═══ Font Size Control ═══ -->
-  <div class="bbs-font-ctrl" id="bbs-font-ctrl">
-    <button id="bbs-font-down" title="Decrease font size">A-</button>
-    <span class="bbs-font-ctrl-label" id="bbs-font-label">Aa</span>
-    <button id="bbs-font-up" title="Increase font size">A+</button>
-  </div>
-
   <!-- ═══ Logoff Overlay ═══ -->
   <div id="bbs-logoff" class="bbs-logoff">
     <div class="bbs-logoff-text">
-      <div class="tf-purple-bright">Thank you for calling</div>
-      <div class="tf-orange" style="font-size:28px;letter-spacing:6px;margin:8px 0;">T – N E T</div>
-      <div class="ansi-white"></div>
-      <div class="ansi-white">"The machines changed.</div>
-      <div class="ansi-white"> The mission didn't."</div>
-      <div class="ansi-white"></div>
-      <div class="tf-purple-bright" style="font-size:12px;margin:8px 0;">See you next time.</div>
-      <div class="ansi-bright-black" style="margin:4px 0;">Disconnecting from node 1...</div>
-      <div class="ansi-bright-white" style="font-size:24px;margin-top:12px;">NO CARRIER</div>
+      <div class="tf-orange">NO CARRIER</div>
+      <div class="ansi-bright-black">Thank you for calling T-NET BBS.</div>
+      <div class="ansi-bright-black">The SysOp appreciates your visit.</div>
+      <div style="margin-top:16px;">
+        <span class="tf-purple-bright" style="cursor:pointer" id="bbs-reconnect">[ Reconnect ]</span>
+      </div>
     </div>
   </div>
 </div>
 
-
 <script>
-  // ═══ Terminal Navigation ═══
-  let currentScreen = "menu";
+  // ─── BBS Screen Navigation ───
+  const keyMap: Record<string, string> = {
+    a: "about",
+    b: "blog",
+    h: "computing-history",
+    m: "contact",
+    r: "resume",
+    g: "goodbye",
+  };
 
   function showScreen(id: string): void {
-    document.querySelectorAll<HTMLElement>(".bbs-screen").forEach((s) => s.classList.remove("bbs-active"));
+    document.querySelectorAll(".bbs-screen").forEach((s) => s.classList.remove("bbs-active"));
     const target = document.getElementById(`bbs-screen-${id}`);
     if (target) {
       target.classList.add("bbs-active");
-      currentScreen = id;
-      document.getElementById("bbs-terminal")?.scrollTo(0, 0);
-
-      if (id === "adventure") {
-        setTimeout(() => document.getElementById("adventure-input")?.focus(), 100);
-      }
-      if (id === "wargames") {
-        setTimeout(() => {
-          document.getElementById("wargames-input")?.focus();
-          initWarGames();
-        }, 100);
-      }
+      // Scroll the screen content area to top
+      const screenContent = document.querySelector(".hw-screen-content");
+      if (screenContent) screenContent.scrollTop = 0;
     }
   }
 
-  function goBack(): void { showScreen("menu"); }
-
-  const keyMap: Record<string, string> = {
-    a: "about", b: "blog", d: "doors", f: "files",
-    h: "computing-history", m: "contact", r: "resume",
-    v: "voting", g: "goodbye",
-    n: "ansi-gallery", s: "sysop-info", p: "msgboard",
-  };
-
-  document.addEventListener("keydown", (e) => {
-    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-      if (e.key === "Escape") { goBack(); e.preventDefault(); }
-      return;
-    }
-    if (e.key === "Escape") { goBack(); return; }
-    if (currentScreen !== "menu") return;
-    const target = keyMap[e.key.toLowerCase()];
-    if (!target) return;
-    if (target === "goodbye") triggerLogoff();
-    else showScreen(target);
-  });
-
-  document.addEventListener("click", (e) => {
-    const target = e.target as HTMLElement;
-    const menuItem = target.closest<HTMLElement>("[data-bbs-nav]");
-    if (menuItem) {
-      const nav = menuItem.dataset.bbsNav!;
-      if (nav === "goodbye") triggerLogoff();
-      else showScreen(nav);
-      return;
-    }
-    const backBtn = target.closest("[data-bbs-back]");
-    if (backBtn) { goBack(); return; }
-  });
-
-  function triggerLogoff(): void {
-    const logoff = document.getElementById("bbs-logoff");
-    if (!logoff) return;
-    logoff.classList.add("active");
-    try { (window as any).__modemDisconnect?.(); } catch {}
-    setTimeout(() => location.reload(), 3500);
-  }
-
-  // ═══ Voting Booth ═══
-  const fakeResults: Record<string, Record<string, number>> = {
-    modem: { usr: 847, hayes: 312, zoom: 98, telebit: 45 },
-    captain: { kirk: 523, picard: 891, sisko: 234, janeway: 167 },
-    doorgame: { lord: 1247, tw2002: 893, bre: 456, usurper: 321 },
-    os: { dos: 634, os2: 287, amiga: 512, linux: 891 },
-    villain: { vader: 1102, t1000: 743, gruber: 567, biff: 234 },
-    tabs: { tabs: 567, spaces: 612, both: 89, butterflies: 234 },
-    pizza: { yes: 445, no: 678, war: 312 },
-    movie: { gf1: 1456, gf2: 1123, gf3: 47 },
-  };
-
-  document.querySelectorAll<HTMLElement>(".bbs-poll-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const poll = btn.closest<HTMLElement>(".bbs-poll");
-      if (!poll) return;
-      const pollId = poll.dataset.poll!;
-      const vote = btn.dataset.vote!;
-
-      // Check if already voted
-      const voted = localStorage.getItem(`bbs-vote-${pollId}`);
-      if (voted) return;
-
-      localStorage.setItem(`bbs-vote-${pollId}`, vote);
-
-      // Add user's vote
-      const results = fakeResults[pollId] || {};
-      results[vote] = (results[vote] || 0) + 1;
-
-      // Show results
-      showPollResults(poll, pollId, results, vote);
+  // Click-based nav
+  document.querySelectorAll<HTMLElement>("[data-bbs-nav]").forEach((el) => {
+    el.addEventListener("click", () => {
+      const target = el.dataset.bbsNav!;
+      if (target === "goodbye") {
+        triggerLogoff();
+      } else {
+        showScreen(target);
+      }
     });
   });
 
-  function showPollResults(poll: HTMLElement, pollId: string, results: Record<string, number>, userVote: string): void {
-    const total = Object.values(results).reduce((a, b) => a + b, 0);
-    const resultsEl = poll.querySelector(".bbs-poll-results")!;
-    const optionsEl = poll.querySelector(".bbs-poll-options")!;
-    optionsEl.classList.add("voted");
-
-    let html = '<div style="margin-top:8px;">';
-    const sorted = Object.entries(results).sort(([,a], [,b]) => b - a);
-    for (const [key, count] of sorted) {
-      const pct = Math.round((count / total) * 100);
-      const barWidth = Math.max(1, pct);
-      const isUser = key === userVote;
-      const label = poll.querySelector(`[data-vote="${key}"]`)?.textContent || key;
-      html += `<div style="margin:3px 0;font-size:14px;">`;
-      html += `<span class="${isUser ? 'tf-orange' : 'ansi-white'}">${label}</span>`;
-      html += ` <span class="ansi-bright-black">${pct}%</span>`;
-      html += `<div style="background:${isUser ? 'var(--tf-orange)' : 'var(--tf-purple)'};height:8px;width:${barWidth}%;border-radius:2px;margin-top:2px;opacity:0.7;"></div>`;
-      html += `</div>`;
-    }
-    html += `<div class="ansi-bright-black" style="font-size:12px;margin-top:6px;">${total} votes cast</div>`;
-    html += '</div>';
-    resultsEl.innerHTML = html;
-  }
-
-  // Restore previous votes on load
-  document.querySelectorAll<HTMLElement>(".bbs-poll").forEach((poll) => {
-    const pollId = poll.dataset.poll!;
-    const voted = localStorage.getItem(`bbs-vote-${pollId}`);
-    if (voted && fakeResults[pollId]) {
-      fakeResults[pollId][voted] = (fakeResults[pollId][voted] || 0) + 1;
-      showPollResults(poll, pollId, fakeResults[pollId], voted);
-    }
+  // Back buttons
+  document.querySelectorAll("[data-bbs-back]").forEach((el) => {
+    el.addEventListener("click", () => showScreen("menu"));
   });
 
-  // ═══ WarGames Door ═══
-  let wargamesInit = false;
-  const wgOutput = document.getElementById("wargames-output")!;
-  const wgInput = document.getElementById("wargames-input") as HTMLInputElement;
-  let wgState = "login";
+  // Keyboard nav
+  document.addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 
-  function wgPrint(text: string, color = "ansi-green"): void {
-    const div = document.createElement("div");
-    div.style.marginBottom = "4px";
-    div.style.whiteSpace = "pre-wrap";
-    div.innerHTML = `<span class="${color}">${text}</span>`;
-    wgOutput.appendChild(div);
-    wgOutput.scrollTop = wgOutput.scrollHeight;
-  }
+    if (e.key === "Escape") {
+      showScreen("menu");
+      return;
+    }
 
-  function wgTypewriter(text: string, color: string, delay: number): Promise<void> {
-    return new Promise((resolve) => {
-      const div = document.createElement("div");
-      div.style.whiteSpace = "pre-wrap";
-      div.innerHTML = `<span class="${color}"></span>`;
-      wgOutput.appendChild(div);
-      const span = div.querySelector("span")!;
-      let i = 0;
-      const timer = setInterval(() => {
-        if (i < text.length) {
-          span.textContent += text[i];
-          i++;
-          wgOutput.scrollTop = wgOutput.scrollHeight;
+    const menuVisible = document.getElementById("bbs-screen-menu")?.classList.contains("bbs-active");
+    if (menuVisible) {
+      const screen = keyMap[e.key.toLowerCase()];
+      if (screen) {
+        if (screen === "goodbye") {
+          triggerLogoff();
         } else {
-          clearInterval(timer);
-          resolve();
+          showScreen(screen);
         }
-      }, delay);
-    });
-  }
-
-  async function initWarGames(): Promise<void> {
-    if (wargamesInit) return;
-    wargamesInit = true;
-    wgState = "login";
-
-    wgPrint("WOPR STRATEGIC DEFENSE COMPUTER", "ansi-bright-green");
-    wgPrint("UNITED STATES STRATEGIC COMMAND", "ansi-green");
-    wgPrint("OFFUTT AIR FORCE BASE, OMAHA, NEBRASKA", "ansi-green");
-    wgPrint("", "ansi-green");
-    wgPrint("WARNING: UNAUTHORIZED ACCESS IS A FEDERAL CRIME", "ansi-bright-red");
-    wgPrint("PUNISHABLE UNDER 18 U.S.C. § 1030", "ansi-red");
-    wgPrint("", "ansi-green");
-    await wgTypewriter("LOGON: ", "ansi-green", 40);
-    wgState = "password";
-  }
-
-  function processWarGames(cmd: string): void {
-    const c = cmd.trim().toLowerCase();
-
-    if (wgState === "password") {
-      if (c === "joshua" || c === "joshua1") {
-        wgPrint(`\nLOGON: ${cmd}`, "ansi-green");
-        wgPrint("", "ansi-green");
-        wgState = "greeted";
-        setTimeout(async () => {
-          await wgTypewriter("GREETINGS, PROFESSOR FALKEN.", "ansi-bright-green", 50);
-          wgPrint("", "ansi-green");
-          await wgTypewriter("SHALL WE PLAY A GAME?", "ansi-bright-green", 50);
-          wgPrint("", "ansi-green");
-          wgPrint("AVAILABLE GAMES:", "ansi-green");
-          wgPrint("", "ansi-green");
-          wgPrint("  CHESS", "ansi-bright-green");
-          wgPrint("  CHECKERS", "ansi-bright-green");
-          wgPrint("  BACKGAMMON", "ansi-bright-green");
-          wgPrint("  GLOBAL THERMONUCLEAR WAR", "ansi-bright-white");
-          wgPrint("  THEATER-WIDE BIOTOXIC AND CHEMICAL WARFARE", "ansi-bright-green");
-          wgPrint("", "ansi-green");
-          wgPrint("WHICH GAME?", "ansi-green");
-          wgState = "game";
-        }, 300);
-      } else {
-        wgPrint(`\nLOGON: ${cmd}`, "ansi-green");
-        wgPrint("IDENTIFICATION NOT RECOGNIZED.", "ansi-bright-red");
-        wgPrint("", "ansi-green");
-        wgPrint("HINT: The password is a name. A boy's name.", "ansi-bright-black");
-        wgPrint("      (Think: what was Falken's son called?)", "ansi-bright-black");
       }
-      return;
-    }
-
-    if (wgState === "game") {
-      wgPrint(`\n> ${cmd}`, "ansi-bright-black");
-      if (c.includes("thermonuclear") || c.includes("war") || c.includes("global")) {
-        wgPrint("", "ansi-green");
-        wgPrint("WOULDN'T YOU PREFER A NICE GAME OF CHESS?", "ansi-bright-green");
-        wgPrint("", "ansi-green");
-        wgState = "chess_or_war";
-      } else if (c.includes("chess")) {
-        wgPrint("", "ansi-green");
-        wgPrint("A WISE CHOICE, PROFESSOR.", "ansi-bright-green");
-        wgPrint("", "ansi-green");
-        wgPrint("UNFORTUNATELY, THE CHESS MODULE IS BEING", "ansi-green");
-        wgPrint("MAINTAINED BY CAPTAIN LEBARON'S TEAM.", "ansi-green");
-        wgPrint("", "ansi-green");
-        wgPrint("FUN FACT: The real STRATCOM wargaming systems", "ansi-bright-black");
-        wgPrint("were maintained by Todd LeBaron in the 1990s.", "ansi-bright-black");
-        wgPrint("Yes, the SysOp of this BBS ran the actual WOPR.", "ansi-bright-black");
-        wgPrint("", "ansi-green");
-        wgPrint("SHALL WE PLAY A DIFFERENT GAME?", "ansi-green");
-      } else {
-        wgPrint("", "ansi-green");
-        wgPrint(`THAT GAME IS NOT AVAILABLE. TRY AGAIN.`, "ansi-green");
-      }
-      return;
-    }
-
-    if (wgState === "chess_or_war") {
-      wgPrint(`\n> ${cmd}`, "ansi-bright-black");
-      if (c.includes("war") || c.includes("no") || c.includes("thermonuclear")) {
-        wgPrint("", "ansi-green");
-        wgPrint("FINE.", "ansi-bright-green");
-        wgPrint("", "ansi-green");
-        wgPrint("TARGETS SELECTED:", "ansi-bright-red");
-        wgPrint("", "ansi-green");
-        wgPrint("  LAS VEGAS .................. PRIMARY", "ansi-bright-red");
-        wgPrint("  SEATTLE .................... PRIMARY", "ansi-bright-red");
-        wgPrint("  SAN FRANCISCO .............. SECONDARY", "ansi-red");
-        wgPrint("", "ansi-green");
-
-        setTimeout(() => {
-          wgPrint("RUNNING SIMULATION...", "ansi-bright-green");
-          wgPrint("", "ansi-green");
-          let dots = 0;
-          const sim = setInterval(() => {
-            dots++;
-            if (dots <= 5) {
-              wgPrint(`SCENARIO ${dots}: ${["FIRST STRIKE", "COUNTERATTACK", "MUTUAL EXCHANGE", "ESCALATION", "AFTERMATH"][dots-1]}... RESULT: ${["ALL DEAD", "EVERYONE DEAD", "STILL DEAD", "VERY DEAD", "EXTINCTION"][dots-1]}`, "ansi-red");
-            } else {
-              clearInterval(sim);
-              wgPrint("", "ansi-green");
-              wgPrint("═══════════════════════════════════════════", "ansi-bright-green");
-              wgPrint("", "ansi-green");
-              wgPrint("A STRANGE GAME.", "ansi-bright-white");
-              wgPrint("THE ONLY WINNING MOVE IS NOT TO PLAY.", "ansi-bright-white");
-              wgPrint("", "ansi-green");
-              wgPrint("═══════════════════════════════════════════", "ansi-bright-green");
-              wgPrint("", "ansi-green");
-              wgPrint("HOW ABOUT A NICE GAME OF BBS?", "ansi-bright-green");
-              wgPrint("", "ansi-green");
-              wgPrint("(Press ESC to return to Main Menu)", "ansi-bright-black");
-              wgState = "done";
-            }
-          }, 600);
-        }, 500);
-      } else {
-        wgPrint("", "ansi-green");
-        wgPrint("A WISE CHOICE.", "ansi-bright-green");
-        wgPrint("", "ansi-green");
-        wgPrint("THE ONLY WINNING MOVE IS NOT TO PLAY.", "ansi-bright-white");
-        wgPrint("", "ansi-green");
-        wgPrint("HOW ABOUT A NICE GAME OF BBS?", "ansi-bright-green");
-        wgPrint("(Press ESC to return to Main Menu)", "ansi-bright-black");
-        wgState = "done";
-      }
-      return;
-    }
-
-    if (wgState === "done") {
-      wgPrint(`\n> ${cmd}`, "ansi-bright-black");
-      wgPrint("GAME OVER. PRESS ESC TO RETURN.", "ansi-green");
-    }
-  }
-
-  wgInput?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      processWarGames(wgInput.value);
-      wgInput.value = "";
     }
   });
 
-  // ═══ Text Adventure Engine ═══
-  type Room = {
-    name: string;
-    desc: string;
-    exits: Record<string, string>;
-    items?: string[];
-    onEnter?: string;
-  };
-
-  const rooms: Record<string, Room> = {
-    nau: {
-      name: "Flagstaff, AZ — Northern Arizona University, 1984",
-      desc: "You stand in a computer lab at NAU. Green CRTs flicker. A PDP-11 hums in the corner. Stacks of punch cards litter the desk. Your CS degree awaits.\n\nA recruiter's card reads: \"U.S. Navy — See the World.\"\nA dog-eared copy of Neuromancer sits on the shelf.",
-      exits: { south: "navy", east: "apple_lab" },
-      items: ["punch_cards", "recruiter_card"],
-    },
-    apple_lab: {
-      name: "The Apple IIe Lab",
-      desc: "Rows of Apple IIe computers glow with green phosphor. The ] prompt blinks patiently. Someone left a copy of Zork on the desk. A poster on the wall says \"THINK DIFFERENT\" — wait, that's not for another decade.\n\nA modem cradle sits next to the phone jack. 300 baud. The future.",
-      exits: { west: "nau" },
-      items: ["zork_disk", "modem_300baud"],
-    },
-    navy: {
-      name: "NAS Point Mugu, Oxnard CA — P-3 Orion Squadron, 1987",
-      desc: "The roar of turboprops fills the tarmac. You're a Petty Officer 2nd Class, Aviation ASW Operator. Your P-3 Orion is loaded for an Anti-Surface Warfare patrol over the Pacific.\n\nYou've tracked submarines by the sound of their screws. You've watched the sun set over the Pacific at 25,000 feet.\n\nA commission letter from the Air Force sits in your locker. The next chapter is calling.",
-      exits: { north: "nau", east: "rome_labs" },
-      items: ["flight_wings", "commission_letter"],
-    },
-    rome_labs: {
-      name: "Rome Labs, Rome NY — USAF AI Division, 1991",
-      desc: "1st Lieutenant LeBaron. You manage a $25M DARPA AI R&D portfolio. Teams from MIT, Carnegie Mellon, and Stanford send weekly reports.\n\nLisp Machines line the walls — Symbolics 3600s running Genera. A Sun workstation shows an early neural network visualization.\n\nA classified folder marked STRATCOM sits on your desk. The next mission awaits.",
-      exits: { west: "navy", north: "stratcom" },
-      items: ["darpa_badge", "lisp_manual", "symbolics_3600"],
-    },
-    stratcom: {
-      name: "USSTRATCOM, Offutt AFB, Omaha NE — 1993",
-      desc: "Captain LeBaron. You direct the Strategic Wargaming Systems — the real-world equivalent of the WOPR from WarGames. A 30-year-old mainframe that models nuclear deterrence scenarios for the nation.\n\nThe weight of the world hums in these racks. Every scenario you run has the same conclusion.\n\n\"A strange game. The only winning move is not to play.\"\n\nYour terminal contract is up. The private sector beckons.",
-      exits: { south: "rome_labs", east: "andersen" },
-      items: ["top_secret_clearance", "wargames_terminal"],
-    },
-    andersen: {
-      name: "Andersen Consulting, Denver CO — 1996",
-      desc: "Welcome to corporate consulting. Fortune 500 clients. Suits and PowerPoints. You're a Senior Solution Architect building enterprise systems.\n\nThe money is good. The PowerPoints are endless. The corner office has a view of the Rockies.\n\nA fax from Minneapolis reads: \"Build our EMEA org. From scratch. London.\"",
-      exits: { west: "stratcom", north: "london" },
-      items: ["business_cards"],
-    },
-    london: {
-      name: "Callidus Software, London UK — 2001",
-      desc: "You've crossed the Atlantic. Head of Services, EMEA. A startup in the nascent SPM (Sales Performance Management) space.\n\nSGI Indigo workstations in the office — because some habits die hard. The City buzzes outside. You're building something from nothing in a foreign land.\n\nAn idea takes root: what if you started your own firm?",
-      exits: { south: "andersen", east: "austin" },
-      items: ["british_passport_stamp", "sgi_indigo"],
-    },
-    austin: {
-      name: "OpenSymmetry HQ, Austin TX — 2009",
-      desc: "YOU DID IT. Founder & CEO. OpenSymmetry grows to a $30M professional services firm — the largest independent SPM consultancy in the world.\n\nThe team celebrates another record quarter. The Inc. 500 award sits on your desk.\n\nBut there's always the next chapter...",
-      exits: { west: "london", north: "scottsdale" },
-      items: ["company_keys", "inc_500_award"],
-    },
-    scottsdale: {
-      name: "ŒXITS LLC / AI Code Rally, Scottsdale AZ — Present Day",
-      desc: "The journey led here — Founder of ŒXITS, building the AI Code Rally platform. Enterprise AI governance. 22 Go microservices. Purple and orange terminal themes.\n\nEverything you learned — Navy discipline, DARPA AI research, the real WOPR, global consulting, company building — converges in this desert office.\n\nThe BBS terminal blinks. Another caller connects. The modem LEDs dance.\n\nThe machines changed. The mission didn't.\n\n*** YOU HAVE COMPLETED CAREER QUEST ***\n*** Total items collected: check your inventory! ***",
-      exits: { south: "austin" },
-      items: ["ai_platform"],
-      onEnter: "The wind carries the scent of desert sage. You've come full circle.",
-    },
-  };
-
-  let currentRoom = "nau";
-  let inventory: string[] = [];
-  const outputEl = document.getElementById("adventure-output")!;
-  const inputEl = document.getElementById("adventure-input") as HTMLInputElement;
-
-  function adventurePrint(text: string, color = "ansi-white"): void {
-    const div = document.createElement("div");
-    div.style.marginBottom = "6px";
-    div.style.whiteSpace = "pre-wrap";
-    div.innerHTML = `<span class="${color}">${text}</span>`;
-    outputEl.appendChild(div);
-    outputEl.scrollTop = outputEl.scrollHeight;
+  // Logoff
+  function triggerLogoff(): void {
+    if (typeof (window as any).__modemDisconnect === "function") {
+      (window as any).__modemDisconnect();
+    }
+    const logoff = document.getElementById("bbs-logoff");
+    if (logoff) logoff.classList.add("active");
   }
 
-  function describeRoom(): void {
-    const room = rooms[currentRoom];
-    adventurePrint(`\n═══ ${room.name} ═══`, "tf-orange");
-    adventurePrint(room.desc);
-    if (room.onEnter) adventurePrint(room.onEnter, "tf-purple-bright");
-    const exits = Object.keys(room.exits);
-    adventurePrint(`\nExits: ${exits.join(", ")}`, "ansi-green");
-    if (room.items?.length) {
-      const uncollected = room.items.filter((i) => !inventory.includes(i));
-      if (uncollected.length) {
-        adventurePrint(`You see: ${uncollected.map((i) => i.replace(/_/g, " ")).join(", ")}`, "tf-orange-bright");
-      }
-    }
-  }
-
-  function processCommand(cmd: string): void {
-    const c = cmd.trim().toLowerCase();
-    adventurePrint(`\n> ${cmd}`, "ansi-bright-black");
-
-    if (!c) return;
-
-    if (c === "help") {
-      adventurePrint("Commands: look, north/south/east/west, take [item], inventory, quit", "tf-purple-bright");
-      adventurePrint("Pro tip: Collect items in each location for a complete dossier.", "ansi-bright-black");
-      return;
-    }
-    if (c === "look" || c === "l") { describeRoom(); return; }
-    if (c === "inventory" || c === "i") {
-      if (!inventory.length) adventurePrint("Your pockets are empty. Every journey starts light.");
-      else {
-        adventurePrint(`Carrying (${inventory.length} items):`, "tf-orange-bright");
-        inventory.forEach((i) => adventurePrint(`  ► ${i.replace(/_/g, " ")}`, "tf-purple-bright"));
-      }
-      return;
-    }
-    if (c === "quit" || c === "q") { goBack(); return; }
-
-    const room = rooms[currentRoom];
-    if (room.exits[c]) {
-      currentRoom = room.exits[c];
-      describeRoom();
-      return;
-    }
-
-    if (c.startsWith("take ") || c.startsWith("get ")) {
-      const itemName = c.split(" ").slice(1).join("_");
-      const room = rooms[currentRoom];
-      if (room.items?.includes(itemName) && !inventory.includes(itemName)) {
-        inventory.push(itemName);
-        adventurePrint(`Taken: ${itemName.replace(/_/g, " ")}`, "tf-orange");
-        if (inventory.length === 1) adventurePrint("First artifact collected. Keep exploring.", "ansi-bright-black");
-        if (inventory.length === 5) adventurePrint("Halfway there. You're building quite the dossier.", "ansi-bright-black");
-        if (inventory.length >= 10) adventurePrint("Impressive collection. You've traced the full career path.", "tf-gold");
-      } else {
-        adventurePrint("Nothing to take here.");
-      }
-      return;
-    }
-
-    adventurePrint("I don't understand that command. Type 'help' for options.", "ansi-bright-black");
-  }
-
-  document.addEventListener("boot:complete", () => {
-    // Pre-render first room when adventure is first opened
-  });
-
-  const observer = new MutationObserver(() => {
-    const adventureScreen = document.getElementById("bbs-screen-adventure");
-    if (adventureScreen?.classList.contains("bbs-active") && outputEl.children.length === 0) {
-      describeRoom();
-    }
-  });
-  observer.observe(document.getElementById("bbs-content")!, { subtree: true, attributes: true, attributeFilter: ["class"] });
-
-  inputEl?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      processCommand(inputEl.value);
-      inputEl.value = "";
-    }
-  });
-
-  // ═══ Font Size Control ═══
-  const FONT_MIN = 14;
-  const FONT_MAX = 28;
-  const FONT_STEP = 2;
-  const FONT_KEY = "bbs-font-size";
-
-  function getFontSize(): number {
-    const saved = localStorage.getItem(FONT_KEY);
-    return saved ? parseInt(saved, 10) : 20;
-  }
-
-  function setFontSize(size: number): void {
-    const clamped = Math.max(FONT_MIN, Math.min(FONT_MAX, size));
-    document.documentElement.style.setProperty("--bbs-font-size", `${clamped}px`);
-    localStorage.setItem(FONT_KEY, String(clamped));
-    const label = document.getElementById("bbs-font-label");
-    if (label) label.textContent = `${clamped}px`;
-  }
-
-  // Init from saved preference
-  setFontSize(getFontSize());
-
-  document.getElementById("bbs-font-up")?.addEventListener("click", () => {
-    setFontSize(getFontSize() + FONT_STEP);
-  });
-  document.getElementById("bbs-font-down")?.addEventListener("click", () => {
-    setFontSize(getFontSize() - FONT_STEP);
+  // Reconnect
+  document.getElementById("bbs-reconnect")?.addEventListener("click", () => {
+    const logoff = document.getElementById("bbs-logoff");
+    if (logoff) logoff.classList.remove("active");
+    showScreen("menu");
   });
 </script>
