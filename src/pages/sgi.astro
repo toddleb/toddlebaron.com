@@ -15,6 +15,7 @@ import GaugeCluster from "../themes/sgi-irix/GaugeCluster.astro";
 import ButtonFly from "../themes/sgi-irix/ButtonFly.astro";
 import FileManager from "../themes/sgi-irix/FileManager.astro";
 import MediaMail from "../themes/sgi-irix/MediaMail.astro";
+import ClockWidget from "../themes/sgi-irix/ClockWidget.astro";
 import { getCollection, render } from "astro:content";
 
 const pages = (await getCollection("pages")).sort((a, b) => a.data.order - b.data.order);
@@ -97,6 +98,7 @@ const windowList = pages.map((p) => ({
         </div>
       </Window>
 
+      <ClockWidget />
       <ButtonFly />
     </SGIDesktop>
   </div>

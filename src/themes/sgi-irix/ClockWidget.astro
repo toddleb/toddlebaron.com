@@ -1,0 +1,64 @@
+---
+// src/themes/sgi-irix/ClockWidget.astro — Small analog clock window
+---
+
+<div
+  class="sgi-window sgi-clock-widget"
+  data-window-id="clock"
+  style="display:none;left:20px;top:60px;width:130px;height:150px"
+>
+  <div class="sgi-window-titlebar" data-drag-handle="clock">
+    <span class="sgi-window-title">Clock</span>
+    <div class="sgi-window-btns">
+      <span class="sgi-window-btn" data-action="close" data-target="clock">×</span>
+    </div>
+  </div>
+  <div class="sgi-window-body" style="display:flex;align-items:center;justify-content:center;padding:8px;">
+    <div class="sgi-clock-face" id="sgi-clock-face">
+      <div class="sgi-clock-mark sgi-clock-mark-12"></div>
+      <div class="sgi-clock-mark sgi-clock-mark-3"></div>
+      <div class="sgi-clock-mark sgi-clock-mark-6"></div>
+      <div class="sgi-clock-mark sgi-clock-mark-9"></div>
+      <div class="sgi-clock-hand sgi-clock-hand-hour" id="sgi-clock-hour"></div>
+      <div class="sgi-clock-hand sgi-clock-hand-minute" id="sgi-clock-minute"></div>
+      <div class="sgi-clock-hand sgi-clock-hand-second" id="sgi-clock-second"></div>
+      <div class="sgi-clock-center"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { registerWindow, openWindow } from "../../engine/wm";
+
+  registerWindow("clock", "Clock", { x: 20, y: 60, width: 130, height: 150 });
+
+  // Auto-open if user had it open last time
+  if (localStorage.getItem("sgi-clock-open") === "1") {
+    document.addEventListener("boot:complete", () => openWindow("clock"));
+  }
+
+  // Save state on open/close
+  document.addEventListener("wm:window-opened", ((e: CustomEvent) => {
+    if (e.detail?.id === "clock") localStorage.setItem("sgi-clock-open", "1");
+  }) as EventListener);
+
+  document.addEventListener("wm:window-closed", ((e: CustomEvent) => {
+    if (e.detail?.id === "clock") localStorage.setItem("sgi-clock-open", "0");
+  }) as EventListener);
+
+  // Clock animation
+  function updateSGIClock(): void {
+    const now = new Date();
+    const h = now.getHours() % 12;
+    const m = now.getMinutes();
+    const s = now.getSeconds();
+    const hourEl = document.getElementById("sgi-clock-hour");
+    const minEl = document.getElementById("sgi-clock-minute");
+    const secEl = document.getElementById("sgi-clock-second");
+    if (hourEl) hourEl.style.transform = `rotate(${h * 30 + m * 0.5}deg)`;
+    if (minEl) minEl.style.transform = `rotate(${m * 6}deg)`;
+    if (secEl) secEl.style.transform = `rotate(${s * 6}deg)`;
+  }
+  updateSGIClock();
+  setInterval(updateSGIClock, 1000);
+</script>

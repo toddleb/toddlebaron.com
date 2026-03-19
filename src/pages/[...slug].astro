@@ -6,6 +6,7 @@ import Window from "../themes/sgi-irix/Window.astro";
 import Toolchest from "../themes/sgi-irix/Toolchest.astro";
 import DesksPanel from "../themes/sgi-irix/DesksPanel.astro";
 import MobileLayout from "../components/MobileLayout.astro";
+import ClockWidget from "../themes/sgi-irix/ClockWidget.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -81,6 +82,7 @@ const pageTitle = blogPost?.data.title
         );
       }))}
 
+      <ClockWidget />
       <DesksPanel windows={windowList} />
     </SGIDesktop>
   </div>
