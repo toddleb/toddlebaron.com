@@ -465,6 +465,7 @@
   height: 32px;
   object-fit: contain;
   image-rendering: pixelated;
+  position: relative;
 }
 
 .nx-dock-label {
@@ -582,6 +583,53 @@
   outline-offset: 1px;
 }
 
+/* ─── Dock Icon Animations ─── */
+.nx-dock-tile[data-window="godzilla"]:hover .nx-dock-icon::after {
+  content: '🔥';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  animation: fire-flicker 0.3s ease infinite alternate;
+}
+
+@keyframes fire-flicker {
+  0% { transform: translateX(-50%) scale(1); }
+  100% { transform: translateX(-50%) scale(1.15); filter: hue-rotate(10deg); }
+}
+
+.nx-dock-tile[data-window="recycler"]:hover .nx-dock-icon {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+/* Fractals icon — always-on slow hue cycle */
+.nx-dock-tile[data-window="fractals"] .nx-dock-icon {
+  animation: fractals-cycle 8s linear infinite;
+}
+
+@keyframes fractals-cycle {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* Music icon — spinning disc on hover */
+.nx-dock-tile[data-window="music"]:hover .nx-dock-icon::after {
+  content: '💿';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  animation: spin-disc 2s linear infinite;
+}
+
+@keyframes spin-disc {
+  0% { transform: translateX(-50%) rotate(0deg); }
+  100% { transform: translateX(-50%) rotate(360deg); }
+}
+
 /* ── Reduced Motion ──────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .nx-window.opening,
@@ -600,6 +648,9 @@
   .nx-window {
     animation: none !important;
   }
+
+  .nx-dock-tile[data-window="fractals"] .nx-dock-icon { animation: none !important; }
+  .nx-dock-tile[data-window="music"]:hover .nx-dock-icon::after { animation: none !important; }
 }
 
 /* ── Terminal ────────────────────────────────────────────────── */
