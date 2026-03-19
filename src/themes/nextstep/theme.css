@@ -651,6 +651,8 @@
 
   .nx-dock-tile[data-window="fractals"] .nx-dock-icon { animation: none !important; }
   .nx-dock-tile[data-window="music"]:hover .nx-dock-icon::after { animation: none !important; }
+  .nx-dock-tile[data-window="godzilla"]:hover .nx-dock-icon::after { animation: none !important; }
+  .idle-active .nx-dock-tile { animation: none !important; }
 }
 
 /* ── Terminal ────────────────────────────────────────────────── */

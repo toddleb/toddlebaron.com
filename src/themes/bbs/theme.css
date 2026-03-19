@@ -1816,6 +1816,13 @@ body[data-time="afternoon"] .desk-lamp {
   .clock-hand-second { display: none; }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .hw-screen::after,
+  .hw-monitor::before,
+  .bbs-splash-logo,
+  .hw-brand-label { animation: none !important; }
+}
+
 /* ─── Night Mode ─── */
 body[data-time="night"] .wall::after,
 body[data-time="evening"] .wall::after {
