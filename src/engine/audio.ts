@@ -12,7 +12,7 @@ export function initAudio(): void {
   document.addEventListener("keydown", unlock);
 }
 
-function getContext(): AudioContext {
+export function getContext(): AudioContext {
   if (!audioContext) {
     audioContext = new AudioContext();
   }
@@ -41,6 +41,7 @@ export async function playSound(url: string): Promise<void> {
 
 export function toggleMute(): boolean {
   muted = !muted;
+  document.dispatchEvent(new CustomEvent("audio:mute-changed", { detail: { muted } }));
   return muted;
 }
 
