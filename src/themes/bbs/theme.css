@@ -1837,3 +1837,20 @@ body[data-time="night"] .hw-monitor::before {
   height: 70%;
   opacity: 1;
 }
+
+/* ─── Idle Overlay ─── */
+.idle-active .hw-screen-content::after {
+  content: "NO CARRIER DETECTED";
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 0, 8, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tf-orange);
+  font-family: var(--bbs-font);
+  font-size: 18px;
+  letter-spacing: 3px;
+  z-index: 60;
+  animation: bbs-cursor-blink 2s step-end infinite;
+}
