@@ -227,13 +227,18 @@
     speedEl.style.color = "#33cc33";
   }
 
-  // Listen for navigation to pulse data LEDs faster
-  document.addEventListener("click", () => {
-    setLed("sd", "on blink");
-    setLed("rd", "on blink");
-    setTimeout(() => {
-      setLed("sd", "on blink-slow");
-      setLed("rd", "on blink-slow");
-    }, 500);
+  // Event-driven TX/RX blinks (after boot)
+  document.addEventListener("boot:complete", () => {
+    // RX blink on content rendered
+    document.addEventListener("bbs:content-rendered", () => {
+      setLed("rd", "on blink");
+      setTimeout(() => setLed("rd", "on blink-slow"), 300);
+    });
+
+    // TX blink on keypress
+    document.addEventListener("keydown", () => {
+      setLed("sd", "on blink");
+      setTimeout(() => setLed("sd", "on blink-slow"), 300);
+    });
   });
 </script>
