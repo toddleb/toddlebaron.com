@@ -100,6 +100,8 @@
     const target = document.getElementById(`bbs-screen-${id}`);
     if (target) {
       target.classList.add("bbs-active");
+      document.dispatchEvent(new CustomEvent("bbs:page-change", { detail: { screen: id } }));
+      document.dispatchEvent(new CustomEvent("bbs:content-rendered"));
       // Scroll the screen content area to top
       const screenContent = document.querySelector(".hw-screen-content");
       if (screenContent) screenContent.scrollTop = 0;
