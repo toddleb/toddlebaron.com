@@ -44,7 +44,26 @@ function createFilteredNoise(centerFreq: number, q: number, gain: number): void 
   targetGains.push(gain);
 }
 
+function onMuteChanged(): void {
+  for (let i = 0; i < activeGains.length; i++) {
+    try {
+      const ctx = getContext();
+      const g = activeGains[i];
+      const target = isMuted() ? 0 : targetGains[i];
+      g.gain.linearRampToValueAtTime(target, ctx.currentTime + 0.3);
+    } catch {
+      // Audio node may have been garbage collected
+    }
+  }
+}
+
+// Register mute listener once at module load
+if (typeof document !== "undefined") {
+  document.addEventListener("audio:mute-changed", onMuteChanged);
+}
+
 export function startAmbient(era: Era): void {
+  stopAmbient(); // clean up any prior ambient (e.g. BBS reboot)
   try {
     switch (era) {
       case "bbs":
@@ -64,20 +83,6 @@ export function startAmbient(era: Era): void {
   } catch {
     // Audio is non-critical
   }
-
-  // Mute integration for continuous sounds
-  document.addEventListener("audio:mute-changed", () => {
-    for (let i = 0; i < activeGains.length; i++) {
-      try {
-        const ctx = getContext();
-        const g = activeGains[i];
-        const target = isMuted() ? 0 : targetGains[i];
-        g.gain.linearRampToValueAtTime(target, ctx.currentTime + 0.3);
-      } catch {
-        // Audio node may have been garbage collected
-      }
-    }
-  });
 }
 
 export function stopAmbient(): void {

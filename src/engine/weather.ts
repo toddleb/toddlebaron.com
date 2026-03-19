@@ -4,6 +4,7 @@ import { getContext, isMuted } from "./audio";
 let rainSource: AudioBufferSourceNode | null = null;
 let rainGain: GainNode | null = null;
 let dripTimeout: ReturnType<typeof setTimeout> | null = null;
+let activeRainVol = 0.015;
 
 export function startRain(intensity: "heavy" | "drizzle"): void {
   if (rainSource) return; // already running
@@ -21,8 +22,8 @@ export function startRain(intensity: "heavy" | "drizzle"): void {
     bp.frequency.value = 3000;
     bp.Q.value = 1;
     rainGain = ctx.createGain();
-    const vol = intensity === "heavy" ? 0.015 : 0.008;
-    rainGain.gain.value = isMuted() ? 0 : vol;
+    activeRainVol = intensity === "heavy" ? 0.015 : 0.008;
+    rainGain.gain.value = isMuted() ? 0 : activeRainVol;
     rainSource.connect(bp).connect(rainGain).connect(ctx.destination);
     rainSource.start();
     scheduleDrip();
@@ -35,7 +36,7 @@ export function startRain(intensity: "heavy" | "drizzle"): void {
 
 function handleMuteChange(): void {
   if (rainGain) {
-    rainGain.gain.value = isMuted() ? 0 : 0.015;
+    rainGain.gain.value = isMuted() ? 0 : activeRainVol;
   }
 }
 
