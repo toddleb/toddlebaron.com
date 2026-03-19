@@ -122,6 +122,80 @@ export async function playDisconnect(): Promise<void> {
   setTimeout(() => ctx.close(), 500);
 }
 
+/** WOPR computer voice — uses Web Speech API with robotic settings */
+export function speakWOPR(text: string): Promise<void> {
+  return new Promise((resolve) => {
+    if (!("speechSynthesis" in window)) { resolve(); return; }
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.75;
+    utter.pitch = 0.3;
+    utter.volume = 0.8;
+    // Try to find a robotic/male voice
+    const voices = speechSynthesis.getVoices();
+    const robot = voices.find(v => /daniel|alex|fred|zarvox|samantha/i.test(v.name))
+      || voices.find(v => v.lang.startsWith("en"))
+      || voices[0];
+    if (robot) utter.voice = robot;
+    utter.onend = () => resolve();
+    utter.onerror = () => resolve();
+    speechSynthesis.speak(utter);
+  });
+}
+
+/** THX Deep Note — synthesized with oscillators converging to a chord */
+export async function playTHXDeepNote(): Promise<void> {
+  const ctx = new AudioContext();
+  if (ctx.state === "suspended") await ctx.resume();
+  const now = ctx.currentTime;
+  const master = ctx.createGain();
+  master.gain.value = 0.08;
+  master.connect(ctx.destination);
+
+  // THX deep note: ~30 oscillators start at random low frequencies
+  // and converge to a D major chord over ~3 seconds
+  const targets = [
+    36.71, 73.42, 146.83, 293.66, 587.33,  // D
+    46.25, 92.50, 185.00, 369.99, 739.99,   // F#
+    55.00, 110.0, 220.00, 440.00, 880.00,   // A
+  ];
+  const dur = 4;
+  const rampStart = 0.8;
+
+  for (const target of targets) {
+    const osc = ctx.createOscillator();
+    osc.type = "sawtooth";
+    // Start at random frequency between 30-80 Hz
+    const startFreq = 30 + Math.random() * 50;
+    osc.frequency.setValueAtTime(startFreq, now);
+    osc.frequency.linearRampToValueAtTime(target, now + rampStart + 1.5 + Math.random() * 0.5);
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.06, now + rampStart);
+    gain.gain.setValueAtTime(0.06, now + dur - 1);
+    gain.gain.linearRampToValueAtTime(0, now + dur);
+
+    // Add slight detuning for richness
+    osc.detune.value = (Math.random() - 0.5) * 20;
+
+    osc.connect(gain).connect(master);
+    osc.start(now);
+    osc.stop(now + dur);
+  }
+
+  // Add a low-pass filter sweep for warmth
+  const lfo = ctx.createBiquadFilter();
+  lfo.type = "lowpass";
+  lfo.frequency.setValueAtTime(200, now);
+  lfo.frequency.linearRampToValueAtTime(2000, now + dur * 0.7);
+  master.disconnect();
+  master.connect(lfo).connect(ctx.destination);
+
+  return new Promise((resolve) => {
+    setTimeout(() => { ctx.close(); resolve(); }, dur * 1000 + 200);
+  });
+}
+
 function tone(
   ctx: AudioContext,
   dest: AudioNode,

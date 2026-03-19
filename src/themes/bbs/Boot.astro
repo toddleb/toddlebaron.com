@@ -30,7 +30,7 @@
 </div>
 
 <script>
-  import { playModemHandshake, playDisconnect } from "../../engine/modem-audio";
+  import { playModemHandshake, playDisconnect, speakWOPR, playTHXDeepNote } from "../../engine/modem-audio";
 
   // Expose disconnect for logoff
   (window as any).__modemDisconnect = playDisconnect;
@@ -193,26 +193,33 @@
       let d = 0;
       for (const line of matrixLines) {
         d += line.delay;
+        const lineText = line.text;
+        const lineColor = line.color;
         setTimeout(() => {
           if (aborted) return;
-          matrixTextEl.appendChild(makeMatrixLine(line.text, line.color));
+          matrixTextEl.appendChild(makeMatrixLine(lineText, lineColor));
+          // WOPR voice for iconic lines
+          if (lineText === "GREETINGS, PROFESSOR FALKEN." || lineText === "SHALL WE PLAY A GAME?" || lineText === "EXCELLENT CHOICE.") {
+            speakWOPR(lineText).catch(() => {});
+          }
         }, d);
       }
 
-      // Matrix → splash
+      // Matrix → splash + THX deep note
       setTimeout(() => {
         if (aborted) return;
         matrixEl.style.transition = "opacity 0.4s";
         matrixEl.style.opacity = "0";
         setTimeout(() => matrixEl.remove(), 400);
         splashEl.classList.add("visible");
+        playTHXDeepNote().catch(() => {});
       }, d + 600);
 
-      // Splash → main
+      // Splash → main (extended to let THX play ~4s)
       setTimeout(() => {
         if (aborted) return;
         finish();
-      }, d + 600 + 2800);
+      }, d + 600 + 4500);
     }, matrixStart);
 
     function skipAll() {
@@ -300,24 +307,33 @@
       let d = 0;
       for (const line of matrixLines) {
         d += line.delay;
+        const lineText = line.text;
+        const lineColor = line.color;
         setTimeout(() => {
           if (aborted) return;
-          matrixText.appendChild(makeMatrixLine(line.text, line.color));
+          matrixText.appendChild(makeMatrixLine(lineText, lineColor));
+          // WOPR voice for iconic lines
+          if (lineText === "GREETINGS, PROFESSOR FALKEN." || lineText === "SHALL WE PLAY A GAME?" || lineText === "EXCELLENT CHOICE.") {
+            speakWOPR(lineText).catch(() => {});
+          }
         }, d);
       }
 
+      // Matrix → splash + THX deep note
       setTimeout(() => {
         if (aborted) return;
         matrixEl.style.transition = "opacity 0.4s";
         matrixEl.style.opacity = "0";
         setTimeout(() => matrixEl.remove(), 400);
         splashEl.classList.add("visible");
+        playTHXDeepNote().catch(() => {});
       }, d + 600);
 
+      // Splash → main (extended for THX ~4s)
       setTimeout(() => {
         if (aborted) return;
         finishBoot();
-      }, d + 600 + 2800);
+      }, d + 600 + 4500);
     }, matrixStart);
 
     bootEl.addEventListener("click", skipAll);

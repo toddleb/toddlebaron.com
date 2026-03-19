@@ -42,6 +42,21 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
             </div>
           </div>
         </div>
+        <!-- Linkin Park - Hybrid Theory (cropped left edge) -->
+        <div class="wall-poster-lp">
+          <div class="poster-frame poster-frame-lp">
+            <div class="poster-content poster-hybrid-theory">
+              <div class="lp-art">
+                <div class="lp-wing"></div>
+                <div class="lp-wing lp-wing-2"></div>
+                <div class="lp-figure"></div>
+              </div>
+              <span class="lp-title">HYBRID</span>
+              <span class="lp-title">THEORY</span>
+              <span class="lp-band">LINKIN PARK</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Desk -->
@@ -55,6 +70,14 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
                 <div class="bbs-scanlines"></div>
                 <div class="hw-screen-content">
                   <slot />
+                </div>
+                <div class="hw-screen-statusbar">
+                  <span id="screen-baud" class="tf-purple-bright">14400</span>
+                  <span class="ansi-bright-black">BAUD</span>
+                  <span class="screen-status-sep">·</span>
+                  <span class="ansi-bright-black">ANSI</span>
+                  <span class="screen-status-sep">·</span>
+                  <span class="ansi-bright-black">V.42bis</span>
                 </div>
               </div>
               <div class="hw-monitor-chin">

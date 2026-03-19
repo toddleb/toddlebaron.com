@@ -64,7 +64,8 @@
 /* ─── Wall ─── */
 .wall {
   width: 100%;
-  background: linear-gradient(180deg, #1a1410 0%, #1e1812 40%, #201a14 100%);
+  flex: 1;
+  background: linear-gradient(180deg, #2a2218 0%, #342a1e 40%, #3a2e22 100%);
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -142,25 +143,101 @@
 .poster-wargames .poster-accent { color: #55ff55; text-shadow: 0 0 8px rgba(51,204,51,0.4); }
 .poster-wargames .poster-detail { color: #338833; }
 
+/* ─── Linkin Park Hybrid Theory poster (cropped, right wall edge) ─── */
+.wall-poster-lp {
+  position: absolute;
+  right: 0;
+  bottom: 8px;
+  overflow: hidden;
+  width: 70px;
+  z-index: 2;
+}
+
+.poster-frame-lp {
+  border-right: none;
+  border-radius: 2px 0 0 2px;
+}
+
+.poster-hybrid-theory {
+  background: linear-gradient(160deg, #1a0a0a 0%, #3a1010 30%, #5a1818 60%, #2a0808 100%);
+  min-width: 120px;
+  padding: 12px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.lp-art {
+  position: relative;
+  height: 50px;
+  margin-bottom: 6px;
+}
+
+.lp-figure {
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  width: 12px;
+  height: 30px;
+  background: linear-gradient(180deg, #1a1a1a, #333);
+  border-radius: 4px 4px 0 0;
+}
+
+.lp-wing {
+  position: absolute;
+  bottom: 10px;
+  left: 8px;
+  width: 30px;
+  height: 20px;
+  border-top: 2px solid rgba(180, 50, 50, 0.6);
+  border-left: 2px solid rgba(180, 50, 50, 0.4);
+  border-radius: 50% 0 0 0;
+  transform: rotate(-15deg);
+}
+
+.lp-wing-2 {
+  left: 24px;
+  transform: rotate(15deg) scaleX(-1);
+  border-left: none;
+  border-right: 2px solid rgba(180, 50, 50, 0.4);
+  border-radius: 0 50% 0 0;
+}
+
+.lp-title {
+  display: block;
+  font-family: var(--bbs-font);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #cc3333;
+  text-shadow: 0 0 4px rgba(204, 51, 51, 0.4);
+}
+
+.lp-band {
+  display: block;
+  font-family: var(--bbs-font);
+  font-size: 6px;
+  letter-spacing: 1px;
+  color: #884444;
+  margin-top: 4px;
+}
+
 /* ─── Desk Layout ─── */
 .desk {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  width: 65vw;
-  max-width: 860px;
-  min-width: 420px;
+  width: 100%;
   padding: 0;
-  background: none;
+  background: linear-gradient(180deg, #201a14 0%, #1e1812 100%);
 }
 
 .hw-stack {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 65vw;
-  max-width: 860px;
+  width: 80vw;
+  max-width: 1100px;
   min-width: 380px;
   gap: 0;
   padding-top: 12px;
@@ -253,9 +330,10 @@
 
 /* ─── Desk Surface ─── */
 .desk-surface {
-  width: 92vw;
-  max-width: 1200px;
-  min-width: 460px;
+  width: 100%;
+  margin-top: -8px;
+  position: relative;
+  z-index: 1;
 }
 
 .desk-edge {
@@ -271,16 +349,16 @@
 .hw-felt-feet {
   display: flex;
   justify-content: space-between;
-  padding: 0 16px;
-  height: 4px;
+  padding: 0 20px;
+  height: 6px;
 }
 
 .felt-foot {
-  width: 10px;
-  height: 4px;
-  background: #333;
-  border-radius: 0 0 2px 2px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  width: 16px;
+  height: 6px;
+  background: #2a2a2a;
+  border-radius: 0 0 3px 3px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .hw-modem-wrap {
@@ -504,16 +582,43 @@
     inset 0 0 30px rgba(74, 26, 122, 0.15),
     inset 0 0 60px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  min-height: 60vh;
+  aspect-ratio: 16 / 10;
+  max-height: 70vh;
 }
 
 .hw-screen-content {
   padding: 16px 20px;
   overflow-y: auto;
+  position: absolute;
+  inset: 0;
+  bottom: 24px;
   scrollbar-width: none;
 }
 
 .hw-screen-content::-webkit-scrollbar { display: none; }
+
+/* Status bar at bottom of monitor screen */
+.hw-screen-statusbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-family: var(--bbs-font);
+  background: rgba(0, 0, 0, 0.6);
+  border-top: 1px solid rgba(123, 47, 190, 0.15);
+}
+
+.screen-status-sep {
+  color: var(--tf-purple);
+  font-size: 8px;
+}
 
 
 .hw-screen-text {
@@ -580,7 +685,7 @@
   background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 40%, #1a1a1a 100%);
   border: 1px solid #444;
   border-radius: 6px;
-  padding: 8px 20px;
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   gap: 20px;
@@ -1020,17 +1125,17 @@
 
 /* ─── Responsive ─── */
 @media (max-width: 900px) {
-  .desk { width: 80vw; }
-  .hw-stack { width: 60vw; }
-  .desk-surface { width: 96vw; }
+  .desk { width: 100%; }
+  .hw-stack { width: 85vw; }
+  .desk-surface { width: 100%; }
   .wall { padding: 16px 20px 0; gap: 20px; }
 }
 
 @media (max-width: 700px) {
   :root { --bbs-font-size: 16px; }
-  .desk { width: 96vw; min-width: 320px; }
-  .hw-stack { width: 90vw; min-width: 300px; }
-  .desk-surface { width: 100vw; min-width: 340px; }
+  .desk { width: 100%; }
+  .hw-stack { width: 96vw; min-width: 300px; }
+  .desk-surface { width: 100%; }
   .desk-item { display: none; }
   .wall-poster { display: none; }
   .wall { min-height: 30px; padding: 10px 0 0; }
