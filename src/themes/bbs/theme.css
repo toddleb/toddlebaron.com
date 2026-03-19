@@ -65,7 +65,7 @@
 .wall {
   width: 100%;
   flex: 1;
-  background: linear-gradient(180deg, #3a2040 0%, #452850 40%, #4d2e58 100%);
+  background: linear-gradient(180deg, #3a3528 0%, #454038 40%, #4d4840 100%);
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -169,25 +169,25 @@
   align-items: flex-end;
   width: 100%;
   padding: 0;
-  background-color: #9a85b0;
+  background-color: #d4c8a8;
   background-image:
-    /* 80s sponge-painted wall — soft violet tones */
-    radial-gradient(ellipse 40px 35px at 15% 20%, rgba(140,110,170,0.5) 0%, transparent 70%),
-    radial-gradient(ellipse 55px 40px at 75% 15%, rgba(160,130,190,0.4) 0%, transparent 70%),
-    radial-gradient(ellipse 35px 50px at 45% 60%, rgba(130,100,160,0.45) 0%, transparent 70%),
-    radial-gradient(ellipse 60px 35px at 85% 70%, rgba(150,120,180,0.4) 0%, transparent 70%),
-    radial-gradient(ellipse 45px 55px at 25% 80%, rgba(165,135,195,0.35) 0%, transparent 70%),
-    radial-gradient(ellipse 50px 30px at 55% 30%, rgba(125,95,155,0.5) 0%, transparent 70%),
-    radial-gradient(ellipse 30px 45px at 10% 50%, rgba(170,145,200,0.3) 0%, transparent 70%),
-    radial-gradient(ellipse 55px 45px at 65% 85%, rgba(135,105,165,0.45) 0%, transparent 70%),
-    radial-gradient(ellipse 40px 35px at 90% 40%, rgba(160,135,190,0.35) 0%, transparent 70%),
-    radial-gradient(ellipse 50px 40px at 35% 10%, rgba(140,110,170,0.4) 0%, transparent 70%),
-    /* Second sponge layer — deeper purple */
-    radial-gradient(ellipse 45px 50px at 20% 45%, rgba(105,75,135,0.3) 0%, transparent 65%),
-    radial-gradient(ellipse 50px 35px at 60% 55%, rgba(110,80,140,0.35) 0%, transparent 65%),
-    radial-gradient(ellipse 35px 45px at 80% 25%, rgba(100,70,130,0.3) 0%, transparent 65%),
-    radial-gradient(ellipse 55px 40px at 40% 75%, rgba(115,85,145,0.25) 0%, transparent 65%),
-    radial-gradient(ellipse 40px 50px at 5% 90%, rgba(105,75,135,0.3) 0%, transparent 65%);
+    /* 80s sponge-painted wall — warm parchment tones */
+    radial-gradient(ellipse 40px 35px at 15% 20%, rgba(190,175,145,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 55px 40px at 75% 15%, rgba(200,185,155,0.4) 0%, transparent 70%),
+    radial-gradient(ellipse 35px 50px at 45% 60%, rgba(175,160,130,0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 60px 35px at 85% 70%, rgba(195,180,150,0.4) 0%, transparent 70%),
+    radial-gradient(ellipse 45px 55px at 25% 80%, rgba(205,190,160,0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 50px 30px at 55% 30%, rgba(170,155,125,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 30px 45px at 10% 50%, rgba(210,195,165,0.3) 0%, transparent 70%),
+    radial-gradient(ellipse 55px 45px at 65% 85%, rgba(180,165,135,0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 40px 35px at 90% 40%, rgba(200,185,155,0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 50px 40px at 35% 10%, rgba(190,175,145,0.4) 0%, transparent 70%),
+    /* Second sponge layer — deeper tan */
+    radial-gradient(ellipse 45px 50px at 20% 45%, rgba(150,135,105,0.3) 0%, transparent 65%),
+    radial-gradient(ellipse 50px 35px at 60% 55%, rgba(155,140,110,0.35) 0%, transparent 65%),
+    radial-gradient(ellipse 35px 45px at 80% 25%, rgba(145,130,100,0.3) 0%, transparent 65%),
+    radial-gradient(ellipse 55px 40px at 40% 75%, rgba(160,145,115,0.25) 0%, transparent 65%),
+    radial-gradient(ellipse 40px 50px at 5% 90%, rgba(150,135,105,0.3) 0%, transparent 65%);
 }
 
 /* ─── Yoo-hoo Bottle ─── */
