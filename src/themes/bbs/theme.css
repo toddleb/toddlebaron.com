@@ -65,11 +65,11 @@
 .wall {
   width: 100%;
   flex: 1;
-  background: linear-gradient(180deg, #2a2218 0%, #342a1e 40%, #3a2e22 100%);
+  background: linear-gradient(180deg, #3a2040 0%, #452850 40%, #4d2e58 100%);
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  padding: 20px 40px 0;
+  padding: 20px 40px 6px;
   position: relative;
   gap: 40px;
   min-height: 90px;
@@ -86,89 +86,78 @@
   pointer-events: none;
 }
 
-/* ─── Wall Posters ─── */
-.wall-poster {
-  flex-shrink: 0;
-  transform: translateY(8px);
-}
-
-.poster-frame {
-  border: 2px solid #333;
-  border-radius: 2px;
-  padding: 2px;
-  background: #111;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.03);
-}
-
-.poster-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px 16px;
-  gap: 2px;
-  min-width: 100px;
-}
-
-.poster-title {
-  font-family: var(--bbs-font);
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  line-height: 1.2;
-}
-
-.poster-sub {
-  font-size: 8px;
-  letter-spacing: 3px;
-  color: #555;
-}
-
-.poster-line {
-  width: 40px;
-  height: 1px;
-  margin: 4px 0;
-}
-
-.poster-detail {
-  font-size: 7px;
-  letter-spacing: 1px;
-  color: #555;
-}
-
-.poster-bbs-ad .poster-title { color: var(--tf-orange); }
-.poster-bbs-ad .poster-line { background: linear-gradient(90deg, transparent, var(--tf-purple), transparent); }
-.poster-bbs-ad .poster-detail { color: var(--tf-purple-bright); }
-
-.poster-wargames .poster-title { color: #33cc33; }
-.poster-wargames .poster-accent { color: #55ff55; text-shadow: 0 0 8px rgba(51,204,51,0.4); }
-.poster-wargames .poster-detail { color: #338833; }
-
-/* ─── Linkin Park Hybrid Theory poster (full album cover on wall) ─── */
-.wall-poster-lp {
+/* Wooden shelf ledge — sits right under the albums */
+.wall::after {
+  content: '';
   position: absolute;
-  left: 10%;
-  bottom: 12px;
-  z-index: 2;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: linear-gradient(180deg, #3a3a3a 0%, #2e2e2e 40%, #222222 100%);
+  border-top: 1px solid #4a4a4a;
+  border-bottom: 1px solid #111;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
+  z-index: 10;
 }
 
-.poster-frame-lp {
-  border: 3px solid #222;
-  border-radius: 2px;
-  background: #111;
-  padding: 2px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.4);
+/* ─── Album Shelf ─── */
+.album-shelf {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 14px;
+  padding: 0 20px 0 140px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  max-width: 100%;
 }
 
-.lp-cover-img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  display: block;
-  filter: brightness(0.55) saturate(0.7);
+.album-shelf::-webkit-scrollbar { display: none; }
+
+/* ─── Shelf Model (B-wing etc.) ─── */
+.shelf-model {
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+.shelf-model img {
+  height: 220px;
+  width: auto;
+  filter: brightness(0.7) saturate(0.8);
   transition: filter 0.3s;
 }
 
-.wall-poster-lp:hover .lp-cover-img {
+.shelf-model:hover img {
+  filter: brightness(0.9) saturate(1);
+}
+
+.album-cover {
+  flex-shrink: 0;
+  border: 2px solid #222;
+  border-radius: 2px;
+  background: #111;
+  padding: 2px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.3);
+  transform: translateY(4px);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.album-cover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.7), 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.album-cover img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.5) saturate(0.65);
+  transition: filter 0.3s;
+}
+
+.album-cover:hover img {
   filter: brightness(0.85) saturate(1);
 }
 
@@ -180,7 +169,44 @@
   align-items: flex-end;
   width: 100%;
   padding: 0;
-  background: linear-gradient(180deg, #201a14 0%, #1e1812 100%);
+  background-color: #9a85b0;
+  background-image:
+    /* 80s sponge-painted wall — soft violet tones */
+    radial-gradient(ellipse 40px 35px at 15% 20%, rgba(140,110,170,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 55px 40px at 75% 15%, rgba(160,130,190,0.4) 0%, transparent 70%),
+    radial-gradient(ellipse 35px 50px at 45% 60%, rgba(130,100,160,0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 60px 35px at 85% 70%, rgba(150,120,180,0.4) 0%, transparent 70%),
+    radial-gradient(ellipse 45px 55px at 25% 80%, rgba(165,135,195,0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 50px 30px at 55% 30%, rgba(125,95,155,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 30px 45px at 10% 50%, rgba(170,145,200,0.3) 0%, transparent 70%),
+    radial-gradient(ellipse 55px 45px at 65% 85%, rgba(135,105,165,0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 40px 35px at 90% 40%, rgba(160,135,190,0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 50px 40px at 35% 10%, rgba(140,110,170,0.4) 0%, transparent 70%),
+    /* Second sponge layer — deeper purple */
+    radial-gradient(ellipse 45px 50px at 20% 45%, rgba(105,75,135,0.3) 0%, transparent 65%),
+    radial-gradient(ellipse 50px 35px at 60% 55%, rgba(110,80,140,0.35) 0%, transparent 65%),
+    radial-gradient(ellipse 35px 45px at 80% 25%, rgba(100,70,130,0.3) 0%, transparent 65%),
+    radial-gradient(ellipse 55px 40px at 40% 75%, rgba(115,85,145,0.25) 0%, transparent 65%),
+    radial-gradient(ellipse 40px 50px at 5% 90%, rgba(105,75,135,0.3) 0%, transparent 65%);
+}
+
+/* ─── Yoo-hoo Bottle ─── */
+.desk-yoohoo {
+  position: absolute;
+  right: 14%;
+  bottom: -3px;
+  z-index: 5;
+}
+
+.desk-yoohoo img {
+  height: 195px;
+  width: auto;
+  filter: brightness(0.75) saturate(0.8) drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+  transition: filter 0.3s;
+}
+
+.desk-yoohoo:hover img {
+  filter: brightness(0.9) saturate(1);
 }
 
 .hw-stack {
@@ -191,7 +217,8 @@
   max-width: 1100px;
   min-width: 380px;
   gap: 0;
-  padding-top: 12px;
+  padding-top: 14px;
+  padding-bottom: 8px;
 }
 
 /* ─── Desk Items ─── */
@@ -282,17 +309,19 @@
 /* ─── Desk Surface ─── */
 .desk-surface {
   width: 100%;
-  margin-top: -8px;
+  max-width: none;
+  min-width: 380px;
+  margin: -8px auto 0;
   position: relative;
   z-index: 1;
 }
 
 .desk-edge {
   height: 18px;
-  background: linear-gradient(180deg, #5a3a20 0%, #4a2e18 40%, #3a2210 100%);
+  background: linear-gradient(180deg, #3a2210 0%, #2e1a0c 40%, #221408 100%);
   border-radius: 0 0 4px 4px;
-  border: 1px solid #2a1a0a;
-  border-top: 2px solid #6a4a2a;
+  border: 1px solid #1a0e04;
+  border-top: 2px solid #4a2e18;
   box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
@@ -512,7 +541,16 @@
 }
 
 .hw-monitor-body {
-  background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 40%, #1a1a1a 100%);
+  background:
+    /* Brushed aluminum grain — fine horizontal lines */
+    repeating-linear-gradient(0deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(0,0,0,0.03) 1px,
+      rgba(255,255,255,0.02) 2px,
+      transparent 3px,
+      rgba(0,0,0,0.02) 4px
+    ),
+    linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 40%, #1a1a1a 100%);
   border: 1px solid #444;
   border-radius: 8px 8px 0 0;
   padding: 12px 12px 0;
@@ -632,7 +670,7 @@
 
 .hw-stand-neck {
   width: 40px;
-  height: 20px;
+  height: 17px;
   background: linear-gradient(180deg, #2a2a2a, #1a1a1a);
   border-left: 1px solid #333;
   border-right: 1px solid #333;
@@ -644,10 +682,18 @@
 }
 
 .hw-computer-body {
-  background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 40%, #1a1a1a 100%);
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(0,0,0,0.03) 1px,
+      rgba(255,255,255,0.02) 2px,
+      transparent 3px,
+      rgba(0,0,0,0.02) 4px
+    ),
+    linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 40%, #1a1a1a 100%);
   border: 1px solid #444;
   border-radius: 6px;
-  padding: 14px 20px;
+  padding: 22px 20px;
   display: flex;
   align-items: center;
   gap: 20px;
@@ -1099,6 +1145,7 @@
   .hw-stack { width: 96vw; min-width: 300px; }
   .desk-surface { width: 100%; }
   .desk-item { display: none; }
+  .desk-yoohoo { display: none; }
   .wall-poster { display: none; }
   .wall { min-height: 30px; padding: 10px 0 0; }
   .bbs-menu-row { flex-direction: column; gap: 8px; }
