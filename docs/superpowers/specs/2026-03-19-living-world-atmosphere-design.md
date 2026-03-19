@@ -67,7 +67,7 @@ In `Boot.astro`, the existing user-gesture listeners (`click`, `keydown`, `touch
 | Linkin Park — Hybrid Theory | In The End | `linkin-park-hybrid-theory` |
 | Shinedown | Simple Man | `shinedown` |
 | Halestorm (self-titled) | It's Not You | `halestorm` |
-| Silversun Pickups | Lazy Eye (TBD — confirm with Todd) | `silversun-pickups` |
+| Silversun Pickups | Panic Switch | `silversun-pickups` |
 | Evanescence | Better Without You | `evanescence` |
 | Godsmack | Lighting Up the Sky | `godsmack` |
 | Fair to Midland | Dance of the Manatee | `fair-to-midland` |
@@ -471,6 +471,6 @@ src/layouts/NXDesktop.astro   — startAmbient('nextstep'), initTimeOfDay()
 
 ## Open Items
 
-- **Silversun Pickups track** — confirm "Lazy Eye" or specify another
+- ~~Silversun Pickups track~~ — confirmed: "Panic Switch"
 - **Todd's birthday date** — needed for future seasonal trigger (not blocking v1)
 - **Album track verification** — run `scripts/fetch-itunes-previews.ts` to confirm all 10 tracks return valid preview URLs. Fallback: manually find and hardcode any missing URLs.
