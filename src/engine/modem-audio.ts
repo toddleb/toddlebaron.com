@@ -127,8 +127,8 @@ export function speakWOPR(text: string): Promise<void> {
   return new Promise((resolve) => {
     if (!("speechSynthesis" in window)) { resolve(); return; }
     const utter = new SpeechSynthesisUtterance(text);
-    utter.rate = 0.75;
-    utter.pitch = 0.3;
+    utter.rate = 0.8;
+    utter.pitch = 0.6;
     utter.volume = 0.8;
     // Try to find a robotic/male voice
     const voices = speechSynthesis.getVoices();

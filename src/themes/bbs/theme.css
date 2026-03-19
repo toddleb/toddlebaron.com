@@ -143,82 +143,33 @@
 .poster-wargames .poster-accent { color: #55ff55; text-shadow: 0 0 8px rgba(51,204,51,0.4); }
 .poster-wargames .poster-detail { color: #338833; }
 
-/* ─── Linkin Park Hybrid Theory poster (cropped, right wall edge) ─── */
+/* ─── Linkin Park Hybrid Theory poster (full album cover on wall) ─── */
 .wall-poster-lp {
   position: absolute;
-  right: 0;
-  bottom: 8px;
-  overflow: hidden;
-  width: 70px;
+  left: 10%;
+  bottom: 12px;
   z-index: 2;
 }
 
 .poster-frame-lp {
-  border-right: none;
-  border-radius: 2px 0 0 2px;
+  border: 3px solid #222;
+  border-radius: 2px;
+  background: #111;
+  padding: 2px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.4);
 }
 
-.poster-hybrid-theory {
-  background: linear-gradient(160deg, #1a0a0a 0%, #3a1010 30%, #5a1818 60%, #2a0808 100%);
-  min-width: 120px;
-  padding: 12px 16px;
-  position: relative;
-  overflow: hidden;
-}
-
-.lp-art {
-  position: relative;
-  height: 50px;
-  margin-bottom: 6px;
-}
-
-.lp-figure {
-  position: absolute;
-  bottom: 0;
-  left: 20px;
-  width: 12px;
-  height: 30px;
-  background: linear-gradient(180deg, #1a1a1a, #333);
-  border-radius: 4px 4px 0 0;
-}
-
-.lp-wing {
-  position: absolute;
-  bottom: 10px;
-  left: 8px;
-  width: 30px;
-  height: 20px;
-  border-top: 2px solid rgba(180, 50, 50, 0.6);
-  border-left: 2px solid rgba(180, 50, 50, 0.4);
-  border-radius: 50% 0 0 0;
-  transform: rotate(-15deg);
-}
-
-.lp-wing-2 {
-  left: 24px;
-  transform: rotate(15deg) scaleX(-1);
-  border-left: none;
-  border-right: 2px solid rgba(180, 50, 50, 0.4);
-  border-radius: 0 50% 0 0;
-}
-
-.lp-title {
+.lp-cover-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
   display: block;
-  font-family: var(--bbs-font);
-  font-size: 8px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  color: #cc3333;
-  text-shadow: 0 0 4px rgba(204, 51, 51, 0.4);
+  filter: brightness(0.55) saturate(0.7);
+  transition: filter 0.3s;
 }
 
-.lp-band {
-  display: block;
-  font-family: var(--bbs-font);
-  font-size: 6px;
-  letter-spacing: 1px;
-  color: #884444;
-  margin-top: 4px;
+.wall-poster-lp:hover .lp-cover-img {
+  filter: brightness(0.85) saturate(1);
 }
 
 /* ─── Desk Layout ─── */
@@ -642,8 +593,19 @@
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 2px;
-  color: #666;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  background: linear-gradient(90deg, #61BB46, #FDB827, #F5821F, #E03A3E, #963D97, #009DDC);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: brightness(0.85);
+  text-shadow: none;
+  animation: rainbow-shift 6s linear infinite;
+  background-size: 200% 100%;
+}
+
+@keyframes rainbow-shift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
 }
 
 .hw-power-indicator {
@@ -656,8 +618,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--tf-orange);
-  box-shadow: 0 0 6px var(--tf-orange-glow), 0 0 12px var(--tf-orange-glow);
+  background: #00ccaa;
+  box-shadow: 0 0 6px rgba(0, 204, 170, 0.6), 0 0 12px rgba(0, 204, 170, 0.3);
 }
 
 .hw-power-label {

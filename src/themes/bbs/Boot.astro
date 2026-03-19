@@ -190,6 +190,7 @@
       setTimeout(() => bootEl.remove(), 300);
       matrixEl.classList.add("visible");
 
+      const speechPromises: Promise<void>[] = [];
       let d = 0;
       for (const line of matrixLines) {
         d += line.delay;
@@ -200,26 +201,34 @@
           matrixTextEl.appendChild(makeMatrixLine(lineText, lineColor));
           // WOPR voice for iconic lines
           if (lineText === "GREETINGS, PROFESSOR FALKEN." || lineText === "SHALL WE PLAY A GAME?" || lineText === "EXCELLENT CHOICE.") {
-            speakWOPR(lineText).catch(() => {});
+            speechPromises.push(speakWOPR(lineText).catch(() => {}));
           }
         }, d);
       }
 
-      // Matrix → splash + THX deep note
-      setTimeout(() => {
+      // Wait for all text to appear + all speech to finish, then splash + THX
+      const allTextDone = d + 600;
+      setTimeout(async () => {
         if (aborted) return;
+        // Wait for any speech still playing
+        await Promise.all(speechPromises);
+        if (aborted) return;
+
+        // Matrix → splash
         matrixEl.style.transition = "opacity 0.4s";
         matrixEl.style.opacity = "0";
         setTimeout(() => matrixEl.remove(), 400);
         splashEl.classList.add("visible");
-        playTHXDeepNote().catch(() => {});
-      }, d + 600);
 
-      // Splash → main (extended to let THX play ~4s)
-      setTimeout(() => {
-        if (aborted) return;
-        finish();
-      }, d + 600 + 4500);
+        // THX deep note on splash reveal
+        playTHXDeepNote().catch(() => {});
+
+        // Splash → main after THX plays (~4.5s)
+        setTimeout(() => {
+          if (aborted) return;
+          finish();
+        }, 4500);
+      }, allTextDone);
     }, matrixStart);
 
     function skipAll() {
@@ -304,6 +313,7 @@
       setTimeout(() => bootEl.remove(), 300);
       matrixEl.classList.add("visible");
 
+      const speechPromises: Promise<void>[] = [];
       let d = 0;
       for (const line of matrixLines) {
         d += line.delay;
@@ -314,26 +324,33 @@
           matrixText.appendChild(makeMatrixLine(lineText, lineColor));
           // WOPR voice for iconic lines
           if (lineText === "GREETINGS, PROFESSOR FALKEN." || lineText === "SHALL WE PLAY A GAME?" || lineText === "EXCELLENT CHOICE.") {
-            speakWOPR(lineText).catch(() => {});
+            speechPromises.push(speakWOPR(lineText).catch(() => {}));
           }
         }, d);
       }
 
-      // Matrix → splash + THX deep note
-      setTimeout(() => {
+      // Wait for all text + speech to finish, then splash + THX
+      const allTextDone = d + 600;
+      setTimeout(async () => {
         if (aborted) return;
+        await Promise.all(speechPromises);
+        if (aborted) return;
+
+        // Matrix → splash
         matrixEl.style.transition = "opacity 0.4s";
         matrixEl.style.opacity = "0";
         setTimeout(() => matrixEl.remove(), 400);
         splashEl.classList.add("visible");
-        playTHXDeepNote().catch(() => {});
-      }, d + 600);
 
-      // Splash → main (extended for THX ~4s)
-      setTimeout(() => {
-        if (aborted) return;
-        finishBoot();
-      }, d + 600 + 4500);
+        // THX deep note on splash reveal
+        playTHXDeepNote().catch(() => {});
+
+        // Splash → main after THX plays (~4.5s)
+        setTimeout(() => {
+          if (aborted) return;
+          finishBoot();
+        }, 4500);
+      }, allTextDone);
     }, matrixStart);
 
     bootEl.addEventListener("click", skipAll);
@@ -343,6 +360,7 @@
 
   function skipAll() {
     aborted = true;
+    if ("speechSynthesis" in window) speechSynthesis.cancel();
     [bootEl, matrixEl, splashEl].forEach((el) => {
       el.style.transition = "opacity 0.15s";
       el.style.opacity = "0";
