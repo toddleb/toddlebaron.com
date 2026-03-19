@@ -1,0 +1,64 @@
+---
+// src/components/Snow.astro — Seasonal snow particles
+const flakes = Array.from({ length: 30 }, () => ({
+  left: Math.random() * 100,
+  size: 2 + Math.random() * 3,
+  duration: 6 + Math.random() * 9,
+  delay: Math.random() * 10,
+  drift: -10 + Math.random() * 20,
+}));
+---
+
+<div class="snow-container" id="snow-container">
+  {flakes.map((f) => (
+    <div
+      class="snowflake"
+      style={`left:${f.left}%;width:${f.size}px;height:${f.size}px;animation-duration:${f.duration}s;animation-delay:${f.delay}s;--drift:${f.drift}px`}
+    />
+  ))}
+</div>
+
+<style>
+  .snow-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+  }
+
+  .snowflake {
+    position: absolute;
+    top: -10px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0.8;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .snowflake {
+      animation: snowfall linear infinite;
+    }
+  }
+
+  @keyframes snowfall {
+    0% { transform: translateY(-10px) translateX(0); opacity: 0; }
+    10% { opacity: 0.8; }
+    100% { transform: translateY(100vh) translateX(var(--drift, 0px)); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .snow-container { display: none; }
+  }
+</style>
+
+<script>
+  import { getSeasonalOverride } from "../engine/seasonal";
+  const override = getSeasonalOverride();
+  if (!override?.particleEffect) {
+    document.getElementById("snow-container")?.remove();
+  }
+  if (override?.cssClass) {
+    document.body.classList.add(override.cssClass);
+  }
+</script>

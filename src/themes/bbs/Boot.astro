@@ -31,11 +31,21 @@
 
 <script>
   import { playModemHandshake, playDisconnect, speakWOPR, playTHXDeepNote } from "../../engine/modem-audio";
+  import { getSeasonalOverride } from "../../engine/seasonal";
 
   // Expose disconnect for logoff
   (window as any).__modemDisconnect = playDisconnect;
 
+  const seasonal = getSeasonalOverride();
+
   const modemLines = [
+    ...(seasonal?.bootMessageOverride
+      ? [
+          { text: "", delay: 100 },
+          { text: seasonal.bootMessageOverride, color: "ansi-bright-white", delay: 300 },
+          { text: "", delay: 200 },
+        ]
+      : []),
     { text: "HAYES SMARTMODEM 14400 — FIRMWARE v4.20", color: "ansi-bright-black", delay: 150 },
     { text: "", delay: 100 },
     { text: "ATZ", color: "tf-orange", delay: 200 },

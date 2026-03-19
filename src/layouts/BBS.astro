@@ -7,6 +7,7 @@ import AlbumPlayer from "../themes/bbs/AlbumPlayer.astro";
 import RainWindow from "../themes/bbs/RainWindow.astro";
 import DeskLamp from "../themes/bbs/DeskLamp.astro";
 import WallClock from "../themes/bbs/WallClock.astro";
+import Snow from "../components/Snow.astro";
 import "../themes/bbs/theme.css";
 export interface Props {
   title?: string;
@@ -130,6 +131,7 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
         <div class="desk-edge"></div>
       </div>
     </div>
+    <Snow />
   </body>
 </html>
 
