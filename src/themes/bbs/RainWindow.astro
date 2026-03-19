@@ -1,0 +1,79 @@
+---
+// src/themes/bbs/RainWindow.astro — Partial window, lower-right corner
+const streaks = Array.from({ length: 18 }, (_, i) => ({
+  left: 5 + Math.random() * 90,
+  duration: 1.5 + Math.random() * 1.5,
+  delay: Math.random() * 3,
+  opacity: 0.3 + Math.random() * 0.4,
+  width: 1 + Math.random(),
+}));
+---
+
+<div class="rain-window" id="rain-window">
+  <div class="rain-window-frame">
+    <div class="rain-window-glass">
+      <div class="rain-window-outside"></div>
+      <div class="rain-streaks">
+        {streaks.map((s) => (
+          <div
+            class="rain-streak"
+            style={`left:${s.left}%;animation-duration:${s.duration}s;animation-delay:${s.delay}s;opacity:${s.opacity};width:${s.width}px`}
+          />
+        ))}
+      </div>
+      <div class="rain-window-reflection"></div>
+    </div>
+    <div class="rain-window-sill"></div>
+  </div>
+</div>
+
+<script>
+  import { getTimePeriod } from "../../engine/time-of-day";
+  import { startRain, stopRain, playThunder } from "../../engine/weather";
+
+  function updateWeather(): void {
+    const period = getTimePeriod();
+    const windowEl = document.getElementById("rain-window");
+    if (!windowEl) return;
+
+    // Daily rain seed for afternoon
+    const daySeed = Math.floor(Date.now() / 86400000);
+    const afternoonRain = (daySeed % 3) === 0; // ~33% chance
+
+    const shouldRain = period === "night" || period === "evening" || period === "dawn" ||
+      (period === "afternoon" && afternoonRain);
+
+    if (shouldRain) {
+      windowEl.classList.add("rain-active");
+      windowEl.classList.remove("rain-clear");
+      const intensity = period === "night" ? "heavy" : "drizzle";
+      startRain(intensity);
+
+      // Lightning at night
+      if (period === "night") {
+        scheduleFlash();
+      }
+    } else {
+      windowEl.classList.remove("rain-active");
+      windowEl.classList.add("rain-clear");
+      stopRain();
+    }
+  }
+
+  let flashTimeout: ReturnType<typeof setTimeout> | null = null;
+  function scheduleFlash(): void {
+    const delay = 30000 + Math.random() * 60000;
+    flashTimeout = setTimeout(() => {
+      const windowEl = document.getElementById("rain-window");
+      if (windowEl?.classList.contains("rain-active")) {
+        windowEl.classList.add("lightning-flash");
+        setTimeout(() => windowEl?.classList.remove("lightning-flash"), 200);
+        // Thunder 1-3s after flash
+        setTimeout(() => playThunder(), 1000 + Math.random() * 2000);
+        scheduleFlash();
+      }
+    }, delay);
+  }
+
+  document.addEventListener("boot:complete", updateWeather);
+</script>
