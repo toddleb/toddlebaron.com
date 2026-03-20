@@ -1925,6 +1925,58 @@ body[data-time="afternoon"] .sky-airplane {
   .sky-birds { display: none; }
 }
 
+/* ── Airplane ── */
+.sky-airplane {
+  z-index: 3;
+}
+
+.sky-airplane::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 3px;
+  background: rgba(60, 60, 60, 0.6);
+  border-radius: 3px 1px 1px 3px;
+  top: 30%;
+  left: 0;
+}
+
+/* Contrail — offset behind the fuselage */
+.sky-airplane::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.4));
+  top: calc(30% + 1px);
+  left: -38px;
+}
+
+@keyframes airplane-cross {
+  0% {
+    transform: translateX(-50px) translateY(30px);
+    opacity: 0;
+  }
+  5% { opacity: 1; }
+  90% { opacity: 1; }
+  100% {
+    transform: translateX(350px) translateY(-40px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sky-airplane::before,
+  .sky-airplane::after {
+    animation: airplane-cross 60s linear infinite;
+    animation-delay: -15s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky-airplane { display: none; }
+}
+
 /* ─── Desk Lamp ─── */
 .desk-lamp {
   position: absolute;
