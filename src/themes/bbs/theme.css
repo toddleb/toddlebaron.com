@@ -1720,6 +1720,148 @@ body[data-time="afternoon"] .rain-window-outside {
   }
 }
 
+/* ─── Daytime Sky Elements ─── */
+.sky-clouds,
+.sky-birds,
+.sky-airplane {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+
+/* Show during daytime, hide at night/dawn/evening */
+body[data-time="morning"] .sky-clouds,
+body[data-time="morning"] .sky-birds,
+body[data-time="morning"] .sky-airplane,
+body[data-time="afternoon"] .sky-clouds,
+body[data-time="afternoon"] .sky-birds,
+body[data-time="afternoon"] .sky-airplane {
+  opacity: 1;
+}
+
+/* Hide when rain is active (afternoon rain days) */
+.rain-active .sky-clouds,
+.rain-active .sky-birds,
+.rain-active .sky-airplane {
+  opacity: 0;
+}
+
+/* Explicit z-index on existing layers for stacking clarity */
+.rain-streaks { z-index: 4; }
+.rain-window-reflection { z-index: 6; }
+
+/* ── Clouds ── */
+.cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+.cloud::before,
+.cloud::after {
+  content: '';
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.cloud-back {
+  width: 60px;
+  height: 20px;
+  top: 15%;
+  opacity: 0.4;
+  z-index: 1;
+}
+
+.cloud-back::before {
+  width: 30px;
+  height: 25px;
+  top: -12px;
+  left: 10px;
+}
+
+.cloud-back::after {
+  width: 24px;
+  height: 18px;
+  top: -8px;
+  left: 30px;
+}
+
+.cloud-mid {
+  width: 50px;
+  height: 16px;
+  top: 25%;
+  opacity: 0.6;
+  z-index: 2;
+}
+
+.cloud-mid::before {
+  width: 25px;
+  height: 20px;
+  top: -10px;
+  left: 8px;
+}
+
+.cloud-mid::after {
+  width: 20px;
+  height: 15px;
+  top: -7px;
+  left: 24px;
+}
+
+.cloud-front {
+  width: 45px;
+  height: 14px;
+  top: 10%;
+  opacity: 0.8;
+  z-index: 2;
+}
+
+.cloud-front::before {
+  width: 22px;
+  height: 18px;
+  top: -10px;
+  left: 6px;
+}
+
+.cloud-front::after {
+  width: 18px;
+  height: 14px;
+  top: -6px;
+  left: 20px;
+}
+
+@keyframes cloud-drift {
+  0% { transform: translateX(320px); }
+  100% { transform: translateX(-120px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cloud-back {
+    animation: cloud-drift 60s linear infinite;
+    animation-delay: -20s;
+  }
+
+  .cloud-mid {
+    animation: cloud-drift 40s linear infinite;
+    animation-delay: -10s;
+  }
+
+  .cloud-front {
+    animation: cloud-drift 25s linear infinite;
+    animation-delay: -5s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud-back { left: 60%; }
+  .cloud-mid { left: 30%; }
+  .cloud-front { left: 70%; }
+}
+
 /* ─── Desk Lamp ─── */
 .desk-lamp {
   position: absolute;
