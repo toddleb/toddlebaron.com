@@ -2147,6 +2147,23 @@ body[data-time="afternoon"] .desk-plant {
   opacity: 1;
 }
 
+/* Plant stand (covers pot bottom) */
+.desk-plant::before {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 18px;
+  background: linear-gradient(180deg, #5a3d2e, #4a3020, #3a2418);
+  border-radius: 3px 3px 1px 1px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 2px 4px rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
 /* ─── Wall Clock (Cloudnola modern style) ─── */
 .wall-clock {
   position: absolute;
