@@ -13,6 +13,18 @@ const streaks = Array.from({ length: 18 }, (_, i) => ({
   <div class="rain-window-frame">
     <div class="rain-window-glass">
       <div class="rain-window-outside"></div>
+      <!-- Daytime sky elements -->
+      <div class="sky-clouds">
+        <div class="cloud cloud-back"></div>
+        <div class="cloud cloud-mid"></div>
+        <div class="cloud cloud-front"></div>
+      </div>
+      <div class="sky-birds">
+        <div class="bird"></div>
+        <div class="bird"></div>
+        <div class="bird"></div>
+      </div>
+      <div class="sky-airplane"></div>
       <div class="rain-streaks">
         {streaks.map((s) => (
           <div
