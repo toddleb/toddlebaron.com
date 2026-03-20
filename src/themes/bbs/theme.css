@@ -71,8 +71,9 @@
   align-items: flex-end;
   padding: 20px 40px 6px;
   position: relative;
-  gap: 40px;
-  min-height: 90px;
+  gap: 20px;
+  min-height: 200px;
+  overflow: hidden;
 }
 
 /* Wall texture overlay */
@@ -104,16 +105,13 @@
 /* ─── Album Shelf ─── */
 .album-shelf {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: center;
-  gap: 14px;
-  padding: 0 20px 0 140px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  max-width: 100%;
+  gap: 8px;
+  padding: 0 10px;
+  max-width: 640px;
 }
-
-.album-shelf::-webkit-scrollbar { display: none; }
 
 /* ─── Shelf Model (B-wing etc.) ─── */
 .shelf-model {
@@ -122,7 +120,7 @@
 }
 
 .shelf-model img {
-  height: 220px;
+  height: 180px;
   width: auto;
   filter: brightness(0.7) saturate(0.8);
   transition: filter 0.3s;
@@ -149,8 +147,8 @@
 }
 
 .album-cover img {
-  width: 180px;
-  height: 180px;
+  width: 110px;
+  height: 110px;
   object-fit: cover;
   display: block;
   filter: brightness(0.5) saturate(0.65);
@@ -1136,7 +1134,9 @@
   .desk { width: 100%; }
   .hw-stack { width: 85vw; }
   .desk-surface { width: 100%; }
-  .wall { padding: 16px 20px 0; gap: 20px; }
+  .wall { padding: 16px 20px 0; gap: 10px; }
+  .album-shelf { max-width: 500px; }
+  .album-cover img { width: 85px; height: 85px; }
 }
 
 @media (max-width: 700px) {
@@ -1147,7 +1147,12 @@
   .desk-item { display: none; }
   .desk-yoohoo { display: none; }
   .wall-poster { display: none; }
-  .wall { min-height: 30px; padding: 10px 0 0; }
+  .wall { min-height: 60px; padding: 10px 0 0; }
+  .album-shelf { max-width: 380px; gap: 4px; }
+  .album-cover img { width: 65px; height: 65px; }
+  .shelf-model { display: none; }
+  .wall-clock { display: none; }
+  .rain-window { display: none; }
   .bbs-menu-row { flex-direction: column; gap: 8px; }
   .bbs-menu-item { max-width: 100%; }
   .bbs-hero-title { font-size: 36px; letter-spacing: 4px; }
@@ -1563,10 +1568,10 @@
 /* ─── Rain Window ─── */
 .rain-window {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 120px;
-  height: 160px;
+  top: -40px;
+  left: -30px;
+  width: 200px;
+  height: 260px;
   z-index: 2;
   pointer-events: none;
 }
@@ -1575,10 +1580,10 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg, #3a2a1a, #2e2010);
-  border: 2px solid #4a3a2a;
-  border-radius: 2px 0 0 0;
-  padding: 4px;
-  box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+  border: 3px solid #4a3a2a;
+  border-radius: 0 0 4px 0;
+  padding: 5px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 2px 2px 8px rgba(0,0,0,0.4);
 }
 
 .rain-window-glass {
@@ -1614,6 +1619,31 @@ body[data-time="afternoon"] .rain-window-outside {
   inset: 0;
   background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 60%);
   pointer-events: none;
+}
+
+/* Window crossbars — visible at the top and left edges (rest clipped by wall overflow) */
+.rain-window-glass::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(180deg, #5a4a3a, #3a2a1a, #5a4a3a);
+  transform: translateY(-50%);
+  z-index: 5;
+}
+
+.rain-window-glass::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(90deg, #5a4a3a, #3a2a1a, #5a4a3a);
+  transform: translateX(-50%);
+  z-index: 5;
 }
 
 .rain-window-sill {
@@ -1652,7 +1682,7 @@ body[data-time="afternoon"] .rain-window-outside {
   0% { transform: translateY(-20px); opacity: 0; }
   10% { opacity: 1; }
   90% { opacity: 1; }
-  100% { transform: translateY(180px); opacity: 0; }
+  100% { transform: translateY(280px); opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1667,7 +1697,7 @@ body[data-time="afternoon"] .rain-window-outside {
 /* ─── Desk Lamp ─── */
 .desk-lamp {
   position: absolute;
-  left: 5%;
+  left: 4%;
   bottom: 0;
   z-index: 4;
   transition: opacity 2s ease;
@@ -1680,37 +1710,41 @@ body[data-time="afternoon"] .desk-lamp {
 }
 
 .lamp-shade {
-  width: 50px;
-  height: 24px;
-  background: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+  width: 140px;
+  height: 55px;
+  background: linear-gradient(180deg, #333, #222, #1a1a1a);
   border-radius: 50% 50% 0 0;
-  border: 1px solid #444;
+  border: 2px solid #444;
+  border-bottom: none;
   margin: 0 auto;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
 }
 
 .lamp-stem {
-  width: 4px;
-  height: 50px;
-  background: #333;
+  width: 8px;
+  height: 100px;
+  background: linear-gradient(90deg, #2a2a2a, #444, #2a2a2a);
   margin: 0 auto;
+  border-radius: 2px;
 }
 
 .lamp-base {
-  width: 40px;
-  height: 6px;
+  width: 110px;
+  height: 12px;
   background: linear-gradient(180deg, #3a3a3a, #222);
-  border-radius: 2px;
+  border-radius: 6px;
   margin: 0 auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
 .lamp-light-cone {
   position: absolute;
-  top: 24px;
-  left: -20px;
-  width: 90px;
-  height: 120px;
-  background: radial-gradient(ellipse at top, rgba(255,220,150,0.25) 0%, rgba(255,200,120,0.1) 40%, transparent 70%);
-  clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
+  top: 55px;
+  left: -30px;
+  width: 200px;
+  height: 260px;
+  background: radial-gradient(ellipse at top, rgba(255,220,150,0.22) 0%, rgba(255,200,120,0.08) 40%, transparent 70%);
+  clip-path: polygon(28% 0%, 72% 0%, 100% 100%, 0% 100%);
   pointer-events: none;
 }
 
@@ -1757,33 +1791,49 @@ body[data-time="afternoon"] .desk-lamp {
   .dust-mote { display: none; }
 }
 
-/* ─── Wall Clock ─── */
+/* ─── Wall Clock (Cloudnola modern style) ─── */
 .wall-clock {
   position: absolute;
-  top: 10px;
-  right: 10%;
-  z-index: 3;
+  top: 8px;
+  left: 3%;
+  z-index: 4;
 }
 
 .clock-face {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  background: #f5f0e0;
-  border: 2px solid #333;
+  background: #f8f5ed;
+  border: 3px solid #2a2a2a;
   position: relative;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5), inset 0 1px 4px rgba(0,0,0,0.08);
 }
 
+/* Hour markers — thin lines radiating from edge */
 .clock-mark {
   position: absolute;
-  background: #333;
+  background: #2a2a2a;
+  width: 1.5px;
+  height: 8px;
+  top: 5px;
+  left: 50%;
+  transform-origin: 50% 45px;
+  margin-left: -0.75px;
 }
 
-.clock-mark-12 { top: 3px; left: 50%; width: 2px; height: 6px; transform: translateX(-50%); }
-.clock-mark-3 { top: 50%; right: 3px; width: 6px; height: 2px; transform: translateY(-50%); }
-.clock-mark-6 { bottom: 3px; left: 50%; width: 2px; height: 6px; transform: translateX(-50%); }
-.clock-mark-9 { top: 50%; left: 3px; width: 6px; height: 2px; transform: translateY(-50%); }
+/* Cardinal markers are thicker */
+.clock-mark-12 { transform: rotate(0deg); height: 10px; width: 2px; margin-left: -1px; }
+.clock-mark-1 { transform: rotate(30deg); }
+.clock-mark-2 { transform: rotate(60deg); }
+.clock-mark-3 { transform: rotate(90deg); height: 10px; width: 2px; margin-left: -1px; }
+.clock-mark-4 { transform: rotate(120deg); }
+.clock-mark-5 { transform: rotate(150deg); }
+.clock-mark-6 { transform: rotate(180deg); height: 10px; width: 2px; margin-left: -1px; }
+.clock-mark-7 { transform: rotate(210deg); }
+.clock-mark-8 { transform: rotate(240deg); }
+.clock-mark-9 { transform: rotate(270deg); height: 10px; width: 2px; margin-left: -1px; }
+.clock-mark-10 { transform: rotate(300deg); }
+.clock-mark-11 { transform: rotate(330deg); }
 
 .clock-hand {
   position: absolute;
@@ -1793,9 +1843,9 @@ body[data-time="afternoon"] .desk-lamp {
   border-radius: 1px;
 }
 
-.clock-hand-hour { width: 3px; height: 14px; background: #222; margin-left: -1.5px; }
-.clock-hand-minute { width: 2px; height: 18px; background: #333; margin-left: -1px; }
-.clock-hand-second { width: 1px; height: 20px; background: #cc3333; margin-left: -0.5px; animation: clock-second-sweep 60s steps(60) infinite; }
+.clock-hand-hour { width: 3px; height: 28px; background: #1a1a1a; margin-left: -1.5px; border-radius: 2px; }
+.clock-hand-minute { width: 2px; height: 36px; background: #2a2a2a; margin-left: -1px; border-radius: 1px; }
+.clock-hand-second { width: 1px; height: 40px; background: #cc3333; margin-left: -0.5px; animation: clock-second-sweep 60s steps(60) infinite; }
 
 @media (prefers-reduced-motion: no-preference) {
   @keyframes clock-second-sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -1805,11 +1855,12 @@ body[data-time="afternoon"] .desk-lamp {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #333;
+  background: #cc3333;
   transform: translate(-50%, -50%);
+  box-shadow: 0 0 2px rgba(0,0,0,0.3);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1843,6 +1894,123 @@ body[data-time="night"] .hw-monitor::before {
   width: 140%;
   height: 70%;
   opacity: 1;
+}
+
+/* ─── Idle Overlay ─── */
+/* ─── Draggable Desk Items ─── */
+.draggable-desk-item {
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: filter 0.2s;
+}
+
+.draggable-desk-item:active {
+  cursor: grabbing;
+}
+
+/* ─── Flying Scarab ─── */
+.scarab {
+  position: fixed;
+  z-index: 999;
+  pointer-events: none;
+  width: 18px;
+  height: 22px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scarab {
+    animation: scarab-fly 30s ease-in-out infinite;
+  }
+}
+
+.scarab-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Wing cases — iridescent dark green/gold */
+.scarab-wing {
+  position: absolute;
+  top: 6px;
+  width: 8px;
+  height: 14px;
+  background: linear-gradient(180deg, #2a4a2a, #4a6a2a, #3a5a3a);
+  border-radius: 2px 2px 50% 50%;
+}
+
+.scarab-wing-l { left: 0; transform-origin: top right; }
+.scarab-wing-r { right: 0; transform-origin: top left; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .scarab-wing-l { animation: wing-flutter-l 0.08s linear infinite; }
+  .scarab-wing-r { animation: wing-flutter-r 0.08s linear infinite; }
+}
+
+@keyframes wing-flutter-l {
+  0%, 100% { transform: rotateY(0deg); }
+  50% { transform: rotateY(50deg); }
+}
+
+@keyframes wing-flutter-r {
+  0%, 100% { transform: rotateY(0deg); }
+  50% { transform: rotateY(-50deg); }
+}
+
+.scarab-head {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 7px;
+  background: #1a2a1a;
+  border-radius: 50% 50% 30% 30%;
+}
+
+.scarab-legs {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  height: 12px;
+}
+
+.scarab-leg {
+  position: absolute;
+  width: 4px;
+  height: 1px;
+  background: #1a2a1a;
+}
+
+.scarab-leg-1 { top: 1px; left: -3px; transform: rotate(-30deg); }
+.scarab-leg-2 { top: 5px; left: -3px; transform: rotate(-10deg); }
+.scarab-leg-3 { top: 9px; left: -2px; transform: rotate(10deg); }
+.scarab-leg-4 { top: 1px; right: -3px; transform: rotate(30deg); }
+.scarab-leg-5 { top: 5px; right: -3px; transform: rotate(10deg); }
+.scarab-leg-6 { top: 9px; right: -2px; transform: rotate(-10deg); }
+
+/* Scarab flight path — wanders around the screen */
+@keyframes scarab-fly {
+  0% { top: 85%; left: -3%; transform: rotate(40deg); }
+  8% { top: 65%; left: 15%; transform: rotate(20deg); }
+  16% { top: 35%; left: 40%; transform: rotate(-10deg); }
+  24% { top: 15%; left: 65%; transform: rotate(-40deg); }
+  32% { top: 25%; left: 85%; transform: rotate(-100deg); }
+  40% { top: 50%; left: 75%; transform: rotate(-150deg); }
+  48% { top: 70%; left: 55%; transform: rotate(170deg); }
+  56% { top: 45%; left: 30%; transform: rotate(120deg); }
+  64% { top: 20%; left: 10%; transform: rotate(60deg); }
+  72% { top: 10%; left: 45%; transform: rotate(-20deg); }
+  80% { top: 35%; left: 80%; transform: rotate(-70deg); }
+  88% { top: 60%; left: 95%; transform: rotate(-130deg); }
+  94% { top: 75%; left: 50%; transform: rotate(160deg); }
+  100% { top: 85%; left: -3%; transform: rotate(40deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scarab { display: none; }
 }
 
 /* ─── Idle Overlay ─── */

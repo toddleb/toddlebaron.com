@@ -142,57 +142,109 @@ export function speakWOPR(text: string): Promise<void> {
   });
 }
 
-/** THX Deep Note — synthesized with oscillators converging to a chord */
+/**
+ * THX Deep Note — 30-voice synthesis converging to D major chord.
+ * Uses just intonation (base D = 150Hz), sawtooth waves with detuning,
+ * low-pass filter sweep, and stereo panning for full stereo width.
+ */
 export async function playTHXDeepNote(externalCtx?: AudioContext): Promise<void> {
   const ctx = externalCtx || new AudioContext();
   if (ctx.state === "suspended") await ctx.resume();
   const now = ctx.currentTime;
+
+  // Master output with compressor for loudness without clipping
+  const compressor = ctx.createDynamicsCompressor();
+  compressor.threshold.value = -24;
+  compressor.ratio.value = 4;
+  compressor.attack.value = 0.003;
+  compressor.release.value = 0.25;
+
   const master = ctx.createGain();
-  master.gain.value = 0.08;
-  master.connect(ctx.destination);
+  master.gain.value = 0.12;
 
-  // THX deep note: ~30 oscillators start at random low frequencies
-  // and converge to a D major chord over ~3 seconds
-  const targets = [
-    36.71, 73.42, 146.83, 293.66, 587.33,  // D
-    46.25, 92.50, 185.00, 369.99, 739.99,   // F#
-    55.00, 110.0, 220.00, 440.00, 880.00,   // A
+  // Low-pass filter sweep — opens up as chord resolves
+  const lpf = ctx.createBiquadFilter();
+  lpf.type = "lowpass";
+  lpf.Q.value = 0.7;
+
+  master.connect(lpf).connect(compressor).connect(ctx.destination);
+
+  const dur = 5;
+  const rampStart = 0.6;
+  const rampEnd = rampStart + 2.8;
+
+  // Filter: start dark, sweep open, then close at fade
+  lpf.frequency.setValueAtTime(300, now);
+  lpf.frequency.linearRampToValueAtTime(8000, now + rampEnd);
+  lpf.frequency.setValueAtTime(8000, now + dur - 0.8);
+  lpf.frequency.linearRampToValueAtTime(1500, now + dur);
+
+  // Master volume envelope: fade in → sustain → fade out
+  master.gain.setValueAtTime(0, now);
+  master.gain.linearRampToValueAtTime(0.12, now + rampStart);
+  master.gain.setValueAtTime(0.12, now + dur - 1.0);
+  master.gain.linearRampToValueAtTime(0, now + dur);
+
+  // 30 voices distributed across D major chord (just intonation, base = 150Hz)
+  // [targetFreq, voiceCount]
+  const voices: [number, number][] = [
+    [37.5, 2],    // D1  (150/4)
+    [75, 2],      // D2  (150/2)
+    [112.5, 2],   // A2  (150×3/4)
+    [150, 2],     // D3  (base)
+    [225, 2],     // A3  (150×3/2)
+    [300, 2],     // D4  (150×2)
+    [450, 2],     // A4  (150×3)
+    [600, 2],     // D5  (150×4)
+    [900, 2],     // A5  (150×6)
+    [1200, 2],    // D6  (150×8)
+    [1500, 6],    // F#6 (150×10) — top note gets more voices for shimmer
   ];
-  const dur = 4;
-  const rampStart = 0.8;
 
-  for (const target of targets) {
-    const osc = ctx.createOscillator();
-    osc.type = "sawtooth";
-    // Start at random frequency between 30-80 Hz
-    const startFreq = 30 + Math.random() * 50;
-    osc.frequency.setValueAtTime(startFreq, now);
-    osc.frequency.linearRampToValueAtTime(target, now + rampStart + 1.5 + Math.random() * 0.5);
+  let voiceIndex = 0;
+  const totalVoices = voices.reduce((sum, [, n]) => sum + n, 0);
 
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(0.06, now + rampStart);
-    gain.gain.setValueAtTime(0.06, now + dur - 1);
-    gain.gain.linearRampToValueAtTime(0, now + dur);
+  for (const [targetFreq, count] of voices) {
+    for (let v = 0; v < count; v++) {
+      const osc = ctx.createOscillator();
+      osc.type = "sawtooth";
 
-    // Add slight detuning for richness
-    osc.detune.value = (Math.random() - 0.5) * 20;
+      // Start in a tight cluster around 200-400Hz (the "swarm")
+      const startFreq = 200 + Math.random() * 200;
+      osc.frequency.setValueAtTime(startFreq, now);
 
-    osc.connect(gain).connect(master);
-    osc.start(now);
-    osc.stop(now + dur);
+      // Wiggle randomly during ramp for organic feel
+      const wiggleFreq = startFreq + (Math.random() - 0.5) * 80;
+      osc.frequency.setValueAtTime(wiggleFreq, now + rampStart * 0.5);
+      osc.frequency.linearRampToValueAtTime(
+        targetFreq,
+        now + rampStart + 1.8 + Math.random() * 1.0,
+      );
+
+      // Slight detuning between voices for richness (±8 cents)
+      osc.detune.value = (Math.random() - 0.5) * 16;
+
+      // Per-voice gain (lower frequencies get more, high gets less)
+      const voiceGain = ctx.createGain();
+      const baseVol = targetFreq < 200 ? 0.07 : targetFreq < 600 ? 0.05 : 0.035;
+      voiceGain.gain.setValueAtTime(0, now);
+      voiceGain.gain.linearRampToValueAtTime(baseVol, now + rampStart + 0.5);
+      voiceGain.gain.setValueAtTime(baseVol, now + dur - 1.0);
+      voiceGain.gain.linearRampToValueAtTime(0, now + dur);
+
+      // Stereo panning — spread voices across the stereo field
+      const panner = ctx.createStereoPanner();
+      panner.pan.value = ((voiceIndex / totalVoices) * 2 - 1) * 0.8 + (Math.random() - 0.5) * 0.3;
+
+      osc.connect(voiceGain).connect(panner).connect(master);
+      osc.start(now);
+      osc.stop(now + dur + 0.1);
+      voiceIndex++;
+    }
   }
 
-  // Add a low-pass filter sweep for warmth
-  const lfo = ctx.createBiquadFilter();
-  lfo.type = "lowpass";
-  lfo.frequency.setValueAtTime(200, now);
-  lfo.frequency.linearRampToValueAtTime(2000, now + dur * 0.7);
-  master.disconnect();
-  master.connect(lfo).connect(ctx.destination);
-
   return new Promise((resolve) => {
-    setTimeout(() => { if (!externalCtx) ctx.close(); resolve(); }, dur * 1000 + 200);
+    setTimeout(() => { if (!externalCtx) ctx.close(); resolve(); }, dur * 1000 + 300);
   });
 }
 

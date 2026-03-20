@@ -7,6 +7,7 @@ import AlbumPlayer from "../themes/bbs/AlbumPlayer.astro";
 import RainWindow from "../themes/bbs/RainWindow.astro";
 import DeskLamp from "../themes/bbs/DeskLamp.astro";
 import WallClock from "../themes/bbs/WallClock.astro";
+import Scarab from "../themes/bbs/Scarab.astro";
 import Snow from "../components/Snow.astro";
 import "../themes/bbs/theme.css";
 export interface Props {
@@ -27,6 +28,7 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
     <div class="room">
       <!-- Wall -->
       <div class="wall">
+        <RainWindow />
         <!-- Album shelf -->
         <div class="album-shelf">
           <div class="album-cover" data-album="chicago-17"><img src="/albums/chicago.jpg" alt="Chicago 17" /></div>
@@ -39,16 +41,16 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
           <div class="album-cover" data-album="godsmack"><img src="/albums/godsmack.png" alt="Godsmack - Lighting Up the Sky" /></div>
           <div class="album-cover" data-album="fair-to-midland"><img src="/albums/fair-to-midland.jpg" alt="Fair to Midland - Fables from a Mayfly" /></div>
           <div class="album-cover" data-album="breaking-benjamin"><img src="/albums/breaking-benjamin.jpg" alt="Breaking Benjamin - Phobia" /></div>
-          <!-- B-wing model -->
-          <div class="shelf-model">
-            <img src="/bwing.png" alt="B-wing starfighter model" />
-          </div>
         </div>
-        <WallClock />
+        <!-- B-wing model on shelf -->
+        <div class="shelf-model">
+          <img src="/bwing.png" alt="B-wing starfighter model" />
+        </div>
       </div>
 
       <!-- Desk -->
       <div class="desk">
+        <WallClock />
         <DeskLamp />
         <!-- Hardware stack -->
         <div class="hw-stack">
@@ -119,10 +121,9 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
             </div>
           </div>
         </div>
-        <RainWindow />
-        <!-- Yoo-hoo bottle -->
-        <div class="desk-yoohoo">
-          <img src="/yoohoo.png" alt="Yoo-hoo chocolate drink" />
+        <!-- Yoo-hoo bottle (draggable) -->
+        <div class="desk-yoohoo draggable-desk-item" id="desk-yoohoo">
+          <img src="/yoohoo.png" alt="Yoo-hoo chocolate drink" draggable="false" />
         </div>
       </div>
 
@@ -131,9 +132,46 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
         <div class="desk-edge"></div>
       </div>
     </div>
+    <Scarab />
     <Snow />
   </body>
 </html>
+
+<script>
+  // Draggable desk items
+  document.querySelectorAll<HTMLElement>(".draggable-desk-item").forEach((el) => {
+    let dragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    el.addEventListener("mousedown", (e) => {
+      dragging = true;
+      const rect = el.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      el.style.zIndex = "50";
+      el.style.cursor = "grabbing";
+      e.preventDefault();
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!dragging) return;
+      const parent = el.offsetParent as HTMLElement;
+      if (!parent) return;
+      const parentRect = parent.getBoundingClientRect();
+      el.style.left = `${e.clientX - parentRect.left - offsetX}px`;
+      el.style.top = `${e.clientY - parentRect.top - offsetY}px`;
+      el.style.right = "auto";
+      el.style.bottom = "auto";
+    });
+
+    document.addEventListener("mouseup", () => {
+      if (!dragging) return;
+      dragging = false;
+      el.style.cursor = "grab";
+    });
+  });
+</script>
 
 <script>
   import { initTimeOfDay } from "../engine/time-of-day";

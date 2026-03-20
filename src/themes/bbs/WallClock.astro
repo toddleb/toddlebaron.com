@@ -1,13 +1,22 @@
 ---
-// src/themes/bbs/WallClock.astro — Analog clock showing real visitor time
+// src/themes/bbs/WallClock.astro — Cloudnola-style modern round wall clock
 ---
 
 <div class="wall-clock" id="wall-clock">
   <div class="clock-face">
+    <!-- All 12 hour markers -->
     <div class="clock-mark clock-mark-12"></div>
+    <div class="clock-mark clock-mark-1"></div>
+    <div class="clock-mark clock-mark-2"></div>
     <div class="clock-mark clock-mark-3"></div>
+    <div class="clock-mark clock-mark-4"></div>
+    <div class="clock-mark clock-mark-5"></div>
     <div class="clock-mark clock-mark-6"></div>
+    <div class="clock-mark clock-mark-7"></div>
+    <div class="clock-mark clock-mark-8"></div>
     <div class="clock-mark clock-mark-9"></div>
+    <div class="clock-mark clock-mark-10"></div>
+    <div class="clock-mark clock-mark-11"></div>
     <div class="clock-hand clock-hand-hour" id="clock-hour"></div>
     <div class="clock-hand clock-hand-minute" id="clock-minute"></div>
     <div class="clock-hand clock-hand-second" id="clock-second"></div>
@@ -35,6 +44,5 @@
     }
   }
   updateClock();
-  // Only update hour/minute hands every 60s (second hand animated via CSS)
   setInterval(updateClock, 60_000);
 </script>

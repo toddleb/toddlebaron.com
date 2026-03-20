@@ -92,11 +92,6 @@
     { text: "GREETINGS, PROFESSOR FALKEN.", color: "ansi-bright-green", delay: 800 },
     { text: "", delay: 300 },
     { text: "SHALL WE PLAY A GAME?", color: "ansi-bright-white", delay: 800 },
-    { text: "", delay: 400 },
-    { text: "> T-NET BBS", color: "ansi-bright-green", delay: 600 },
-    { text: "", delay: 300 },
-    { text: "EXCELLENT CHOICE.", color: "ansi-green", delay: 500 },
-    { text: "CONNECTING TO NODE 1...", color: "ansi-green", delay: 600 },
   ];
 
   function escapeHtml(s: string): string {
@@ -212,7 +207,7 @@
           if (aborted) return;
           matrixTextEl.appendChild(makeMatrixLine(lineText, lineColor));
           // WOPR voice for iconic lines
-          if (lineText === "GREETINGS, PROFESSOR FALKEN." || lineText === "SHALL WE PLAY A GAME?" || lineText === "EXCELLENT CHOICE.") {
+          if (lineText === "GREETINGS, PROFESSOR FALKEN." || lineText === "SHALL WE PLAY A GAME?") {
             speechPromises.push(speakWOPR(lineText).catch(() => {}));
           }
         }, d);
@@ -339,7 +334,7 @@
           if (aborted) return;
           matrixText.appendChild(makeMatrixLine(lineText, lineColor));
           // WOPR voice for iconic lines
-          if (lineText === "GREETINGS, PROFESSOR FALKEN." || lineText === "SHALL WE PLAY A GAME?" || lineText === "EXCELLENT CHOICE.") {
+          if (lineText === "GREETINGS, PROFESSOR FALKEN." || lineText === "SHALL WE PLAY A GAME?") {
             speechPromises.push(speakWOPR(lineText).catch(() => {}));
           }
         }, d);
