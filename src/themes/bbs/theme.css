@@ -65,7 +65,8 @@
 /* ─── Wall ─── */
 .wall {
   width: 100%;
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0;
   background:
     repeating-linear-gradient(
       0deg,
@@ -205,15 +206,16 @@
   align-items: flex-end;
   width: 100%;
   padding: 0;
-  flex-shrink: 0;
-  background: url('/wall-brick.jpg') center center / cover no-repeat;
+  flex: 0 1 auto;
+  overflow: hidden;
+  background: url('/wall-brick.jpg') center bottom / cover no-repeat;
 }
 
 /* ─── Yoo-hoo Bottle ─── */
 .desk-yoohoo {
   position: absolute;
   right: 14%;
-  bottom: -3px;
+  bottom: -22px;
   z-index: 5;
 }
 
@@ -562,14 +564,7 @@
 
 .hw-monitor-body {
   background:
-    /* Subtle plastic grain */
-    repeating-linear-gradient(0deg,
-      rgba(255,255,255,0.04) 0px,
-      rgba(0,0,0,0.02) 1px,
-      rgba(255,255,255,0.03) 2px,
-      transparent 3px
-    ),
-    linear-gradient(180deg, #e8e0d0 0%, #ddd5c4 40%, #d0c8b8 100%);
+    url('/brushed-steel.jpg') center center / cover no-repeat;
   border: 1px solid #c8c0b0;
   border-radius: 8px 8px 0 0;
   padding: 12px 12px 0;
@@ -591,7 +586,7 @@
     inset 0 0 60px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   width: 100%;
-  height: clamp(300px, 60vw * 10 / 16, 70vh);
+  height: clamp(260px, 50vw * 10 / 16, 55vh);
 }
 
 .hw-screen-content {
@@ -654,8 +649,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: brightness(0.85);
-  text-shadow: none;
+  filter: brightness(1.2);
+  text-shadow: 0 0 4px rgba(255,255,255,0.3);
   animation: rainbow-shift 6s linear infinite;
   background-size: 200% 100%;
 }
@@ -684,7 +679,8 @@
   font-size: 8px;
   font-weight: bold;
   letter-spacing: 0.5px;
-  color: #777;
+  color: #ccc;
+  text-shadow: 0 0 2px rgba(255,255,255,0.2);
 }
 
 .hw-stand-neck {
@@ -702,13 +698,7 @@
 
 .hw-computer-body {
   background:
-    repeating-linear-gradient(0deg,
-      rgba(255,255,255,0.04) 0px,
-      rgba(0,0,0,0.02) 1px,
-      rgba(255,255,255,0.03) 2px,
-      transparent 3px
-    ),
-    linear-gradient(180deg, #e8e0d0 0%, #ddd5c4 40%, #d0c8b8 100%);
+    url('/brushed-steel.jpg') center center / cover no-repeat;
   border: 1px solid #c8c0b0;
   border-radius: 6px;
   padding: 22px 20px;
@@ -1734,8 +1724,8 @@ body[data-time="afternoon"] .rain-window-outside {
 .desk-lamp {
   position: absolute;
   left: 4%;
-  bottom: 0;
-  z-index: 4;
+  bottom: 38px; /* sits above desk-surface edge */
+  z-index: 20;
   transition: opacity 2s ease;
   pointer-events: none;
 }
@@ -1876,6 +1866,28 @@ body[data-time="afternoon"] .desk-lamp {
 
 @media (prefers-reduced-motion: reduce) {
   .dust-mote { display: none; }
+}
+
+/* ─── Desk Plant (daytime) ─── */
+.desk-plant {
+  position: absolute;
+  left: 4%;
+  bottom: 14px;
+  z-index: 20;
+  transition: opacity 2s ease;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.desk-plant img {
+  height: 380px;
+  width: auto;
+}
+
+/* Show plant during day, hide at night */
+body[data-time="morning"] .desk-plant,
+body[data-time="afternoon"] .desk-plant {
+  opacity: 1;
 }
 
 /* ─── Wall Clock (Cloudnola modern style) ─── */

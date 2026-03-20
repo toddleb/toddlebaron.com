@@ -6,6 +6,7 @@ import Modem from "../themes/bbs/Modem.astro";
 import AlbumPlayer from "../themes/bbs/AlbumPlayer.astro";
 import RainWindow from "../themes/bbs/RainWindow.astro";
 import DeskLamp from "../themes/bbs/DeskLamp.astro";
+import DeskPlant from "../themes/bbs/DeskPlant.astro";
 // WallClock removed from desk scene
 import Scarab from "../themes/bbs/Scarab.astro";
 import Snow from "../components/Snow.astro";
@@ -48,9 +49,11 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
         </div>
       </div>
 
+      <!-- Desk Lamp (night) / Plant (day) — room-level so never clipped -->
+      <DeskLamp />
+      <DeskPlant />
       <!-- Desk -->
       <div class="desk">
-        <DeskLamp />
         <!-- Hardware stack -->
         <div class="hw-stack">
           <!-- Monitor -->
