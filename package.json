@@ -12,6 +12,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.0.4"
+    "@types/three": "^0.183.1",
+    "astro": "^6.0.4",
+    "postprocessing": "^6.39.0",
+    "three": "^0.183.2"
   }
 }

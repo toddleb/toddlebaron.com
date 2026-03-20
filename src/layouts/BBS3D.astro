@@ -1,0 +1,59 @@
+---
+// src/layouts/BBS3D.astro — T-NET BBS (3D desk scene)
+import SEOHead from "../components/SEOHead.astro";
+import AlbumPlayer from "../themes/bbs/AlbumPlayer.astro";
+import DeskScene3D from "../themes/bbs/DeskScene3D.astro";
+import Snow from "../components/Snow.astro";
+import "../themes/bbs/theme.css";
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of Todd LeBaron. Est. 1984." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead title={title} description={description} />
+    <slot name="head" />
+  </head>
+  <body class="bbs-body">
+    <DeskScene3D>
+      <slot />
+    </DeskScene3D>
+    <AlbumPlayer />
+    <Snow />
+  </body>
+</html>
+
+<script>
+  import { initTimeOfDay } from "../engine/time-of-day";
+  import { startAmbient } from "../engine/ambient";
+  import { initTypingSounds, playMenuBeep, playHDDChatter } from "../engine/typing-sounds";
+
+  initTimeOfDay();
+
+  document.addEventListener("boot:complete", () => {
+    startAmbient("bbs");
+    initTypingSounds("bbs");
+
+    document.querySelectorAll(".bbs-menu-item").forEach((el) => {
+      el.addEventListener("click", playMenuBeep);
+    });
+    document.addEventListener("bbs:page-change", playHDDChatter);
+
+    let idleTimer: ReturnType<typeof setTimeout>;
+    function resetIdle() {
+      document.body.classList.remove("idle-active");
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => document.body.classList.add("idle-active"), 120_000);
+    }
+    resetIdle();
+    document.addEventListener("mousemove", resetIdle);
+    document.addEventListener("keydown", resetIdle);
+    document.addEventListener("click", resetIdle);
+    document.addEventListener("touchstart", resetIdle);
+  });
+</script>

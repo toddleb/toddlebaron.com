@@ -1,0 +1,474 @@
+---
+// src/themes/bbs/DeskScene3D.astro — Three.js 3D desk scene
+// Uses object library from src/engine/3d/objects/
+---
+
+<div id="desk-3d-container">
+  <canvas id="desk-3d-canvas"></canvas>
+  <div id="desk-3d-screen-wrap">
+    <div class="hw-screen" id="bbs-terminal">
+      <div class="bbs-scanlines"></div>
+      <div class="hw-screen-content">
+        <slot />
+      </div>
+      <div class="hw-screen-statusbar">
+        <span id="screen-baud" class="tf-purple-bright">14400</span>
+        <span class="ansi-bright-black">BAUD</span>
+        <span class="screen-status-sep">·</span>
+        <span class="ansi-bright-black">ANSI</span>
+        <span class="screen-status-sep">·</span>
+        <span class="ansi-bright-black">V.42bis</span>
+      </div>
+    </div>
+  </div>
+  <!-- LED ticker (positioned over computer in 3D) -->
+  <div id="desk-3d-led-wrap">
+    <div class="hw-led-screen" id="hw-led-screen">
+      <div class="hw-led-content" id="hw-led-content">
+        <span class="hw-led-text" id="hw-led-text">T-NET BBS · EST. 1984 · SCOTTSDALE, AZ</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import * as THREE from 'three';
+  import * as mat from '../../engine/3d/materials';
+  import {
+    createMonitor,
+    createComputer,
+    createModem,
+    createDeskLamp,
+    createPlant,
+    createYoohoo,
+    createAlbumShelf,
+    createBwing,
+    createScarab,
+    createRainWindow,
+    createKeyboard,
+    createMouse,
+    createCables,
+    createMousepad,
+    createCoffeeMug,
+    createPenCup,
+    createStickyNotes,
+    createPowerStrip,
+    createDustParticles,
+  } from '../../engine/3d/objects';
+  import type { DeskObject } from '../../engine/3d/types';
+
+  // ─── Setup ───
+  const canvas = document.getElementById('desk-3d-canvas') as HTMLCanvasElement;
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1a1a28);
+
+  // Camera: seated position looking slightly down at desk
+  const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(0, 4.5, 8);
+  camera.lookAt(0, 3.0, -1);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.2;
+
+  // ─── Environment Map (room-like reflections) ───
+  const pmremGen = new THREE.PMREMGenerator(renderer);
+  pmremGen.compileEquirectangularShader();
+
+  // Create a simple room environment for reflections
+  const envScene = new THREE.Scene();
+  // Warm ceiling
+  const envCeilGeo = new THREE.PlaneGeometry(20, 20);
+  const envCeilMat = new THREE.MeshBasicMaterial({ color: 0xfff5e0 });
+  const envCeil = new THREE.Mesh(envCeilGeo, envCeilMat);
+  envCeil.position.set(0, 10, 0);
+  envCeil.rotation.x = Math.PI / 2;
+  envScene.add(envCeil);
+  // Dark floor
+  const envFloorMat = new THREE.MeshBasicMaterial({ color: 0x2a1a10 });
+  const envFloor = new THREE.Mesh(envCeilGeo.clone(), envFloorMat);
+  envFloor.position.set(0, -2, 0);
+  envFloor.rotation.x = -Math.PI / 2;
+  envScene.add(envFloor);
+  // Walls
+  const envWallMat = new THREE.MeshBasicMaterial({ color: 0x888090 });
+  for (const [pos, rot] of [
+    [[0, 4, -10], [0, 0, 0]],
+    [[0, 4, 10], [0, Math.PI, 0]],
+    [[-10, 4, 0], [0, Math.PI / 2, 0]],
+    [[10, 4, 0], [0, -Math.PI / 2, 0]],
+  ] as [[number, number, number], [number, number, number]][]) {
+    const w = new THREE.Mesh(new THREE.PlaneGeometry(20, 12), envWallMat);
+    w.position.set(...pos);
+    w.rotation.set(...rot);
+    envScene.add(w);
+  }
+  // Window glow (right wall)
+  const envWindowMat = new THREE.MeshBasicMaterial({ color: 0xc8dae8 });
+  const envWindow = new THREE.Mesh(new THREE.PlaneGeometry(4, 5), envWindowMat);
+  envWindow.position.set(9.9, 5, -2);
+  envWindow.rotation.y = -Math.PI / 2;
+  envScene.add(envWindow);
+
+  const envMap = pmremGen.fromScene(envScene, 0.04).texture;
+  scene.environment = envMap;
+  envScene.traverse((obj) => { if ((obj as THREE.Mesh).geometry) (obj as THREE.Mesh).geometry.dispose(); });
+  pmremGen.dispose();
+
+  // ─── Environment ───
+  // Wall (upper) — from divider (y=4.5) to ceiling (y=9)
+  const wallGeo = new THREE.PlaneGeometry(18, 4.5);
+  const wallMesh = new THREE.Mesh(wallGeo, mat.wall);
+  wallMesh.position.set(0, 6.75, -3);
+  wallMesh.receiveShadow = true;
+  scene.add(wallMesh);
+
+  // Wall (lower / brick) — from floor (y=-0.3) to divider (y=4.5)
+  const brickGeo = new THREE.PlaneGeometry(18, 4.8);
+  const brickMesh = new THREE.Mesh(brickGeo, mat.brick);
+  brickMesh.position.set(0, 2.1, -3);
+  brickMesh.receiveShadow = true;
+  scene.add(brickMesh);
+
+  // Desk surface
+  const deskGeo = new THREE.BoxGeometry(14, 0.2, 4);
+  const deskMesh = new THREE.Mesh(deskGeo, mat.deskWood);
+  deskMesh.position.set(0, 0.9, -0.5);
+  deskMesh.receiveShadow = true;
+  deskMesh.castShadow = true;
+  scene.add(deskMesh);
+
+  // Desk front edge (rounded bullnose)
+  const edgeGeo = new THREE.BoxGeometry(14, 0.25, 0.18);
+  const edgeMesh = new THREE.Mesh(edgeGeo, mat.deskEdge);
+  edgeMesh.position.set(0, 0.85, 1.55);
+  edgeMesh.castShadow = true;
+  scene.add(edgeMesh);
+
+  // Shelf divider strip (between upper and lower wall)
+  const dividerGeo = new THREE.BoxGeometry(18, 0.06, 0.1);
+  const dividerMat = new THREE.MeshStandardMaterial({ color: 0x4a3a2a, roughness: 0.6, metalness: 0.1 });
+  const divider = new THREE.Mesh(dividerGeo, dividerMat);
+  divider.position.set(0, 4.5, -2.96);
+  divider.castShadow = true;
+  scene.add(divider);
+
+  // Floor (dark hardwood — procedural plank texture)
+  const floorCanvas = document.createElement('canvas');
+  floorCanvas.width = 512;
+  floorCanvas.height = 512;
+  const fCtx = floorCanvas.getContext('2d')!;
+  fCtx.fillStyle = '#3a2a1a';
+  fCtx.fillRect(0, 0, 512, 512);
+  // Draw planks
+  const plankH = 64;
+  for (let y = 0; y < 512; y += plankH) {
+    // Plank gap
+    fCtx.strokeStyle = 'rgba(0,0,0,0.4)';
+    fCtx.lineWidth = 2;
+    fCtx.beginPath();
+    fCtx.moveTo(0, y);
+    fCtx.lineTo(512, y);
+    fCtx.stroke();
+    // Stagger vertical seams
+    const offset = ((y / plankH) % 2) * 128;
+    for (let x = offset; x < 512; x += 256) {
+      fCtx.strokeStyle = 'rgba(0,0,0,0.25)';
+      fCtx.lineWidth = 1.5;
+      fCtx.beginPath();
+      fCtx.moveTo(x, y);
+      fCtx.lineTo(x, y + plankH);
+      fCtx.stroke();
+    }
+    // Grain lines within each plank
+    const plankBright = 0.9 + Math.random() * 0.2;
+    for (let gy = y + 3; gy < y + plankH - 2; gy += 3) {
+      const grainAlpha = 0.08 + Math.random() * 0.12;
+      fCtx.strokeStyle = `rgba(${Math.floor(80 * plankBright)}, ${Math.floor(55 * plankBright)}, ${Math.floor(35 * plankBright)}, ${grainAlpha})`;
+      fCtx.lineWidth = 0.5 + Math.random();
+      fCtx.beginPath();
+      fCtx.moveTo(0, gy);
+      for (let gx = 0; gx < 512; gx += 30) {
+        fCtx.lineTo(gx, gy + Math.sin(gx * 0.03) * 1.5);
+      }
+      fCtx.stroke();
+    }
+  }
+  const floorTex = new THREE.CanvasTexture(floorCanvas);
+  floorTex.wrapS = floorTex.wrapT = THREE.RepeatWrapping;
+  floorTex.repeat.set(3, 2);
+  const floorGeo = new THREE.PlaneGeometry(18, 8);
+  const floorMat = new THREE.MeshStandardMaterial({
+    map: floorTex,
+    roughness: 0.65,
+    metalness: 0.02,
+  });
+  const floor = new THREE.Mesh(floorGeo, floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.set(0, -0.3, 0);
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  // Baseboard (trim along wall-floor junction)
+  const baseboardGeo = new THREE.BoxGeometry(18, 0.25, 0.08);
+  const baseboardMat = new THREE.MeshStandardMaterial({ color: 0xf0ece4, roughness: 0.7 });
+  const baseboard = new THREE.Mesh(baseboardGeo, baseboardMat);
+  baseboard.position.set(0, -0.17, -2.96);
+  scene.add(baseboard);
+
+  // ─── Desk legs (tapered) ───
+  const legMat = new THREE.MeshStandardMaterial({ color: 0x4a3020, roughness: 0.6, metalness: 0.02 });
+  const legPositions: [number, number][] = [[-6.5, 1.2], [6.5, 1.2], [-6.5, -2.2], [6.5, -2.2]];
+  for (const [lx, lz] of legPositions) {
+    const legGeo = new THREE.CylinderGeometry(0.12, 0.15, 1.2, 8);
+    const leg = new THREE.Mesh(legGeo, legMat);
+    leg.position.set(lx, 0.2, lz);
+    leg.castShadow = true;
+    scene.add(leg);
+  }
+
+  // ─── Desk drawer fronts (center, 2 drawers) ───
+  const drawerMat = new THREE.MeshStandardMaterial({ color: 0x5a3d2e, roughness: 0.6, metalness: 0.02 });
+  const handleMat = new THREE.MeshStandardMaterial({ color: 0xb89040, roughness: 0.3, metalness: 0.7 });
+  for (let i = 0; i < 2; i++) {
+    // Drawer face
+    const dGeo = new THREE.BoxGeometry(3, 0.35, 0.06);
+    const drawer = new THREE.Mesh(dGeo, drawerMat);
+    drawer.position.set(-3 + i * 6, 0.55, 1.57);
+    scene.add(drawer);
+    // Handle
+    const hGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.6, 6);
+    const handle = new THREE.Mesh(hGeo, handleMat);
+    handle.rotation.z = Math.PI / 2;
+    handle.position.set(-3 + i * 6, 0.55, 1.6);
+    scene.add(handle);
+  }
+
+  // ─── Wall outlet (near baseboard right side) ───
+  const outletMat = new THREE.MeshStandardMaterial({ color: 0xf0ece4, roughness: 0.7 });
+  const outletPlate = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.5, 0.03), outletMat);
+  outletPlate.position.set(4.5, 0.3, -2.97);
+  scene.add(outletPlate);
+  const slotMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.9 });
+  for (let i = 0; i < 2; i++) {
+    for (let j = 0; j < 2; j++) {
+      const slotGeo = new THREE.BoxGeometry(0.03, 0.08, 0.01);
+      const slot = new THREE.Mesh(slotGeo, slotMat);
+      slot.position.set(4.5 - 0.04 + j * 0.08, 0.38 - i * 0.18, -2.96);
+      scene.add(slot);
+    }
+  }
+
+  // ─── Fog (atmospheric depth) ───
+  scene.fog = new THREE.FogExp2(0x1a1a28, 0.02);
+
+  // ─── Lighting ───
+  // Low ambient — lets shadows and light pools do the work
+  const ambient = new THREE.AmbientLight(0x303045, 0.4);
+  scene.add(ambient);
+
+  // Warm overhead practical (like a ceiling pendant)
+  const overhead = new THREE.PointLight(0xffe8c8, 1.8, 20, 1.5);
+  overhead.position.set(-1, 7.5, 0);
+  overhead.castShadow = true;
+  overhead.shadow.mapSize.set(1024, 1024);
+  overhead.shadow.bias = -0.002;
+  overhead.shadow.radius = 4;
+  scene.add(overhead);
+
+  // Cool window light (right side, bluish daylight)
+  const windowLight = new THREE.DirectionalLight(0x8aacc8, 1.0);
+  windowLight.position.set(8, 6, 2);
+  windowLight.target.position.set(0, 2, -1);
+  scene.add(windowLight.target);
+  windowLight.castShadow = true;
+  windowLight.shadow.mapSize.set(1024, 1024);
+  windowLight.shadow.camera.near = 1;
+  windowLight.shadow.camera.far = 20;
+  windowLight.shadow.camera.left = -8;
+  windowLight.shadow.camera.right = 8;
+  windowLight.shadow.camera.top = 8;
+  windowLight.shadow.camera.bottom = -2;
+  windowLight.shadow.bias = -0.002;
+  windowLight.shadow.radius = 3;
+  scene.add(windowLight);
+
+  // Subtle warm fill from front-below (bounce light off desk)
+  const bounceLight = new THREE.PointLight(0xd0a878, 0.3, 10, 2);
+  bounceLight.position.set(0, 1.5, 3);
+  scene.add(bounceLight);
+
+  // Rim light from behind (separates objects from background)
+  const rimLight = new THREE.DirectionalLight(0x6666aa, 0.3);
+  rimLight.position.set(0, 5, -5);
+  scene.add(rimLight);
+
+  // ─── Objects from library ───
+  const objects: DeskObject[] = [
+    createMonitor({ position: [0, 2.6, -1.8] }),
+    createComputer({ position: [0, 1.35, -0.5] }),
+    createModem({ position: [0, 0.98, -0.5] }),
+    createDeskLamp({ position: [-5.5, 1.0, 0.2] }),
+    createPlant({ position: [4.8, 2.0, 0.5] }),
+    createYoohoo({ position: [3.5, 1.4, 0.8] }),
+    createAlbumShelf({ position: [-1.5, 6.5, -2.85] }),
+    createBwing({ position: [3.0, 7.3, -2.85] }),
+    createScarab({ position: [5.5, 0.98, 1.0] }),
+    createRainWindow({ position: [6.0, 5.2, -2.93] }),
+    createKeyboard({ position: [0, 1.05, 1.0] }),
+    createMousepad({ position: [3.2, 1.02, 1.3] }),
+    createMouse({ position: [3.2, 1.05, 1.2] }),
+    createCoffeeMug({ position: [-3.8, 1.25, 0.8] }),
+    createPenCup({ position: [-4.5, 1.25, -0.3] }),
+    createStickyNotes({ position: [-2.8, 1.02, 0.9] }),
+    createCables(),
+    createPowerStrip({ position: [3, -0.22, -2.2] }),
+    createDustParticles(),
+  ];
+
+  for (const obj of objects) {
+    scene.add(obj.group);
+  }
+
+  // ─── HTML Overlays ───
+  const screenWrap = document.getElementById('desk-3d-screen-wrap')!;
+  const ledWrap = document.getElementById('desk-3d-led-wrap')!;
+
+  function projectToScreen(point: THREE.Vector3): { x: number; y: number } {
+    const v = point.clone().project(camera);
+    return {
+      x: (v.x * 0.5 + 0.5) * window.innerWidth,
+      y: (-v.y * 0.5 + 0.5) * window.innerHeight,
+    };
+  }
+
+  function updateOverlays(): void {
+    // Monitor screen overlay
+    const sTL = projectToScreen(new THREE.Vector3(-2.4, 6.2, -1.55));
+    const sBR = projectToScreen(new THREE.Vector3(2.4, 3.1, -1.55));
+    screenWrap.style.left = `${sTL.x}px`;
+    screenWrap.style.top = `${sTL.y}px`;
+    screenWrap.style.width = `${sBR.x - sTL.x}px`;
+    screenWrap.style.height = `${sBR.y - sTL.y}px`;
+
+    // LED ticker overlay
+    const lTL = projectToScreen(new THREE.Vector3(-1.7, 1.45, 0.75));
+    const lBR = projectToScreen(new THREE.Vector3(1.7, 1.3, 0.75));
+    ledWrap.style.left = `${lTL.x}px`;
+    ledWrap.style.top = `${lTL.y}px`;
+    ledWrap.style.width = `${lBR.x - lTL.x}px`;
+    ledWrap.style.height = `${lBR.y - lTL.y}px`;
+  }
+
+  // ─── Post-Processing ───
+  import { EffectComposer, RenderPass, EffectPass, BloomEffect, VignetteEffect, SMAAEffect } from 'postprocessing';
+
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+
+  // Bloom — stronger glow on LEDs and emissive surfaces
+  const bloom = new BloomEffect({
+    intensity: 0.8,
+    luminanceThreshold: 0.5,
+    luminanceSmoothing: 0.2,
+    mipmapBlur: true,
+  });
+
+  // Vignette — heavier for moody framing
+  const vignette = new VignetteEffect({
+    offset: 0.25,
+    darkness: 0.7,
+  });
+
+  // SMAA anti-aliasing
+  const smaa = new SMAAEffect();
+
+  composer.addPass(new EffectPass(camera, bloom, vignette, smaa));
+
+  // ─── Animation Loop ───
+  const clock = new THREE.Clock();
+  const camBasePos = camera.position.clone();
+  const camBaseLookAt = new THREE.Vector3(0, 3.0, -1);
+
+  // Check prefers-reduced-motion
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function animate(): void {
+    requestAnimationFrame(animate);
+    const delta = clock.getDelta();
+    const elapsed = clock.getElapsedTime();
+
+    for (const obj of objects) {
+      obj.update?.(delta, elapsed);
+    }
+
+    // Subtle camera breathing (very slow, barely perceptible)
+    if (!reducedMotion) {
+      camera.position.x = camBasePos.x + Math.sin(elapsed * 0.15) * 0.06;
+      camera.position.y = camBasePos.y + Math.sin(elapsed * 0.2) * 0.03;
+      camera.lookAt(
+        camBaseLookAt.x + Math.sin(elapsed * 0.1) * 0.02,
+        camBaseLookAt.y,
+        camBaseLookAt.z
+      );
+    }
+
+    composer.render(delta);
+    updateOverlays();
+  }
+
+  animate();
+
+  // ─── Resize ───
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    composer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+
+<style>
+  #desk-3d-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #desk-3d-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  #desk-3d-screen-wrap {
+    position: absolute;
+    overflow: hidden;
+    border-radius: 3px;
+    pointer-events: auto;
+    z-index: 10;
+  }
+
+  #desk-3d-screen-wrap .hw-screen {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: #0a0008;
+  }
+
+  #desk-3d-led-wrap {
+    position: absolute;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  #desk-3d-led-wrap .hw-led-screen {
+    width: 100%;
+    height: 100%;
+  }
+</style>
