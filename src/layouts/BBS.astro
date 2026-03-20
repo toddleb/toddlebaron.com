@@ -6,7 +6,7 @@ import Modem from "../themes/bbs/Modem.astro";
 import AlbumPlayer from "../themes/bbs/AlbumPlayer.astro";
 import RainWindow from "../themes/bbs/RainWindow.astro";
 import DeskLamp from "../themes/bbs/DeskLamp.astro";
-import WallClock from "../themes/bbs/WallClock.astro";
+// WallClock removed from desk scene
 import Scarab from "../themes/bbs/Scarab.astro";
 import Snow from "../components/Snow.astro";
 import "../themes/bbs/theme.css";
@@ -27,8 +27,8 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
     <!-- Room -->
     <div class="room">
       <!-- Wall -->
+      <RainWindow />
       <div class="wall">
-        <RainWindow />
         <!-- Album shelf -->
         <div class="album-shelf">
           <div class="album-cover" data-album="chicago-17"><img src="/albums/chicago.jpg" alt="Chicago 17" /></div>
@@ -50,7 +50,6 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
 
       <!-- Desk -->
       <div class="desk">
-        <WallClock />
         <DeskLamp />
         <!-- Hardware stack -->
         <div class="hw-stack">

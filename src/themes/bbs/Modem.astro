@@ -32,23 +32,22 @@
   .modem-body {
     background:
       repeating-linear-gradient(0deg,
-        rgba(255,255,255,0.03) 0px,
-        rgba(0,0,0,0.03) 1px,
-        rgba(255,255,255,0.02) 2px,
-        transparent 3px,
-        rgba(0,0,0,0.02) 4px
+        rgba(255,255,255,0.04) 0px,
+        rgba(0,0,0,0.02) 1px,
+        rgba(255,255,255,0.03) 2px,
+        transparent 3px
       ),
-      linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 40%, #1a1a1a 100%);
-    border: 1px solid #444;
+      linear-gradient(180deg, #e8e0d0 0%, #ddd5c4 40%, #d0c8b8 100%);
+    border: 1px solid #c8c0b0;
     border-radius: 6px;
-    padding: 14px 20px;
+    padding: 20px 20px;
     display: flex;
     align-items: center;
     gap: 24px;
     box-shadow:
-      0 -2px 8px rgba(0, 0, 0, 0.5),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+      0 -2px 8px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1);
     font-family: var(--bbs-font);
   }
 
@@ -60,13 +59,13 @@
     font-size: 13px;
     font-weight: 900;
     letter-spacing: 2px;
-    color: #888;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    color: #6a6050;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
   }
 
   .modem-model {
     font-size: 9px;
-    color: #555;
+    color: #8a8070;
     letter-spacing: 1px;
     margin-top: 1px;
   }
@@ -89,14 +88,14 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #1a1a1a;
-    border: 1px solid #333;
+    background: #b0a898;
+    border: 1px solid #c0b8a8;
     transition: background 0.1s, box-shadow 0.1s;
   }
 
   .led-label {
     font-size: 8px;
-    color: #555;
+    color: #8a8070;
     letter-spacing: 0.5px;
     font-weight: bold;
   }
@@ -130,7 +129,7 @@
   .modem-speed {
     flex-shrink: 0;
     font-size: 11px;
-    color: #444;
+    color: #8a8070;
     letter-spacing: 1px;
     font-weight: bold;
     min-width: 80px;
