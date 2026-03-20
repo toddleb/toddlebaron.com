@@ -1,14 +1,9 @@
 ---
-// src/themes/bbs/AlbumPlayer.astro — Now Playing overlay
+// src/themes/bbs/AlbumPlayer.astro — Music player controls (hidden, drives LED ticker)
 ---
 
-<div id="album-player" class="album-player" style="display:none">
-  <img id="album-player-art" class="album-player-art" src="" alt="" />
-  <div class="album-player-info">
-    <div id="album-player-track" class="album-player-track"></div>
-    <div id="album-player-artist" class="album-player-artist"></div>
-  </div>
-  <button id="album-player-toggle" class="album-player-toggle">▶</button>
+<div id="album-player" class="album-player-controls" style="display:none">
+  <button id="album-player-toggle" class="album-player-ctrl-btn" title="Play/Pause">▶</button>
   <div class="album-player-progress">
     <div id="album-player-bar" class="album-player-bar"></div>
   </div>
@@ -16,33 +11,33 @@
 
 <script>
   import { albumTracks } from "../../data/album-tracks";
-  import { isMuted } from "../../engine/audio";
+  import { isMuted, forceUnmute } from "../../engine/audio";
 
   const playerEl = document.getElementById("album-player")!;
-  const artEl = document.getElementById("album-player-art") as HTMLImageElement;
-  const trackEl = document.getElementById("album-player-track")!;
-  const artistEl = document.getElementById("album-player-artist")!;
   const toggleBtn = document.getElementById("album-player-toggle")!;
   const barEl = document.getElementById("album-player-bar")!;
+  const ledTextEl = document.getElementById("hw-led-text");
 
   let currentAudio: HTMLAudioElement | null = null;
   let currentAlbumId: string | null = null;
   let crossfadeInterval: ReturnType<typeof setInterval> | null = null;
 
-  function showPlayer(albumId: string): void {
+  function updateLED(albumId: string): void {
     const data = albumTracks[albumId];
-    if (!data) return;
-    artEl.src = data.artworkUrl || "";
-    artEl.alt = data.album;
-    trackEl.textContent = data.track;
-    artistEl.textContent = `${data.artist} — ${data.album}`;
-    playerEl.style.display = "flex";
+    if (!data || !ledTextEl) return;
+    ledTextEl.textContent = `♫ ${data.track} — ${data.artist} · ${data.album}`;
+  }
+
+  function resetLED(): void {
+    if (ledTextEl) {
+      ledTextEl.textContent = "T-NET BBS · EST. 1984 · SCOTTSDALE, AZ";
+    }
   }
 
   function playTrack(albumId: string): void {
     const data = albumTracks[albumId];
     if (!data || !data.previewUrl) {
-      showPlayer(albumId);
+      updateLED(albumId);
       return;
     }
 
@@ -78,7 +73,8 @@
     currentAudio = newAudio;
     currentAlbumId = albumId;
 
-    showPlayer(albumId);
+    updateLED(albumId);
+    playerEl.style.display = "flex";
 
     if (!isMuted()) {
       newAudio.play().catch(() => {});
@@ -104,13 +100,16 @@
     newAudio.addEventListener("ended", () => {
       toggleBtn.textContent = "▶";
       barEl.style.width = "0%";
+      resetLED();
+      playerEl.style.display = "none";
     });
   }
 
-  // Listen for album clicks
+  // Listen for album clicks — force-unmute since this IS a user gesture
   document.querySelectorAll<HTMLElement>("[data-album]").forEach((el) => {
     el.style.cursor = "pointer";
     el.addEventListener("click", () => {
+      forceUnmute();
       const albumId = el.dataset.album;
       if (albumId) playTrack(albumId);
     });

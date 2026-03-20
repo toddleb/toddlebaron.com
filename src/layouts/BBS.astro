@@ -61,7 +61,6 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
                 <div class="bbs-scanlines"></div>
                 <div class="hw-screen-content">
                   <slot />
-                  <AlbumPlayer />
                 </div>
                 <div class="hw-screen-statusbar">
                   <span id="screen-baud" class="tf-purple-bright">14400</span>
@@ -93,6 +92,13 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
               <div class="hw-computer-brand">
                 <span class="hw-brand-label">Apple XXVIe</span>
               </div>
+              <!-- LED ticker screen -->
+              <div class="hw-led-screen" id="hw-led-screen">
+                <div class="hw-led-content" id="hw-led-content">
+                  <span class="hw-led-text" id="hw-led-text">T-NET BBS · EST. 1984 · SCOTTSDALE, AZ</span>
+                </div>
+              </div>
+              <AlbumPlayer />
               <div class="hw-computer-ports">
                 <span class="hw-port"></span>
                 <span class="hw-port"></span>

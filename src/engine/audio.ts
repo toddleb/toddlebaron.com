@@ -48,3 +48,8 @@ export function toggleMute(): boolean {
 export function isMuted(): boolean {
   return muted;
 }
+
+/** Force-unmute (for direct user gestures like album clicks) */
+export function forceUnmute(): void {
+  muted = false;
+}
