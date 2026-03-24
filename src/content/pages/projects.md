@@ -7,6 +7,15 @@ order: 3
 
 # Projects
 
+## On The Clock — 2026 NFL Draft Simulator (2025)
+
+Full 7-round, 224-pick NFL draft simulator. Pick your team and play GM, or watch 32 CPU teams draft using AI-weighted decision logic. Features real 2026 prospect data, team needs analysis, draft grading, a prediction/betting market with stock ticker, and shareable draft results. Built with Next.js, React, and Tailwind CSS.
+
+- [Launch Simulator →](https://otc.toddlebaron.com)
+- [GitHub →](https://github.com/toddlebaron/on-the-clock)
+
+---
+
 ## AI Code Rally (2024–Present)
 
 Enterprise governance platform for AI-assisted development. Policy enforcement, usage metering, audit trails, and multi-tenant governance. 22 Go microservices, gRPC + NATS event bus, Next.js frontend, Neon PostgreSQL.
