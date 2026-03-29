@@ -61,6 +61,7 @@
       var(--nx-desktop-grid) 39px,
       var(--nx-desktop-grid) 40px
     );
+  min-width: 1440px;
   font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: var(--nx-text-primary);
   overflow: hidden;

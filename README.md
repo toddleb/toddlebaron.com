@@ -1,43 +1,78 @@
-# Astro Starter Kit: Minimal
+# toddlebaron.com
 
-```sh
-npm create astro@latest -- --template minimal
+Personal portfolio site with a retro OS theme spanning three computing eras: BBS, SGI IRIX, and NeXTSTEP.
+
+## Tech Stack
+
+- **Framework:** Astro 6 (static output, MPA)
+- **3D:** Three.js (desk scene)
+- **Audio:** Web Audio API synthesis (no audio files except iTunes previews)
+- **Node:** 22+ (pinned in `.nvmrc`)
+
+## Setup
+
+```bash
+nvm use           # picks up .nvmrc → Node 22
+npm install
+npm run dev       # http://localhost:4321
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Scripts
 
-## 🚀 Project Structure
+| Command           | Action                                    |
+| :---------------- | :---------------------------------------- |
+| `npm run dev`     | Start dev server at `localhost:4321`      |
+| `npm run build`   | Build production site to `./dist/`        |
+| `npm run preview` | Preview production build locally          |
+| `npm run check`   | Run Astro type/content checks             |
 
-Inside of your Astro project, you'll see the following folders and files:
+## Deploy
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+**Host: Cloudflare Pages** (project: `toddlebaron-com`)
+
+```bash
+npm run build && wrangler pages deploy dist --project-name toddlebaron-com
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Production domains: `toddlebaron.com`, `www.toddlebaron.com`
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### Rollback
 
-Any static assets, like images, can be placed in the `public/` directory.
+Cloudflare Pages keeps previous deployments. To rollback:
 
-## 🧞 Commands
+1. Go to Cloudflare Dashboard > Pages > `toddlebaron-com` > Deployments
+2. Find the last known-good deployment
+3. Click the three-dot menu > "Rollback to this deployment"
 
-All commands are run from the root of the project, from a terminal:
+Or redeploy a previous commit:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+```bash
+git checkout <known-good-sha>
+npm run build && wrangler pages deploy dist --project-name toddlebaron-com
+git checkout main
+```
 
-## 👀 Want to learn more?
+### Smoke Test
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+After deploy, verify:
+
+1. `https://toddlebaron.com` loads (BBS boot sequence plays)
+2. Terminal renders and accepts input
+3. Album player loads track previews
+4. 3D desk scene renders (Three.js)
+5. Rain window animates
+
+## Project Structure
+
+```
+src/
+├── themes/
+│   ├── bbs/          # BBS era (CRT terminal, modem boot, desk scene)
+│   ├── sgi-irix/     # SGI IRIX era (window manager, screensavers)
+│   └── nextstep/     # NeXTSTEP era (dock, shelf, menu bar)
+├── engine/           # Shared modules (audio, wm, time-of-day, weather)
+├── layouts/          # Per-era layout wrappers
+├── components/       # Shared components (SEOHead, etc.)
+├── data/             # Static data (albums, playlist)
+└── pages/            # Routes
+```

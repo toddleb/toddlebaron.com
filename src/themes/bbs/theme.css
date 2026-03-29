@@ -49,6 +49,7 @@
   font-size: var(--bbs-font-size);
   color: var(--ansi-white);
   line-height: 1.5;
+  min-width: 1440px;
   -webkit-font-smoothing: none;
 }
 

@@ -6,16 +6,18 @@ export interface Props {
 }
 const { title = "Todd LeBaron", description = "Software engineer. From mainframes to modern web." } = Astro.props;
 const fullTitle = title === "Todd LeBaron" ? title : `${title} | Todd LeBaron`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=1440" />
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL.href} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://toddlebaron.com" />
+<meta property="og:url" content={canonicalURL.href} />
 <meta property="og:image" content="https://toddlebaron.com/og-image.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
