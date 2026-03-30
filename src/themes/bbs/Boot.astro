@@ -230,11 +230,11 @@
         // THX deep note on splash reveal
         playTHXDeepNote(sharedBootCtx || undefined).catch(() => {});
 
-        // Splash → main after THX plays (~4.5s)
+        // Splash → main after THX plays (~12s)
         setTimeout(() => {
           if (aborted) return;
           finish();
-        }, 4500);
+        }, 12000);
       }, allTextDone);
     }, matrixStart);
 
@@ -356,11 +356,11 @@
         // THX deep note on splash reveal
         playTHXDeepNote(sharedBootCtx || undefined).catch(() => {});
 
-        // Splash → main after THX plays (~4.5s)
+        // Splash → main after THX plays (~12s)
         setTimeout(() => {
           if (aborted) return;
           finishBoot();
-        }, 4500);
+        }, 12000);
       }, allTextDone);
     }, matrixStart);
 

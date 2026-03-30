@@ -126,6 +126,8 @@ export async function playDisconnect(): Promise<void> {
 export function speakWOPR(text: string): Promise<void> {
   return new Promise((resolve) => {
     if (!("speechSynthesis" in window)) { resolve(); return; }
+    // Safety timeout — never block boot for more than 6s
+    const timeout = setTimeout(resolve, 6000);
     const utter = new SpeechSynthesisUtterance(text);
     utter.rate = 0.8;
     utter.pitch = 0.6;
@@ -136,8 +138,8 @@ export function speakWOPR(text: string): Promise<void> {
       || voices.find(v => v.lang.startsWith("en"))
       || voices[0];
     if (robot) utter.voice = robot;
-    utter.onend = () => resolve();
-    utter.onerror = () => resolve();
+    utter.onend = () => { clearTimeout(timeout); resolve(); };
+    utter.onerror = () => { clearTimeout(timeout); resolve(); };
     speechSynthesis.speak(utter);
   });
 }

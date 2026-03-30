@@ -517,9 +517,18 @@
   opacity: 1;
 }
 
+.bbs-splash.visible .bbs-splash-logo {
+  animation: splash-grow 10s ease-out forwards, splash-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes splash-grow {
+  0%   { transform: scale(0.3); opacity: 0.3; }
+  30%  { transform: scale(0.6); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 .bbs-splash-logo {
   text-align: center;
-  animation: splash-glow 2s ease-in-out infinite alternate;
 }
 
 .bbs-splash-title {
