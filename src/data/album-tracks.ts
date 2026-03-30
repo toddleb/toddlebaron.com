@@ -23,8 +23,8 @@ export const albumTracks: Record<string, AlbumTrack> = {
     artist: "Papa Roach",
     track: "Forever",
     album: "The Paramour Sessions",
-    artworkUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/54/d9/26/54d926e2-709e-c148-9df0-ae43ab16cce4/10UMGIM06817.rgb.jpg/100x100bb.jpg",
-    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e1/5b/90/e15b903a-fcf2-5655-35ec-a9d7a596c4cb/mzaf_3654896425381095011.plus.aac.p.m4a",
+    artworkUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/e7/93/e2/e793e2b8-d12b-4762-2dfa-54da8338d5ca/00602517081864.rgb.jpg/100x100bb.jpg",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/a9/8d/34/a98d3433-23e2-d71c-b5de-7716a6fcf2d8/mzaf_13448504511873384368.plus.aac.p.m4a",
     spineColor: "#8B0000",
   },
   "linkin-park-hybrid-theory": {
@@ -51,13 +51,21 @@ export const albumTracks: Record<string, AlbumTrack> = {
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ff/24/a1/ff24a182-3696-f3da-0f69-667feed7d102/mzaf_4285869540893768331.plus.aac.p.m4a",
     spineColor: "#8B4513",
   },
-  "silversun-pickups": {
+  "silversun-pickups-swoon": {
     artist: "Silversun Pickups",
     track: "Panic Switch",
     album: "Swoon",
-    artworkUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b8/63/27/b8632723-ca02-7fac-9327-f22b1ea214a7/121477.jpg/100x100bb.jpg",
+    artworkUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ef/67/46/ef6746fa-bdf4-c09f-ed9c-388dc5e019b9/121459.jpg/100x100bb.jpg",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/24/0a/67/240a67f6-8e83-3478-d00a-c18f3ab9815f/mzaf_4817506931546365563.plus.aac.p.m4a",
     spineColor: "#2c1810",
+  },
+  "silversun-pickups-physical-thrills": {
+    artist: "Silversun Pickups",
+    track: "Scared Together",
+    album: "Physical Thrills",
+    artworkUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/75/64/e8/7564e8da-ac8d-a885-603c-fb1be0ce5d06/850018479578.png/100x100bb.jpg",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ea/09/2b/ea092bb1-c4ad-7d93-75a2-23dcd0226d15/mzaf_17902709573120997732.plus.aac.p.m4a",
+    spineColor: "#3a2a1a",
   },
   "evanescence": {
     artist: "Evanescence",
@@ -80,7 +88,7 @@ export const albumTracks: Record<string, AlbumTrack> = {
     track: "Dance of the Manatee",
     album: "Fables from a Mayfly: What I Tell You Three Times Is True",
     artworkUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/a6/85/ef/a685efc2-abdd-8882-073a-29b380a1944b/07UMGIM06136.rgb.jpg/100x100bb.jpg",
-    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/86/83/af/8683afab-8334-e20f-d7a6-c5ec3e10cb06/mzaf_1253594459571962518.plus.aac.p.m4a",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a8/d5/81/a8d5818b-407c-dd76-6446-14d0165bc3bb/mzaf_12844435616323883576.plus.aac.p.m4a",
     spineColor: "#4a1a1a",
   },
   "breaking-benjamin": {
@@ -90,5 +98,13 @@ export const albumTracks: Record<string, AlbumTrack> = {
     artworkUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/3e/17/f0/3e17f07a-3234-dfdb-03ad-341c162ead92/00720616264763.rgb.jpg/100x100bb.jpg",
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/46/5c/b1/465cb148-e0e8-f12e-b871-ef4b4494d262/mzaf_13136985139407366665.plus.aac.p.m4a",
     spineColor: "#1a1a1a",
+  },
+  "kansas-leftoverture": {
+    artist: "Kansas",
+    track: "Play the Game Tonight",
+    album: "Leftoverture",
+    artworkUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music/56/5b/88/mzi.hpnqhyuu.jpg/100x100bb.jpg",
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3e/75/40/3e75409d-029e-beb2-febe-c48019858ff4/mzaf_12324682939917729657.plus.aac.p.m4a",
+    spineColor: "#2a1a0a",
   },
 };

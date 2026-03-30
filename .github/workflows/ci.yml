@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Type check
+        run: npm run check
+
+      - name: Production build
+        run: npm run build
+
+      - name: Smoke test — all pages rendered
+        run: |
+          PAGE_COUNT=$(find dist -name '*.html' | wc -l | tr -d ' ')
+          echo "Built $PAGE_COUNT pages"
+          if [ "$PAGE_COUNT" -lt 10 ]; then
+            echo "Expected at least 10 pages, got $PAGE_COUNT"
+            exit 1
+          fi

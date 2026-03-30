@@ -121,53 +121,44 @@
   z-index: 10;
 }
 
-/* ─── Cassette Tape Shelf ─── */
-.cassette-shelf {
-  display: flex;
-  align-items: flex-end;
-  gap: 0;
+/* ─── Album Shelf ─── */
+.album-shelf {
+  display: grid;
+  grid-template-columns: repeat(6, auto);
+  gap: 5px;
   padding: 0 10px;
   margin-left: 120px;
-  transform: perspective(400px) rotateX(6deg);
+}
+
+.album-cover {
+  flex-shrink: 0;
+  border: 1px solid #222;
+  border-radius: 2px;
+  background: #111;
+  padding: 1px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.3);
+  transform: perspective(400px) rotateX(8deg) translateY(4px);
   transform-origin: bottom center;
-}
-
-.cassette-spine {
-  width: 16px;
-  height: 90px;
-  border-left: 1px solid rgba(255,255,255,0.08);
-  border-right: 1px solid rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 1px 0 0 rgba(255,255,255,0.06), inset -1px 0 0 rgba(0,0,0,0.2);
-  transition: filter 0.2s, transform 0.2s;
-  filter: brightness(0.7);
 }
 
-.cassette-spine:hover {
-  filter: brightness(1);
-  transform: translateY(-3px);
-  z-index: 2;
+.album-cover:hover {
+  transform: perspective(400px) rotateX(2deg) translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.7), 0 2px 6px rgba(0,0,0,0.4);
 }
 
-.cassette-spine-text {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transform: rotate(180deg);
-  font-family: "Cascadia Mono", "IBM Plex Mono", monospace;
-  font-size: 8px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: rgba(255,255,255,0.85);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-  max-height: 80px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+.album-cover img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.7) saturate(0.85);
+  transition: filter 0.3s;
+}
+
+.album-cover:hover img {
+  filter: brightness(0.9) saturate(1);
 }
 
 /* ─── Shelf Model (B-wing etc.) ─── */
@@ -199,10 +190,39 @@
   transition: filter 0.3s, transform 0.3s;
   transform: perspective(400px) rotateX(6deg) rotateY(-5deg) rotateZ(8deg);
   transform-origin: bottom center;
+  cursor: pointer;
 }
 
 .shelf-model:hover img {
   filter: brightness(0.9) saturate(1);
+}
+
+.shelf-model.flying {
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.shelf-model.flying img {
+  animation: bwing-flyaway 1.8s ease-in forwards;
+}
+
+.shelf-model.flying::after {
+  animation: stand-fade 0.4s ease-out 0.2s forwards;
+}
+
+@keyframes bwing-flyaway {
+  0%   { transform: perspective(400px) rotateX(6deg) rotateY(-5deg) rotateZ(8deg); opacity: 1; }
+  10%  { transform: perspective(400px) rotateX(6deg) rotateY(-5deg) rotateZ(8deg) translate(5px, -5px) scale(1.1); opacity: 1; }
+  100% { transform: perspective(400px) rotateX(6deg) rotateY(-5deg) rotateZ(8deg) translate(-1400px, 0px) scale(0.8); opacity: 0; }
+}
+
+@keyframes stand-fade {
+  to { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shelf-model.flying img { animation: none; opacity: 0; }
+  .shelf-model.flying::after { animation: none; opacity: 0; }
 }
 
 /* ─── Desk Layout ─── */
@@ -212,7 +232,7 @@
   justify-content: center;
   align-items: flex-end;
   width: 100%;
-  padding: 0;
+  padding: 0 0 0 60px;
   flex: 0 1 auto;
   overflow: hidden;
   background: url('/wall-brick.jpg') center bottom / cover no-repeat;
@@ -227,7 +247,7 @@
 }
 
 .desk-yoohoo img {
-  height: 90px;
+  height: 135px;
   width: auto;
   filter: brightness(0.75) saturate(0.8) drop-shadow(0 4px 8px rgba(0,0,0,0.6));
   transition: filter 0.3s;
@@ -1234,7 +1254,7 @@
   .hw-stack { width: 85vw; }
   .desk-surface { width: 100%; }
   .wall { padding: 16px 20px 0; gap: 10px; }
-  .cassette-shelf { max-width: 500px; }
+  .album-shelf { max-width: 500px; }
 }
 
 @media (max-width: 700px) {
@@ -1246,7 +1266,7 @@
   .desk-yoohoo { display: none; }
   .wall-poster { display: none; }
   .wall { min-height: 60px; padding: 10px 0 6px; }
-  .cassette-shelf { max-width: 380px; }
+  .album-shelf { max-width: 380px; }
   .shelf-model { display: none; }
   .rain-window { display: none; }
   .bbs-menu-row { flex-direction: column; gap: 8px; }
@@ -1600,7 +1620,7 @@
 .rain-window {
   position: absolute;
   top: -40px;
-  left: -10px;
+  left: -50px;
   width: 300px;
   height: 480px;
   z-index: 15;
@@ -2142,7 +2162,7 @@ body[data-time="afternoon"] .desk-lamp {
 }
 
 .desk-plant img {
-  height: 230px;
+  height: 345px;
   width: auto;
 }
 
@@ -2150,6 +2170,33 @@ body[data-time="afternoon"] .desk-lamp {
 body[data-time="morning"] .desk-plant,
 body[data-time="afternoon"] .desk-plant {
   opacity: 1;
+}
+
+/* Gecko crawling on plant */
+.plant-gecko {
+  position: absolute;
+  bottom: 30px;
+  left: 20%;
+  z-index: 3;
+  animation: gecko-crawl 18s ease-in-out infinite;
+  transform-origin: center center;
+  filter: brightness(0.8) drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+}
+
+@keyframes gecko-crawl {
+  0%   { bottom: 30px; left: 20%; transform: rotate(0deg) scaleX(1); }
+  10%  { bottom: 55px; left: 18%; transform: rotate(-15deg) scaleX(1); }
+  25%  { bottom: 80px; left: 30%; transform: rotate(-5deg) scaleX(1); }
+  35%  { bottom: 90px; left: 50%; transform: rotate(5deg) scaleX(1); }
+  50%  { bottom: 75px; left: 65%; transform: rotate(15deg) scaleX(-1); }
+  65%  { bottom: 55px; left: 60%; transform: rotate(10deg) scaleX(-1); }
+  75%  { bottom: 40px; left: 45%; transform: rotate(-5deg) scaleX(-1); }
+  90%  { bottom: 32px; left: 28%; transform: rotate(-10deg) scaleX(1); }
+  100% { bottom: 30px; left: 20%; transform: rotate(0deg) scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plant-gecko { animation: none; }
 }
 
 /* Plant stand (covers pot bottom) */

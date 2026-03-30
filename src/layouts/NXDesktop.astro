@@ -5,6 +5,7 @@ import NXShelf from "../themes/nextstep/NXShelf.astro";
 import NXDock from "../themes/nextstep/NXDock.astro";
 import NXMobile from "../themes/nextstep/NXMobile.astro";
 import Snow from "../components/Snow.astro";
+import SEOHead from "../components/SEOHead.astro";
 import "../themes/nextstep/theme.css";
 
 export interface Props {
@@ -16,13 +17,10 @@ const { title = "toddlebaron.com", description = "Todd LeBaron — Builder of Th
 <!DOCTYPE html>
 <html lang="en" data-theme="nextstep">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=1440" />
-  <meta name="description" content={description} />
+  <SEOHead title={title} description={description} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <title>{title}</title>
 </head>
 <body>
   <div class="nx-desktop" id="nx-desktop">
