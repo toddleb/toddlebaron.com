@@ -84,16 +84,16 @@ export function createComputer(opts: DeskObjectOptions = {}): DeskObject {
 
   // ─── Labels (like original 2D: brand, port labels) ───
   // Brand label
-  const brandLabel = makeLabel('T-NET SYSTEMS', 320, 32, 16, '#d0ccc4');
-  brandLabel.position.set(-1.5, -0.2, 1.305);
+  const brandLabel = makeLabel('T-NET SYSTEMS', 320, 32, 16, '#555555');
+  brandLabel.position.set(-1.5, -0.2, 1.32);
   brandLabel.scale.set(0.7, 0.7, 1);
   group.add(brandLabel);
 
   // Port labels: COM1, COM2, LPT1
   const portLabels = ['COM1', 'COM2', 'LPT1'];
   for (let i = 0; i < portLabels.length; i++) {
-    const pl = makeLabel(portLabels[i], 96, 24, 12, '#b0aaa0');
-    pl.position.set(-2.0 + i * 0.5, -0.28, 1.305);
+    const pl = makeLabel(portLabels[i], 96, 24, 12, '#666666');
+    pl.position.set(-2.0 + i * 0.5, -0.28, 1.32);
     pl.scale.set(0.4, 0.4, 1);
     group.add(pl);
 

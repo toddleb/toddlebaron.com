@@ -51,6 +51,11 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
         </div>
       </div>
 
+      <!-- Chair rail molding between wall and brick -->
+      <div class="chair-rail"></div>
+
+      <!-- Room darkness overlay (toggled by lamp) -->
+      <div class="room-darkness" id="room-darkness"></div>
       <!-- Desk Lamp (night) / Plant (day) — room-level so never clipped -->
       <DeskLamp />
       <DeskPlant />
@@ -77,7 +82,7 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
               </div>
               <div class="hw-monitor-chin">
                 <span class="hw-brand-label">Apple XXVIe</span>
-                <div class="hw-power-indicator">
+                <div class="hw-power-indicator hw-power-btn" id="monitor-power">
                   <span class="hw-power-led"></span>
                   <span class="hw-power-label">POWER</span>
                 </div>
@@ -108,7 +113,7 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
                 <span class="hw-port"></span>
                 <span class="hw-port hw-port-wide"></span>
               </div>
-              <div class="hw-power-indicator">
+              <div class="hw-power-indicator hw-power-btn" id="computer-power">
                 <span class="hw-power-led"></span>
                 <span class="hw-power-label">POWER</span>
               </div>
@@ -139,6 +144,7 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
 
       <!-- Desk surface -->
       <div class="desk-surface">
+        <div class="crt-desk-glow"></div>
         <div class="desk-edge"></div>
       </div>
     </div>
@@ -204,7 +210,159 @@ const { title = "T-NET BBS — Todd LeBaron", description = "Personal network of
       setTimeout(() => {
         bwing.classList.remove('flying');
         flown = false;
-      }, 3000);
+      }, 9000);
+    });
+  }
+</script>
+
+<script>
+  // Lamp pull chain toggle
+  const chain = document.getElementById('lamp-pull-chain');
+  const lamp = chain?.closest('.desk-lamp') as HTMLElement | null;
+  const room = document.querySelector('.room') as HTMLElement | null;
+  const darkness = document.getElementById('room-darkness');
+  if (chain && lamp && room && darkness) {
+    chain.addEventListener('click', () => {
+      const isOff = lamp.classList.toggle('lamp-off');
+      room.classList.toggle('lamp-off', isOff);
+      darkness.classList.toggle('active', isOff);
+    });
+  }
+</script>
+
+<script>
+  // ─── Power Button Controls ───
+  const ctx = new AudioContext();
+
+  // Mac startup chime (C major chord: C4, E4, G4, C5)
+  function playStartupChime() {
+    const now = ctx.currentTime;
+    const freqs = [261.6, 329.6, 392.0, 523.3];
+    freqs.forEach((f) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = f;
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 2.5);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 2.5);
+    });
+  }
+
+  // Shutdown chime (descending: G4, E4, C4)
+  function playShutdownChime() {
+    const now = ctx.currentTime;
+    const notes = [
+      { freq: 392.0, start: 0, dur: 0.3 },
+      { freq: 329.6, start: 0.15, dur: 0.3 },
+      { freq: 261.6, start: 0.3, dur: 0.6 },
+    ];
+    notes.forEach(({ freq, start, dur }) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.1, now + start);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + start + dur);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now + start);
+      osc.stop(now + start + dur);
+    });
+  }
+
+  // Modem disconnect screech
+  function playModemDisconnect() {
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(2400, now);
+    osc.frequency.exponentialRampToValueAtTime(300, now + 0.4);
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.5);
+  }
+
+  // Modem reconnect dial tone
+  function playModemReconnect() {
+    const now = ctx.currentTime;
+    // Dial tone: two sine waves
+    [350, 440].forEach((f) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = f;
+      gain.gain.setValueAtTime(0.06, now);
+      gain.gain.setValueAtTime(0.06, now + 0.3);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.4);
+    });
+    // Then a quick handshake screech
+    setTimeout(() => {
+      const n = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(1200, n);
+      osc.frequency.linearRampToValueAtTime(2400, n + 0.3);
+      gain.gain.setValueAtTime(0.04, n);
+      gain.gain.exponentialRampToValueAtTime(0.001, n + 0.4);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(n);
+      osc.stop(n + 0.4);
+    }, 500);
+  }
+
+  // ── Monitor power ──
+  const monitorPower = document.getElementById('monitor-power');
+  const monitor = document.querySelector('.hw-monitor') as HTMLElement | null;
+  if (monitorPower && monitor) {
+    monitorPower.addEventListener('click', () => {
+      if (monitor.classList.contains('powered-off')) {
+        // Power on
+        monitor.classList.remove('powered-off');
+        monitor.classList.add('powering-on');
+        setTimeout(() => monitor.classList.remove('powering-on'), 700);
+      } else {
+        // Power off — CRT phosphor dot
+        monitor.classList.add('powered-off');
+      }
+    });
+  }
+
+  // ── Computer power ──
+  const computerPower = document.getElementById('computer-power');
+  const computer = document.querySelector('.hw-computer') as HTMLElement | null;
+  if (computerPower && computer) {
+    computerPower.addEventListener('click', () => {
+      if (computer.classList.contains('powered-off')) {
+        computer.classList.remove('powered-off');
+        playStartupChime();
+      } else {
+        computer.classList.add('powered-off');
+        playShutdownChime();
+      }
+    });
+  }
+
+  // ── Modem power ──
+  const modemPower = document.getElementById('modem-power');
+  const modemWrap = document.querySelector('.hw-modem-wrap') as HTMLElement | null;
+  if (modemPower && modemWrap) {
+    modemPower.addEventListener('click', () => {
+      if (modemWrap.classList.contains('powered-off')) {
+        modemWrap.classList.remove('powered-off');
+        playModemReconnect();
+      } else {
+        modemWrap.classList.add('powered-off');
+        playModemDisconnect();
+      }
     });
   }
 </script>

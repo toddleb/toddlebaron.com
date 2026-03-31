@@ -69,21 +69,38 @@
   flex: 1 1 0%;
   min-height: 0;
   background:
+    /* Ceiling vignette — darker at top for depth */
+    linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.06) 25%, transparent 50%),
+    /* Worn plaster micro-cracks */
+    repeating-linear-gradient(
+      37deg,
+      transparent 0px, transparent 60px,
+      rgba(0,0,0,0.08) 60px, rgba(0,0,0,0.08) 61px,
+      transparent 61px, transparent 140px
+    ),
+    repeating-linear-gradient(
+      143deg,
+      transparent 0px, transparent 90px,
+      rgba(0,0,0,0.06) 90px, rgba(0,0,0,0.06) 91px,
+      transparent 91px, transparent 170px
+    ),
+    /* Drywall stipple texture */
     repeating-linear-gradient(
       0deg,
-      rgba(0,0,0,0.03) 0px,
+      rgba(0,0,0,0.06) 0px,
       transparent 1px,
-      transparent 3px,
-      rgba(0,0,0,0.02) 4px
+      transparent 2px,
+      rgba(0,0,0,0.04) 3px
     ),
     repeating-linear-gradient(
       90deg,
-      rgba(0,0,0,0.02) 0px,
+      rgba(0,0,0,0.05) 0px,
       transparent 1px,
-      transparent 4px,
-      rgba(0,0,0,0.015) 5px
+      transparent 2px,
+      rgba(0,0,0,0.03) 3px
     ),
-    linear-gradient(180deg, #8a8694 0%, #938f9c 40%, #888492 100%);
+    /* Cool gray-purple with subtle warmth variation */
+    linear-gradient(180deg, #847e8a 0%, #908a96 30%, #8a8694 60%, #868290 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -95,14 +112,21 @@
   overflow: hidden;
 }
 
-/* Wall texture overlay */
+/* Wall texture overlay — worn plaster grain */
 .wall::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(0,0,0,0.03) 60px, rgba(0,0,0,0.03) 61px),
-    repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(0,0,0,0.02) 30px, rgba(0,0,0,0.02) 31px);
+    /* Scuff marks / worn patches */
+    radial-gradient(ellipse at 20% 40%, rgba(0,0,0,0.1) 0%, transparent 30%),
+    radial-gradient(ellipse at 70% 25%, rgba(0,0,0,0.08) 0%, transparent 25%),
+    radial-gradient(ellipse at 45% 70%, rgba(255,255,255,0.06) 0%, transparent 20%),
+    radial-gradient(ellipse at 85% 60%, rgba(0,0,0,0.07) 0%, transparent 20%),
+    radial-gradient(ellipse at 35% 15%, rgba(255,255,255,0.04) 0%, transparent 18%),
+    /* Fine stipple grid */
+    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px),
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px);
   pointer-events: none;
 }
 
@@ -119,6 +143,52 @@
   border-bottom: 1px solid #111;
   box-shadow: 0 3px 6px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
   z-index: 10;
+}
+
+/* ─── Chair Rail Molding ─── */
+.chair-rail {
+  width: 100%;
+  height: 14px;
+  flex-shrink: 0;
+  background:
+    linear-gradient(180deg,
+      #5a4838 0%,
+      #7a6450 15%,
+      #8a7460 30%,
+      #6a5444 50%,
+      #5a4434 70%,
+      #4a3828 85%,
+      #3a2e20 100%
+    );
+  border-top: 1px solid #8a7a68;
+  border-bottom: 1px solid #2a1e14;
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.4),
+    0 -1px 3px rgba(0,0,0,0.2),
+    inset 0 2px 1px rgba(255,255,255,0.08),
+    inset 0 -1px 1px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 2;
+}
+/* Highlight bead on molding */
+.chair-rail::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02));
+}
+/* Shadow groove on molding */
+.chair-rail::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0,0,0,0.15);
 }
 
 /* ─── Album Shelf ─── */
@@ -203,7 +273,7 @@
 }
 
 .shelf-model.flying img {
-  animation: bwing-flyaway 1.8s ease-in forwards;
+  animation: bwing-flyaway 6s ease-in forwards;
 }
 
 .shelf-model.flying::after {
@@ -267,6 +337,7 @@
   gap: 0;
   padding-top: 14px;
   padding-bottom: 1px;
+  position: relative;
 }
 
 /* ─── Desk Items ─── */
@@ -363,6 +434,30 @@
   position: relative;
   z-index: 1;
   flex-shrink: 0;
+}
+
+/* CRT glow reflection on desk surface */
+.crt-desk-glow {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 30px;
+  background: radial-gradient(ellipse at center, rgba(0, 255, 150, 0.07) 0%, rgba(0, 200, 100, 0.03) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 2;
+  animation: crt-glow-breathe 4s ease-in-out infinite alternate;
+}
+@keyframes crt-glow-breathe {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+/* Hide CRT glow when monitor is off */
+.hw-monitor.powered-off ~ .crt-desk-glow,
+.room:has(.hw-monitor.powered-off) .crt-desk-glow {
+  opacity: 0;
+  transition: opacity 0.5s;
 }
 
 .desk-edge {
@@ -701,6 +796,20 @@
   align-items: center;
   gap: 6px;
 }
+.hw-power-btn {
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  transition: background 0.2s;
+}
+.hw-power-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.hw-power-btn:active {
+  background: rgba(255, 255, 255, 0.12);
+}
 
 .hw-power-led {
   width: 6px;
@@ -717,6 +826,81 @@
   letter-spacing: 0.5px;
   color: #ccc;
   text-shadow: 0 0 2px rgba(255,255,255,0.2);
+}
+
+/* ─── CRT Power Off / On Effects ─── */
+/* Monitor off: phosphor dot shrink */
+.hw-monitor.powered-off .hw-screen {
+  background: #000 !important;
+  overflow: hidden;
+}
+.hw-monitor.powered-off .hw-screen-content,
+.hw-monitor.powered-off .bbs-scanlines,
+.hw-monitor.powered-off .hw-screen-statusbar {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.hw-monitor.powered-off .hw-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0, 255, 150, 0.9) 0%, rgba(0, 200, 100, 0.4) 2%, transparent 4%);
+  animation: crt-off 1.5s ease-out forwards;
+  z-index: 100;
+}
+@keyframes crt-off {
+  0%   { transform: scale(1); opacity: 1; background: radial-gradient(ellipse at center, #fff 0%, rgba(0, 255, 150, 0.9) 5%, transparent 50%); }
+  15%  { transform: scaleY(0.01) scaleX(1); opacity: 1; background: radial-gradient(ellipse at center, #fff 0%, rgba(0, 255, 150, 0.9) 10%, transparent 60%); }
+  40%  { transform: scaleY(0.005) scaleX(0.6); opacity: 1; }
+  70%  { transform: scaleY(0.005) scaleX(0.08); opacity: 0.8; }
+  100% { transform: scaleY(0.005) scaleX(0.02); opacity: 0; }
+}
+/* Power on: screen expand */
+.hw-monitor.powering-on .hw-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 255, 150, 0.15);
+  animation: crt-on 0.6s ease-out forwards;
+  z-index: 100;
+}
+@keyframes crt-on {
+  0%   { transform: scaleY(0.005) scaleX(0.02); opacity: 0.8; }
+  30%  { transform: scaleY(0.01) scaleX(1); opacity: 0.6; }
+  60%  { transform: scaleY(1) scaleX(1); opacity: 0.3; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/* Monitor power LED off */
+.hw-monitor.powered-off .hw-power-led {
+  background: #333;
+  box-shadow: none;
+}
+
+/* Computer off: darken ticker and LED */
+.hw-computer.powered-off .hw-led-screen,
+.hw-computer.powered-off .hw-led-content {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.hw-computer.powered-off .hw-power-led {
+  background: #333;
+  box-shadow: none;
+}
+
+/* Modem off: all LEDs die */
+.hw-modem-wrap.powered-off .led-dot {
+  background: #555 !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+.hw-modem-wrap.powered-off .modem-speed {
+  color: #555 !important;
+  text-shadow: none !important;
+}
+.hw-modem-wrap.powered-off .hw-power-led {
+  background: #333;
+  box-shadow: none;
 }
 
 .hw-stand-neck {
@@ -1278,6 +1462,8 @@
   .album-shelf { max-width: 380px; }
   .shelf-model { display: none; }
   .rain-window { display: none; }
+  .chair-rail { height: 8px; }
+  .crt-desk-glow { display: none; }
   .bbs-menu-row { flex-direction: column; gap: 8px; }
   .bbs-menu-item { max-width: 100%; }
   .bbs-hero-title { font-size: 36px; letter-spacing: 4px; }
@@ -1754,6 +1940,68 @@ body[data-time="afternoon"] .rain-window-outside {
   }
 }
 
+/* ─── Night Sky Elements ─── */
+.night-sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s ease;
+  z-index: 1;
+}
+/* Show at night/evening/dawn, hide during day */
+body[data-time="night"] .night-sky,
+body[data-time="evening"] .night-sky,
+body[data-time="dawn"] .night-sky {
+  opacity: 1;
+}
+/* Hide when raining */
+.rain-active .night-sky {
+  opacity: 0;
+}
+
+.moon {
+  position: absolute;
+  top: 8%;
+  right: 12%;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fffde8, #f5e6a0, #d4c070);
+  box-shadow: 0 0 12px rgba(255, 250, 200, 0.6), 0 0 40px rgba(255, 240, 150, 0.25);
+}
+/* Crescent shadow */
+.moon::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  width: 24px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, transparent 40%, rgba(20, 25, 50, 0.85));
+}
+
+.star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fffde8;
+  box-shadow: 0 0 4px rgba(255, 250, 200, 0.8), 0 0 8px rgba(255, 250, 200, 0.3);
+  animation: star-twinkle 3s ease-in-out infinite alternate;
+}
+
+@keyframes star-twinkle {
+  0%   { opacity: 0.4; transform: scale(0.8); }
+  50%  { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0.5; transform: scale(0.9); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star { animation: none; opacity: 0.7; }
+}
+
 /* ─── Daytime Sky Elements ─── */
 .sky-clouds,
 .sky-birds,
@@ -2014,11 +2262,162 @@ body[data-time="afternoon"] .sky-airplane {
 /* ─── Desk Lamp ─── */
 .desk-lamp {
   position: absolute;
-  left: 4%;
+  right: 4%;
   bottom: 38px; /* sits above desk-surface edge */
   z-index: 20;
   transition: opacity 2s ease;
   pointer-events: none;
+}
+
+/* Lamp-off state: hide light cone and dust, darken room */
+.desk-lamp.lamp-off .lamp-light-cone { opacity: 0; transition: opacity 0.5s; }
+.desk-lamp.lamp-off .lamp-shade {
+  box-shadow: none;
+  filter: brightness(0.5);
+}
+
+/* Room darkness overlay when lamp is off at night */
+.room-darkness {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 18;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.room-darkness.active {
+  opacity: 1;
+}
+
+/* ─── Lamp Off: everything dark except light-emitting elements ─── */
+/* Raise hw-stack above darkness overlay so glows are visible */
+.room.lamp-off .hw-stack {
+  position: relative;
+  z-index: 19;
+}
+.room.lamp-off .wall {
+  filter: brightness(0.1);
+  transition: filter 1s;
+}
+.room.lamp-off .chair-rail {
+  filter: brightness(0.1);
+  transition: filter 1s;
+}
+/* CRT glow gets stronger in the dark */
+.room.lamp-off .crt-desk-glow {
+  width: 600px;
+  height: 40px;
+  background: radial-gradient(ellipse at center, rgba(0, 255, 150, 0.15) 0%, rgba(0, 200, 100, 0.06) 40%, transparent 70%);
+}
+.room.lamp-off .desk {
+  background: #0a0a0a;
+  transition: background 1s;
+}
+.room.lamp-off .desk-surface {
+  filter: brightness(0.15);
+  transition: filter 1s;
+}
+.room.lamp-off .desk-yoohoo {
+  filter: brightness(0.15);
+  transition: filter 1s;
+}
+/* Darken plant image only, not the gecko */
+.room.lamp-off .desk-plant img {
+  filter: brightness(0.1);
+  transition: filter 1s;
+}
+.room.lamp-off .desk-plant::before {
+  filter: brightness(0.1);
+}
+/* Gecko glows neon when lights off */
+.room.lamp-off .plant-gecko {
+  filter: none;
+}
+.room.lamp-off .plant-gecko svg {
+  filter: drop-shadow(0 0 8px rgba(0, 255, 180, 1)) drop-shadow(0 0 20px rgba(0, 255, 120, 0.7)) drop-shadow(0 0 40px rgba(0, 255, 100, 0.4));
+}
+.room.lamp-off .plant-gecko svg ellipse,
+.room.lamp-off .plant-gecko svg path,
+.room.lamp-off .plant-gecko svg line {
+  fill: #00ffaa;
+  stroke: #00ffaa;
+}
+.room.lamp-off .plant-gecko svg circle {
+  fill: #ffffff;
+}
+
+/* Darken hardware bodies */
+.room.lamp-off .hw-monitor-body {
+  background: #0a0a0a;
+  border-color: #111;
+  transition: background 1s;
+}
+.room.lamp-off .hw-monitor-chin {
+  background: #0a0a0a;
+  transition: background 1s;
+}
+.room.lamp-off .hw-computer-body {
+  background: #0a0a0a;
+  transition: background 1s;
+}
+.room.lamp-off .hw-computer-brand .hw-brand-label {
+  color: #cceeff;
+  text-shadow: 0 0 8px rgba(150, 220, 255, 1), 0 0 20px rgba(100, 180, 255, 0.7), 0 0 40px rgba(80, 150, 255, 0.3);
+  opacity: 1;
+}
+.room.lamp-off .hw-computer-ports span {
+  background: #0a0a0a;
+}
+.room.lamp-off .hw-felt-feet span {
+  background: #0a0a0a;
+}
+.room.lamp-off .modem-body {
+  background: #0a0a0a;
+  transition: background 1s;
+}
+
+/* Screen glows */
+.room.lamp-off .hw-screen {
+  box-shadow: 0 0 60px rgba(0, 255, 150, 0.4), 0 0 120px rgba(0, 200, 100, 0.2), 0 0 200px rgba(0, 180, 80, 0.1);
+}
+
+/* Power LEDs glow bright */
+.room.lamp-off .hw-power-led {
+  box-shadow: 0 0 10px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 255, 0, 0.7), 0 0 50px rgba(0, 255, 0, 0.3);
+}
+
+/* LED ticker glows */
+.room.lamp-off .hw-led-screen {
+  box-shadow: 0 0 20px rgba(255, 100, 0, 0.6), 0 0 50px rgba(255, 80, 0, 0.3), 0 0 80px rgba(255, 60, 0, 0.15);
+}
+
+/* Modem LEDs glow */
+.room.lamp-off .led-dot {
+  box-shadow: 0 0 10px rgba(0, 255, 0, 1), 0 0 25px rgba(0, 255, 0, 0.6), 0 0 50px rgba(0, 255, 0, 0.3);
+}
+.room.lamp-off .modem-speed {
+  text-shadow: 0 0 10px rgba(0, 255, 0, 1), 0 0 25px rgba(0, 255, 0, 0.5);
+}
+.room.lamp-off .modem-logo {
+  color: #cceeff;
+  text-shadow: 0 0 8px rgba(150, 220, 255, 1), 0 0 20px rgba(100, 180, 255, 0.7), 0 0 40px rgba(80, 150, 255, 0.3);
+  opacity: 1;
+}
+
+/* Glowing cord when lamp is off — so user can find it */
+.desk-lamp.lamp-off .chain-ball {
+  background: radial-gradient(circle at 35% 35%, #ffcc44, #cc8800, #664400);
+  box-shadow: 0 0 8px rgba(255, 200, 60, 0.6), 0 0 20px rgba(255, 180, 40, 0.3);
+  animation: cord-glow-pulse 2s ease-in-out infinite alternate;
+}
+.desk-lamp.lamp-off .chain-links {
+  box-shadow: 0 0 4px rgba(255, 200, 60, 0.3);
+}
+
+@keyframes cord-glow-pulse {
+  0% { box-shadow: 0 0 6px rgba(255, 200, 60, 0.4), 0 0 14px rgba(255, 180, 40, 0.2); }
+  100% { box-shadow: 0 0 12px rgba(255, 200, 60, 0.8), 0 0 28px rgba(255, 180, 40, 0.4); }
 }
 
 body[data-time="morning"] .desk-lamp,
@@ -2175,9 +2574,12 @@ body[data-time="afternoon"] .desk-lamp {
   width: auto;
 }
 
-/* Show plant during day, hide at night */
+/* Show plant all times */
 body[data-time="morning"] .desk-plant,
-body[data-time="afternoon"] .desk-plant {
+body[data-time="afternoon"] .desk-plant,
+body[data-time="evening"] .desk-plant,
+body[data-time="night"] .desk-plant,
+body[data-time="dawn"] .desk-plant {
   opacity: 1;
 }
 
